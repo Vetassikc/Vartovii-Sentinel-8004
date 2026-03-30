@@ -15,7 +15,8 @@
   "signed_verdict": {
     "trace_id": "trace-fail-closed-oracle-001",
     "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
-    "signature": "0x6e31d564b6d79af0b1264130baba78b75329b2bff9279615b0b9e8cbb389d9aa",
+    "permit_hash": "0x0e08620e7d15553db5483d58ca02ac29bc4d9e057f055c77980c6a3dbd7c1dcc",
+    "signature": "0x12e10f1469f27c4d713cf9652796526622bb79dbd90d17b20acd8b26215755e3",
     "signer": "sentinel-demo-signer",
     "signed_at": "2026-03-27T09:15:00Z",
     "expires_at": "2026-03-27T09:20:00.000Z",
@@ -34,6 +35,20 @@
       "policy_version": "judge-demo-v1",
       "judge_mode": true,
       "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d"
+    },
+    "permit_payload": {
+      "trace_id": "trace-fail-closed-oracle-001",
+      "agent_id": "strategy-agent-demo",
+      "intent_id": "intent-fail-closed-oracle-001",
+      "venue": "demo",
+      "chain_id": 1,
+      "market": "BTC/USD",
+      "side": "SELL",
+      "order_type": "MARKET",
+      "approved_notional_usd": "0.00",
+      "max_slippage_bps": 30,
+      "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
+      "expires_at": "2026-03-27T09:20:00.000Z"
     }
   }
 }

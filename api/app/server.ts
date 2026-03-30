@@ -1,6 +1,11 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 
-import { evaluateTradeIntent, validateTradeIntent } from "./policy.ts";
+import {
+  evaluateTradeIntent,
+  validatePermitVerificationRequest,
+  validateTradeIntent,
+  verifyTradePermit,
+} from "./policy.ts";
 
 function respondJson(
   response: ServerResponse,
@@ -34,10 +39,29 @@ export async function handleJudgeModeRequest(
   pathname: string,
   rawBody: string,
 ): Promise<{ statusCode: number; payload: unknown }> {
-  if (method === "POST" && pathname === "/api/demo/evaluate-intent") {
+  if (
+    method === "POST" &&
+    (pathname === "/api/demo/evaluate-intent" || pathname === "/api/demo/verify-permit")
+  ) {
     try {
       const payload = rawBody.length === 0 ? {} : JSON.parse(rawBody);
-      const validation = validateTradeIntent(payload);
+
+      if (pathname === "/api/demo/evaluate-intent") {
+        const validation = validateTradeIntent(payload);
+        if (!validation.ok) {
+          return {
+            statusCode: 400,
+            payload: validation.error,
+          };
+        }
+
+        return {
+          statusCode: 200,
+          payload: evaluateTradeIntent(validation.value),
+        };
+      }
+
+      const validation = validatePermitVerificationRequest(payload);
       if (!validation.ok) {
         return {
           statusCode: 400,
@@ -47,7 +71,7 @@ export async function handleJudgeModeRequest(
 
       return {
         statusCode: 200,
-        payload: evaluateTradeIntent(validation.value),
+        payload: verifyTradePermit(validation.value),
       };
     } catch (error) {
       const message =

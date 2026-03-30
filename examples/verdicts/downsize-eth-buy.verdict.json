@@ -15,7 +15,8 @@
   "signed_verdict": {
     "trace_id": "trace-downsize-eth-buy-001",
     "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
-    "signature": "0xf01e47fccce00eda1d4aa455333ea55892f28045d73486fe6b898c9408e873bd",
+    "permit_hash": "0xad2b2ab110a442e1bda502fbece0836d78c77f91ee5b43a9896622f6a13a41f7",
+    "signature": "0x1a4e9aa6329b9c729bbf1bbcb30473f5ae00e8a900225d625db0509f0df94b49",
     "signer": "sentinel-demo-signer",
     "signed_at": "2026-03-27T09:10:00Z",
     "expires_at": "2026-03-27T09:15:00.000Z",
@@ -34,6 +35,20 @@
       "policy_version": "judge-demo-v1",
       "judge_mode": true,
       "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110"
+    },
+    "permit_payload": {
+      "trace_id": "trace-downsize-eth-buy-001",
+      "agent_id": "strategy-agent-demo",
+      "intent_id": "intent-downsize-eth-buy-001",
+      "venue": "kraken",
+      "chain_id": 1,
+      "market": "ETH/USD",
+      "side": "BUY",
+      "order_type": "MARKET",
+      "approved_notional_usd": "2500.00",
+      "max_slippage_bps": 40,
+      "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
+      "expires_at": "2026-03-27T09:15:00.000Z"
     }
   }
 }

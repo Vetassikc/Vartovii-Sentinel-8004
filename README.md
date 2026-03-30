@@ -20,7 +20,7 @@ decision:
 
 The core flow is:
 
-`agent proposes trade -> Sentinel evaluates -> signed verdict -> auditable trace -> execution continues only if verdict is valid`
+`agent proposes trade -> Sentinel evaluates -> signed verdict + permit envelope -> auditable trace -> execution continues only if the permit remains valid`
 
 ## Current Repository Status
 
@@ -34,7 +34,9 @@ Current public assets include:
 - public schema definitions
 - sample intent and verdict payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
+- a local `POST /api/demo/verify-permit` endpoint
 - a CLI scenario runner for the canonical demo fixtures
+- a CLI permit verifier for the signed execution envelope
 - Node test coverage for fixture and endpoint parity
 
 ## Why This Repo Exists Separately
@@ -106,6 +108,12 @@ Run a fixture directly:
 
 ```bash
 node scripts/run-scenario.ts allow-btc-buy
+```
+
+Verify the signed execution envelope:
+
+```bash
+node scripts/verify-permit.ts downsize-eth-buy 2500.00
 ```
 
 Run the local tests:

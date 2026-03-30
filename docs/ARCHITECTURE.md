@@ -21,8 +21,9 @@ Strategy Agent / Fixture Runner
   -> Intent Normalizer + Validator
   -> Policy Engine
   -> Risk Verdict
-  -> Verdict Signer
+  -> Verdict Signer + Permit Envelope
   -> Audit JSON Trace
+  -> Judge-Mode Permit Verifier
   -> Judge-Mode Execution Gate
 ```
 
@@ -50,8 +51,18 @@ Applies deterministic checks such as:
 
 ### Verdict Signer
 
-Transforms the risk decision into a machine-readable signed artifact that the
-execution layer can verify.
+Transforms the risk decision into a machine-readable signed artifact with a
+bounded execution permit envelope that the execution layer can verify.
+
+### Execution Permit
+
+Binds the signed artifact to the public demo execution scope:
+
+- agent identity handle
+- venue and chain context
+- market and side
+- approved notional envelope
+- expiry boundary
 
 ### Audit Trace
 
@@ -60,8 +71,8 @@ happened and why.
 
 ### Execution Gate
 
-Allows execution only when a valid verdict exists and remains within the
-approved decision envelope.
+Allows execution only when a valid signed permit exists, remains unexpired, and
+the execution request stays within the approved decision envelope.
 
 ## Public Interface Contract
 
@@ -69,15 +80,19 @@ The public scaffold uses these core types:
 
 - `TradeIntent`
 - `RiskVerdict`
+- `ExecutionPermit`
 - `SignedVerdict`
 - `SentinelEvaluationResponse`
+- `PermitVerificationResponse`
 
 See [../shared/schemas/sentinel.ts](../shared/schemas/sentinel.ts).
 
 The local judge-mode surface exposes:
 
 - `POST /api/demo/evaluate-intent`
+- `POST /api/demo/verify-permit`
 - `node scripts/run-scenario.ts <scenario-name>`
+- `node scripts/verify-permit.ts <scenario-name> [requested-notional-usd]`
 
 ## Decision Outcomes
 
@@ -96,6 +111,7 @@ The minimum demo profile is intentionally conservative:
 - emphasis on low drawdown and controlled approvals
 - fail-closed behavior when required inputs are missing
 - fixed `judge-demo-v1` policy version and deterministic demo signatures
+- permit verification that fails closed when the signed envelope no longer matches execution scope
 
 ## Public Boundary
 

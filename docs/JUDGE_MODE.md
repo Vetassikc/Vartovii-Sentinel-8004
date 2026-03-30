@@ -25,6 +25,14 @@ Judge mode centers around this public evaluation path:
 The endpoint accepts a canonical `TradeIntent` payload and returns a canonical
 `SentinelEvaluationResponse` payload with nested `signed_verdict`.
 
+Judge mode also exposes a narrow permit verification path:
+
+`POST /api/demo/verify-permit`
+
+The verifier accepts a `TradeIntent`, a `signed_verdict`, and an optional
+execution notional override to prove that execution stays inside the signed
+permit envelope.
+
 ## Local Run
 
 Start the API:
@@ -37,6 +45,12 @@ Run a scenario directly from the CLI:
 
 ```bash
 node scripts/run-scenario.ts downsize-eth-buy
+```
+
+Verify a signed permit directly from the CLI:
+
+```bash
+node scripts/verify-permit.ts downsize-eth-buy 2500.00
 ```
 
 Run tests:
@@ -71,6 +85,8 @@ A judge-mode response should make it obvious:
 - why that decision was returned
 - whether downsizing occurred
 - whether the verdict was signed
+- whether the signed permit still validates
+- whether the requested execution stayed within the approved envelope
 - which policy version produced the decision
 
 ## Example Request
@@ -101,11 +117,15 @@ curl -X POST http://127.0.0.1:8787/api/demo/evaluate-intent \
   "signed_verdict": {
     "trace_id": "trace-downsize-eth-buy-001",
     "decision_hash": "0x...",
+    "permit_hash": "0x...",
     "signature": "0x...",
     "signer": "sentinel-demo-signer",
     "signed_at": "2026-03-27T09:10:00Z",
     "expires_at": "2026-03-27T09:15:00.000Z",
     "schema_version": "sentinel-8004-v1",
+    "permit_payload": {
+      "...": "..."
+    },
     "verdict_payload": {
       "...": "..."
     }
@@ -113,9 +133,31 @@ curl -X POST http://127.0.0.1:8787/api/demo/evaluate-intent \
 }
 ```
 
+## Example Permit Verification
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/demo/verify-permit \
+  -H "Content-Type: application/json" \
+  --data '{
+    "intent": { "...": "..." },
+    "signed_verdict": { "...": "..." },
+    "requested_notional_usd": "2500.00"
+  }'
+```
+
+The verifier returns a machine-readable gate result with:
+
+- `permit_valid`
+- `executable`
+- `verification_code`
+- `requested_notional_usd`
+- `approved_notional_usd`
+- `checks[]`
+
 ## Public Limitation
 
 Judge mode is not presented as a complete production deployment.
 
-It is the public, inspectable proof that Sentinel can evaluate trading intents
-and emit machine-readable guardrail decisions in a reliable format.
+It is the public, inspectable proof that Sentinel can evaluate trading intents,
+emit machine-readable guardrail decisions, and verify whether a requested
+execution still fits the signed permit envelope.

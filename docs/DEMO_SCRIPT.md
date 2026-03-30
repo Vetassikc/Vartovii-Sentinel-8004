@@ -17,7 +17,7 @@ Use a one-sentence framing:
 
 Explain the narrow flow:
 
-`agent proposes trade -> Sentinel evaluates -> allow / deny / downsize -> signed verdict -> auditable trace`
+`agent proposes trade -> Sentinel evaluates -> allow / deny / downsize -> signed verdict + permit envelope -> auditable trace`
 
 ### 3. Walk Through Four Scenarios
 
@@ -31,7 +31,8 @@ Show a trade denied because it violates the configured risk envelope.
 
 #### Scenario C: Trade Downsized
 
-Show that the system can preserve intent while reducing exposure.
+Show that the system can preserve intent while reducing exposure, then verify
+that only the downsized execution envelope is permitted.
 
 #### Scenario D: Fail-Closed
 
@@ -47,9 +48,19 @@ Highlight fields such as:
 - `reason_code`
 - `expires_at`
 - `decision_hash`
+- `signed_verdict.permit_hash`
+- `signed_verdict.permit_payload.approved_notional_usd`
 - `signed_verdict.signature`
 
-### 5. Close With The Positioning
+### 5. Show Permit Verification
+
+Run the permit verifier on the downsized ETH scenario and point out:
+
+- the original request no longer fits the approved envelope
+- the downsized request becomes executable
+- the signed artifact binds execution scope to the agent and market context
+
+### 6. Close With The Positioning
 
 End with:
 

@@ -1,12 +1,19 @@
 import { createHash } from "node:crypto";
 
 import type {
+  ExecutionPermit,
   ErrorResponse,
+  PermitCheck,
+  PermitVerificationRequest,
+  PermitVerificationResponse,
   RiskVerdict,
   SentinelEvaluationResponse,
   SignedVerdict,
   TradeIntent,
+  TradeVenue,
   VerdictAction,
+  OrderSide,
+  OrderType,
 } from "../../shared/schemas/sentinel.ts";
 
 const ALLOWED_MARKETS = new Set(["BTC/USD", "ETH/USD"]);
@@ -29,6 +36,20 @@ type ValidationFailure = {
 
 export type ValidationResult = ValidationSuccess | ValidationFailure;
 
+type PermitVerificationValidationSuccess = {
+  ok: true;
+  value: PermitVerificationRequest;
+};
+
+type PermitVerificationValidationFailure = {
+  ok: false;
+  error: ErrorResponse;
+};
+
+export type PermitVerificationValidationResult =
+  | PermitVerificationValidationSuccess
+  | PermitVerificationValidationFailure;
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -37,8 +58,32 @@ function isPositiveNumericString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0 && Number(value) > 0;
 }
 
+function isNonNegativeNumericString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0 && Number(value) >= 0;
+}
+
 function isValidIsoTimestamp(value: unknown): value is string {
   return typeof value === "string" && !Number.isNaN(Date.parse(value));
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === "string");
+}
+
+function isVerdictAction(value: unknown): value is VerdictAction {
+  return ["ALLOW", "DENY", "ALLOW_WITH_DOWNSIZE"].includes(String(value));
+}
+
+function isTradeVenue(value: unknown): value is TradeVenue {
+  return ["kraken", "aerodrome", "demo"].includes(String(value));
+}
+
+function isOrderSide(value: unknown): value is OrderSide {
+  return ["BUY", "SELL"].includes(String(value));
+}
+
+function isOrderType(value: unknown): value is OrderType {
+  return ["MARKET", "LIMIT"].includes(String(value));
 }
 
 function formatUsd(value: number): string {
@@ -77,6 +122,14 @@ function extractUnavailableSignals(
     .map(([signalName]) => signalName);
 }
 
+function buildPermitCheck(name: string, ok: boolean, detail: string): PermitCheck {
+  return {
+    name,
+    ok,
+    detail,
+  };
+}
+
 export function validateTradeIntent(input: unknown): ValidationResult {
   if (!isRecord(input)) {
     return {
@@ -99,7 +152,7 @@ export function validateTradeIntent(input: unknown): ValidationResult {
   if (typeof input.intent_id !== "string" || input.intent_id.trim().length === 0) {
     errors.push("intent_id must be a non-empty string.");
   }
-  if (!["kraken", "aerodrome", "demo"].includes(String(input.venue))) {
+  if (!isTradeVenue(input.venue)) {
     errors.push("venue must be one of kraken, aerodrome, or demo.");
   }
   if (!Number.isInteger(input.chain_id) || Number(input.chain_id) <= 0) {
@@ -108,10 +161,10 @@ export function validateTradeIntent(input: unknown): ValidationResult {
   if (typeof input.market !== "string" || input.market.trim().length === 0) {
     errors.push("market must be a non-empty string.");
   }
-  if (!["BUY", "SELL"].includes(String(input.side))) {
+  if (!isOrderSide(input.side)) {
     errors.push("side must be BUY or SELL.");
   }
-  if (!["MARKET", "LIMIT"].includes(String(input.order_type))) {
+  if (!isOrderType(input.order_type)) {
     errors.push("order_type must be MARKET or LIMIT.");
   }
   if (!isPositiveNumericString(input.size_base)) {
@@ -149,6 +202,147 @@ export function validateTradeIntent(input: unknown): ValidationResult {
   };
 }
 
+function validateRiskVerdict(input: unknown): input is RiskVerdict {
+  return (
+    isRecord(input) &&
+    typeof input.trace_id === "string" &&
+    isVerdictAction(input.verdict) &&
+    Number.isInteger(input.risk_score) &&
+    Number(input.risk_score) >= 0 &&
+    typeof input.reason_code === "string" &&
+    isStringArray(input.reason_detail) &&
+    isNonNegativeNumericString(input.allowed_notional_usd) &&
+    typeof input.decision_hash === "string" &&
+    isValidIsoTimestamp(input.expires_at) &&
+    typeof input.policy_version === "string" &&
+    typeof input.judge_mode === "boolean"
+  );
+}
+
+function validateExecutionPermit(input: unknown): input is ExecutionPermit {
+  return (
+    isRecord(input) &&
+    typeof input.trace_id === "string" &&
+    typeof input.agent_id === "string" &&
+    typeof input.intent_id === "string" &&
+    isTradeVenue(input.venue) &&
+    Number.isInteger(input.chain_id) &&
+    Number(input.chain_id) > 0 &&
+    typeof input.market === "string" &&
+    isOrderSide(input.side) &&
+    isOrderType(input.order_type) &&
+    isNonNegativeNumericString(input.approved_notional_usd) &&
+    Number.isInteger(input.max_slippage_bps) &&
+    Number(input.max_slippage_bps) >= 0 &&
+    typeof input.decision_hash === "string" &&
+    isValidIsoTimestamp(input.expires_at)
+  );
+}
+
+function validateSignedVerdict(input: unknown): input is SignedVerdict {
+  return (
+    isRecord(input) &&
+    typeof input.trace_id === "string" &&
+    typeof input.decision_hash === "string" &&
+    typeof input.permit_hash === "string" &&
+    typeof input.signature === "string" &&
+    typeof input.signer === "string" &&
+    isValidIsoTimestamp(input.signed_at) &&
+    isValidIsoTimestamp(input.expires_at) &&
+    typeof input.schema_version === "string" &&
+    validateRiskVerdict(input.verdict_payload) &&
+    validateExecutionPermit(input.permit_payload)
+  );
+}
+
+export function validatePermitVerificationRequest(
+  input: unknown,
+): PermitVerificationValidationResult {
+  if (!isRecord(input)) {
+    return {
+      ok: false,
+      error: {
+        error: "invalid_permit_verification_request",
+        details: ["Payload must be a JSON object."],
+      },
+    };
+  }
+
+  const intentValidation = validateTradeIntent(input.intent);
+  const errors = intentValidation.ok ? [] : [...intentValidation.error.details];
+
+  if (!validateSignedVerdict(input.signed_verdict)) {
+    errors.push("signed_verdict must be a valid signed verdict object.");
+  }
+  if (
+    input.requested_notional_usd !== undefined &&
+    !isPositiveNumericString(input.requested_notional_usd)
+  ) {
+    errors.push("requested_notional_usd must be a positive numeric string when provided.");
+  }
+  if (input.verified_at !== undefined && !isValidIsoTimestamp(input.verified_at)) {
+    errors.push("verified_at must be a valid ISO 8601 timestamp when provided.");
+  }
+
+  if (errors.length > 0 || !intentValidation.ok) {
+    return {
+      ok: false,
+      error: {
+        error: "invalid_permit_verification_request",
+        details: errors,
+      },
+    };
+  }
+
+  return {
+    ok: true,
+    value: {
+      intent: intentValidation.value,
+      signed_verdict: input.signed_verdict,
+      requested_notional_usd: input.requested_notional_usd,
+      verified_at: input.verified_at,
+    },
+  };
+}
+
+function hashRiskVerdictPayload(verdict: Omit<RiskVerdict, "decision_hash">): string {
+  return sha256Hex(stableStringify(verdict));
+}
+
+function buildExecutionPermit(
+  intent: TradeIntent,
+  verdict: RiskVerdict,
+): ExecutionPermit {
+  return {
+    trace_id: intent.trace_id,
+    agent_id: intent.agent_id,
+    intent_id: intent.intent_id,
+    venue: intent.venue,
+    chain_id: intent.chain_id,
+    market: intent.market,
+    side: intent.side,
+    order_type: intent.order_type,
+    approved_notional_usd: verdict.allowed_notional_usd,
+    max_slippage_bps: intent.max_slippage_bps,
+    decision_hash: verdict.decision_hash,
+    expires_at: verdict.expires_at,
+  };
+}
+
+function hashExecutionPermit(permit: ExecutionPermit): string {
+  return sha256Hex(stableStringify(permit));
+}
+
+function buildVerdictSignature(
+  decisionHash: string,
+  permitHash: string,
+  signedAt: string,
+): string {
+  return sha256Hex(
+    `${DEMO_SIGNER}:${decisionHash}:${permitHash}:${signedAt}:${SCHEMA_VERSION}`,
+  );
+}
+
 function buildRiskVerdict(
   intent: TradeIntent,
   verdict: VerdictAction,
@@ -172,22 +366,29 @@ function buildRiskVerdict(
 
   return {
     ...verdictPayload,
-    decision_hash: sha256Hex(stableStringify(verdictPayload)),
+    decision_hash: hashRiskVerdictPayload(verdictPayload),
   };
 }
 
-function signVerdict(verdict: RiskVerdict, submittedAt: string): SignedVerdict {
+function signVerdict(intent: TradeIntent, verdict: RiskVerdict): SignedVerdict {
+  const permitPayload = buildExecutionPermit(intent, verdict);
+  const permitHash = hashExecutionPermit(permitPayload);
+
   return {
     trace_id: verdict.trace_id,
     decision_hash: verdict.decision_hash,
-    signature: sha256Hex(
-      `${DEMO_SIGNER}:${verdict.decision_hash}:${submittedAt}:${SCHEMA_VERSION}`,
+    permit_hash: permitHash,
+    signature: buildVerdictSignature(
+      verdict.decision_hash,
+      permitHash,
+      intent.submitted_at,
     ),
     signer: DEMO_SIGNER,
-    signed_at: submittedAt,
+    signed_at: intent.submitted_at,
     expires_at: verdict.expires_at,
     schema_version: SCHEMA_VERSION,
     verdict_payload: verdict,
+    permit_payload: permitPayload,
   };
 }
 
@@ -271,6 +472,178 @@ export function evaluateTradeIntent(intent: TradeIntent): SentinelEvaluationResp
 
   return {
     ...verdict,
-    signed_verdict: signVerdict(verdict, intent.submitted_at),
+    signed_verdict: signVerdict(intent, verdict),
+  };
+}
+
+export function verifyTradePermit(
+  request: PermitVerificationRequest,
+): PermitVerificationResponse {
+  const { intent, signed_verdict: signedVerdict } = request;
+  const requestedNotionalUsd = request.requested_notional_usd ?? intent.notional_usd;
+  const verifiedAt = request.verified_at ?? signedVerdict.signed_at;
+  const canonicalPermit = buildExecutionPermit(intent, signedVerdict.verdict_payload);
+  const canonicalPermitHash = hashExecutionPermit(canonicalPermit);
+  const canonicalDecisionHash = hashRiskVerdictPayload({
+    trace_id: signedVerdict.verdict_payload.trace_id,
+    verdict: signedVerdict.verdict_payload.verdict,
+    risk_score: signedVerdict.verdict_payload.risk_score,
+    reason_code: signedVerdict.verdict_payload.reason_code,
+    reason_detail: signedVerdict.verdict_payload.reason_detail,
+    allowed_notional_usd: signedVerdict.verdict_payload.allowed_notional_usd,
+    expires_at: signedVerdict.verdict_payload.expires_at,
+    policy_version: signedVerdict.verdict_payload.policy_version,
+    judge_mode: signedVerdict.verdict_payload.judge_mode,
+  });
+  const expectedSignature = buildVerdictSignature(
+    canonicalDecisionHash,
+    canonicalPermitHash,
+    signedVerdict.signed_at,
+  );
+
+  const traceMatches =
+    signedVerdict.trace_id === intent.trace_id &&
+    signedVerdict.trace_id === signedVerdict.verdict_payload.trace_id &&
+    signedVerdict.trace_id === signedVerdict.permit_payload.trace_id;
+  const decisionHashMatches =
+    signedVerdict.decision_hash === signedVerdict.verdict_payload.decision_hash &&
+    signedVerdict.decision_hash === canonicalDecisionHash;
+  const permitScopeMatches =
+    stableStringify(signedVerdict.permit_payload) === stableStringify(canonicalPermit);
+  const permitHashMatches = signedVerdict.permit_hash === canonicalPermitHash;
+  const signerMatches = signedVerdict.signer === DEMO_SIGNER;
+  const signatureMatches = signedVerdict.signature === expectedSignature;
+  const schemaMatches = signedVerdict.schema_version === SCHEMA_VERSION;
+  const expiryMatches =
+    signedVerdict.expires_at === signedVerdict.verdict_payload.expires_at &&
+    signedVerdict.expires_at === signedVerdict.permit_payload.expires_at;
+  const notExpired =
+    Date.parse(verifiedAt) <= Date.parse(signedVerdict.expires_at);
+  const verdictAllows =
+    signedVerdict.verdict_payload.verdict === "ALLOW" ||
+    signedVerdict.verdict_payload.verdict === "ALLOW_WITH_DOWNSIZE";
+  const requestedWithinApproved =
+    Number(requestedNotionalUsd) <=
+    Number(signedVerdict.permit_payload.approved_notional_usd);
+
+  const checks = [
+    buildPermitCheck(
+      "trace_id_matches",
+      traceMatches,
+      traceMatches
+        ? "Trace identifiers stay aligned across the intent and signed permit envelope."
+        : "Trace identifiers are not aligned across the intent and signed permit envelope.",
+    ),
+    buildPermitCheck(
+      "decision_hash_matches",
+      decisionHashMatches,
+      decisionHashMatches
+        ? "Signed decision hash matches the canonical verdict payload."
+        : "Signed decision hash does not match the canonical verdict payload.",
+    ),
+    buildPermitCheck(
+      "permit_scope_matches",
+      permitScopeMatches,
+      permitScopeMatches
+        ? "Permit payload matches the submitted execution intent envelope."
+        : "Permit payload does not match the submitted execution intent envelope.",
+    ),
+    buildPermitCheck(
+      "permit_hash_matches",
+      permitHashMatches,
+      permitHashMatches
+        ? "Permit hash matches the canonical permit payload."
+        : "Permit hash does not match the canonical permit payload.",
+    ),
+    buildPermitCheck(
+      "signer_matches",
+      signerMatches,
+      signerMatches
+        ? "Signer matches the deterministic judge-mode demo signer."
+        : "Signer does not match the deterministic judge-mode demo signer.",
+    ),
+    buildPermitCheck(
+      "signature_matches",
+      signatureMatches,
+      signatureMatches
+        ? "Signature matches the canonical demo signing envelope."
+        : "Signature does not match the canonical demo signing envelope.",
+    ),
+    buildPermitCheck(
+      "schema_version_supported",
+      schemaMatches,
+      schemaMatches
+        ? "Schema version is supported by the judge-mode verifier."
+        : "Schema version is not supported by the judge-mode verifier.",
+    ),
+    buildPermitCheck(
+      "expiry_matches",
+      expiryMatches,
+      expiryMatches
+        ? "Top-level, verdict, and permit expiry fields are aligned."
+        : "Expiry fields are not aligned across the signed verdict envelope.",
+    ),
+    buildPermitCheck(
+      "permit_not_expired",
+      notExpired,
+      notExpired
+        ? "Permit was verified within the allowed TTL window."
+        : "Permit has expired and is no longer executable.",
+    ),
+    buildPermitCheck(
+      "verdict_allows_execution",
+      verdictAllows,
+      verdictAllows
+        ? "Verdict action allows execution when the request stays within scope."
+        : "Verdict action denies execution.",
+    ),
+    buildPermitCheck(
+      "requested_notional_within_approved",
+      requestedWithinApproved,
+      requestedWithinApproved
+        ? "Requested execution notional stays within the approved permit envelope."
+        : "Requested execution notional exceeds the approved permit envelope.",
+    ),
+  ];
+
+  const permitValid =
+    traceMatches &&
+    decisionHashMatches &&
+    permitScopeMatches &&
+    permitHashMatches &&
+    signerMatches &&
+    signatureMatches &&
+    schemaMatches &&
+    expiryMatches &&
+    notExpired;
+  const executable = permitValid && verdictAllows && requestedWithinApproved;
+
+  let verificationCode = "EXECUTION_PERMITTED";
+  if (!traceMatches || !decisionHashMatches || !permitScopeMatches || !permitHashMatches) {
+    verificationCode = "PERMIT_SCOPE_MISMATCH";
+  } else if (!signerMatches || !signatureMatches) {
+    verificationCode = "SIGNATURE_INVALID";
+  } else if (!schemaMatches) {
+    verificationCode = "SCHEMA_VERSION_UNSUPPORTED";
+  } else if (!expiryMatches || !notExpired) {
+    verificationCode = "VERDICT_EXPIRED";
+  } else if (!verdictAllows) {
+    verificationCode = "VERDICT_DENIES_EXECUTION";
+  } else if (!requestedWithinApproved) {
+    verificationCode = "REQUEST_EXCEEDS_APPROVED_NOTIONAL";
+  }
+
+  return {
+    trace_id: intent.trace_id,
+    permit_valid: permitValid,
+    executable,
+    verification_code: verificationCode,
+    requested_notional_usd: formatUsd(Number(requestedNotionalUsd)),
+    approved_notional_usd: signedVerdict.permit_payload.approved_notional_usd,
+    decision_hash: signedVerdict.decision_hash,
+    permit_hash: signedVerdict.permit_hash,
+    verified_at: verifiedAt,
+    judge_mode: signedVerdict.verdict_payload.judge_mode,
+    checks,
   };
 }

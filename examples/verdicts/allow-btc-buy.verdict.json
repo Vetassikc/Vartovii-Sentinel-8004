@@ -16,7 +16,8 @@
   "signed_verdict": {
     "trace_id": "trace-allow-btc-buy-001",
     "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
-    "signature": "0xefaef07715eee9f3c2111f62e53dd5b52fa01eef33f626a194e5ca36bf54f71f",
+    "permit_hash": "0x706ba65764be631b02377fe95c2c25e3a1cdd20412f2c5e1bc07a0df6c2ee070",
+    "signature": "0xa077caef622f0124718405065c37afb8bb01a32e39e6743b9e096b1b8bd5abed",
     "signer": "sentinel-demo-signer",
     "signed_at": "2026-03-27T09:00:00Z",
     "expires_at": "2026-03-27T09:05:00.000Z",
@@ -36,6 +37,20 @@
       "policy_version": "judge-demo-v1",
       "judge_mode": true,
       "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630"
+    },
+    "permit_payload": {
+      "trace_id": "trace-allow-btc-buy-001",
+      "agent_id": "strategy-agent-demo",
+      "intent_id": "intent-allow-btc-buy-001",
+      "venue": "kraken",
+      "chain_id": 1,
+      "market": "BTC/USD",
+      "side": "BUY",
+      "order_type": "MARKET",
+      "approved_notional_usd": "2400.00",
+      "max_slippage_bps": 35,
+      "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
+      "expires_at": "2026-03-27T09:05:00.000Z"
     }
   }
 }
