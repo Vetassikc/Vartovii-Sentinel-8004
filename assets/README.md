@@ -26,6 +26,9 @@ Use these two screenshots as the canonical demo shell states:
 These screenshots are captured from the public judge demo shell and are the
 recommended stills for lablab, slides, and demo videos.
 
+The slide deck source in `../slides/sentinel-8004-submission-deck-v1.html`
+reuses both screenshots.
+
 ## Social And Share Card
 
 Use `social/sentinel-8004-thread-card.png` as the public-safe share card for:

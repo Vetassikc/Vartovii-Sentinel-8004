@@ -15,6 +15,8 @@ This folder contains the public-safe documentation for the
   - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
   - recommended live demo sequence for judges and streams
+- `SUBMISSION_MEDIA.md`
+  - slide deck and PDF export workflow for submission media
 
 ## Related Asset Pack
 

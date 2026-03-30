@@ -34,6 +34,7 @@ Current public assets include:
 - a narrow web demo shell for judges
 - demo script
 - a submission asset pack with a cover image, canonical screenshots, and a social card
+- a small submission slide deck source plus a reproducible PDF export path
 - public schema definitions
 - sample intent, verdict, registration, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
@@ -96,9 +97,10 @@ Out of scope for this repository:
 2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
 4. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-5. Inspect [assets/README.md](./assets/README.md)
-6. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-7. Inspect the example payloads under [examples/](./examples/)
+5. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
+6. Inspect [assets/README.md](./assets/README.md)
+7. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+8. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -159,6 +161,12 @@ Run the local tests:
 node --test api/tests/*.test.ts
 ```
 
+Export the submission slides PDF:
+
+```bash
+npm run slides:pdf
+```
+
 ## Deployment Target
 
 The smallest prepared hosting path is Render.
@@ -186,6 +194,15 @@ Use these paths for submission materials:
 
 For demo videos and judge callouts, the most reusable single proof object is the
 `Validation Artifact` panel shown in the judge demo shell.
+
+## Submission Media
+
+The slide deck workflow lives in [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md).
+
+Use these paths for upload-ready slides:
+
+- slide deck source: `slides/sentinel-8004-submission-deck-v1.html`
+- slide PDF: `output/pdf/sentinel-8004-submission-slides-v1.pdf`
 
 ## Demo Scenarios
 
