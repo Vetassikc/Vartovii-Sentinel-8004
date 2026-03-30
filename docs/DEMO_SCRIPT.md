@@ -81,6 +81,25 @@ End with:
 
 `We do not build bots for capital deployment. We build guardrails for bots that move capital.`
 
+## Reusable Submission Assets
+
+Use the asset pack in `../assets/README.md` for submission materials.
+
+Recommended mapping:
+
+- cover image
+  - `../assets/cover/sentinel-8004-cover.png`
+- default demo screenshot
+  - `../assets/screenshots/judge-demo-allow-btc-buy.png`
+- constrained demo screenshot
+  - `../assets/screenshots/judge-demo-downsize-eth-buy.png`
+- social/share card
+  - `../assets/social/sentinel-8004-thread-card.png`
+
+For video overlays and narration, the `Validation Artifact` payload is the best
+single proof object to keep on screen because it ties the agent registration,
+decision hash, permit hash, and demo-only proof status together.
+
 ## Demo Rule
 
 Prefer a clean, reproducible judge-mode flow over a fragile live integration.

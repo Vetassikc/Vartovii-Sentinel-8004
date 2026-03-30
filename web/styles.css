@@ -10,7 +10,7 @@ body {
 }
 
 .page {
-  max-width: 1200px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 24px;
 }
@@ -45,6 +45,7 @@ h2 {
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 1px 2px rgba(20, 32, 51, 0.06);
+  min-width: 0;
 }
 
 .controls {
@@ -93,11 +94,20 @@ pre {
   color: #dce6ff;
   font-size: 12px;
   line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 ul {
   margin: 0;
   padding-left: 18px;
+}
+
+@media (min-width: 1240px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {

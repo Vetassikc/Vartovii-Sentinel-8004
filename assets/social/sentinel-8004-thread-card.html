@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vartovii Sentinel-8004 Social Card</title>
+    <style>
+      :root {
+        --bg: #0a0a0f;
+        --bg-soft: #12121a;
+        --panel: rgba(255, 255, 255, 0.05);
+        --border: rgba(255, 255, 255, 0.1);
+        --text: #ffffff;
+        --muted: #a1a1aa;
+        --purple: #8b5cf6;
+        --cyan: #06b6d4;
+        --green: #10b981;
+        --amber: #f59e0b;
+        --shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 18% 20%, rgba(139, 92, 246, 0.34), transparent 34%),
+          radial-gradient(circle at 82% 18%, rgba(6, 182, 212, 0.24), transparent 28%),
+          radial-gradient(circle at 78% 82%, rgba(16, 185, 129, 0.14), transparent 24%),
+          linear-gradient(145deg, #09090d 0%, #11111a 45%, #0a0a0f 100%);
+        color: var(--text);
+        font-family: Inter, "SF Pro Text", system-ui, sans-serif;
+      }
+
+      .frame {
+        width: 1600px;
+        height: 900px;
+        position: relative;
+        overflow: hidden;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+          rgba(7, 7, 11, 0.9);
+      }
+
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+        background-size: 64px 64px;
+        mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent 95%);
+      }
+
+      .orb {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(28px);
+        opacity: 0.55;
+      }
+
+      .orb.purple {
+        top: -80px;
+        left: -40px;
+        width: 360px;
+        height: 360px;
+        background: rgba(139, 92, 246, 0.38);
+      }
+
+      .orb.cyan {
+        right: -60px;
+        top: 90px;
+        width: 300px;
+        height: 300px;
+        background: rgba(6, 182, 212, 0.26);
+      }
+
+      .content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        padding: 64px 72px 58px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .mark {
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.18), transparent 50%),
+          linear-gradient(145deg, rgba(139, 92, 246, 0.85), rgba(6, 182, 212, 0.55));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.24),
+          0 16px 40px rgba(139, 92, 246, 0.24);
+        font-family: Outfit, "SF Pro Display", sans-serif;
+        font-weight: 700;
+        font-size: 34px;
+      }
+
+      .brand-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .brand-copy .name {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .brand-copy .tag {
+        font-size: 16px;
+        color: var(--muted);
+      }
+
+      .badge {
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 15px;
+        color: #e4e4e7;
+        backdrop-filter: blur(12px);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.18fr 0.82fr;
+        gap: 42px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        border-radius: 999px;
+        width: fit-content;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.22);
+        color: #a7f3d0;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      h1 {
+        margin: 20px 0 18px;
+        max-width: 900px;
+        font-family: Outfit, "SF Pro Display", sans-serif;
+        font-size: 72px;
+        line-height: 0.98;
+        letter-spacing: -0.04em;
+      }
+
+      .subtitle {
+        max-width: 770px;
+        font-size: 28px;
+        line-height: 1.35;
+        color: #d4d4d8;
+      }
+
+      .flow {
+        margin-top: 34px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .chip {
+        padding: 14px 18px;
+        border-radius: 18px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        font-size: 18px;
+        color: #f4f4f5;
+        backdrop-filter: blur(14px);
+      }
+
+      .chip.arrow {
+        color: var(--muted);
+        padding-inline: 12px;
+      }
+
+      .side {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+      }
+
+      .panel {
+        padding: 24px 24px 22px;
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(16px);
+      }
+
+      .panel .label {
+        color: var(--muted);
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        margin-bottom: 14px;
+      }
+
+      .decision-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .decision {
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 17px;
+      }
+
+      .allow {
+        color: #a7f3d0;
+        background: rgba(16, 185, 129, 0.12);
+      }
+
+      .deny {
+        color: #fca5a5;
+        background: rgba(239, 68, 68, 0.12);
+      }
+
+      .downsize {
+        color: #fde68a;
+        background: rgba(245, 158, 11, 0.14);
+      }
+
+      .proof {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .proof-line {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: 17px;
+      }
+
+      .proof-line span:first-child {
+        color: var(--muted);
+      }
+
+      .proof-line span:last-child {
+        color: #f4f4f5;
+        font-weight: 600;
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 20px;
+      }
+
+      .footer-copy {
+        max-width: 840px;
+        font-size: 22px;
+        color: #d4d4d8;
+        line-height: 1.35;
+      }
+
+      .footer-copy strong {
+        color: white;
+      }
+
+      .hashtags {
+        text-align: right;
+        font-size: 18px;
+        color: #a5b4fc;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="frame">
+      <div class="grid"></div>
+      <div class="orb purple"></div>
+      <div class="orb cyan"></div>
+
+      <section class="content">
+        <div class="topbar">
+          <div class="brand">
+            <div class="mark">V</div>
+            <div class="brand-copy">
+              <div class="name">Vartovii</div>
+              <div class="tag">Trust infrastructure for machine decision-making</div>
+            </div>
+          </div>
+          <div class="badge">Live build • ERC-8004 Hackathon</div>
+        </div>
+
+        <div class="hero">
+          <div>
+            <div class="eyebrow">Sentinel-8004 • Signed trade-permit guardrail</div>
+            <h1>Not another trading bot. The control layer in front of it.</h1>
+            <div class="subtitle">
+              Sentinel-8004 evaluates trade intent before execution and returns a machine-readable, auditable decision.
+            </div>
+            <div class="flow">
+              <div class="chip">Trade Intent</div>
+              <div class="chip arrow">→</div>
+              <div class="chip">Evaluate</div>
+              <div class="chip arrow">→</div>
+              <div class="chip">Allow / Deny / Downsize</div>
+              <div class="chip arrow">→</div>
+              <div class="chip">Signed Verdict</div>
+              <div class="chip arrow">→</div>
+              <div class="chip">Audit Trace</div>
+            </div>
+          </div>
+
+          <div class="side">
+            <div class="panel">
+              <div class="label">Decision Surface</div>
+              <div class="decision-row">
+                <div class="decision allow">ALLOW</div>
+                <div class="decision deny">DENY</div>
+                <div class="decision downsize">ALLOW_WITH_DOWNSIZE</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="label">Proof Layer</div>
+              <div class="proof">
+                <div class="proof-line"><span>reason_code</span><span>explicit</span></div>
+                <div class="proof-line"><span>decision scope</span><span>bounded</span></div>
+                <div class="proof-line"><span>verdict</span><span>signed</span></div>
+                <div class="proof-line"><span>behavior</span><span>fail-closed</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-copy">
+            <strong>Vartovii</strong> is the broader thesis. <strong>Sentinel-8004</strong> is the current live proof:
+            a narrow, judge-friendly trust layer for autonomous trading agents.
+          </div>
+          <div class="hashtags">#AIAgents<br />#ERC8004<br />#BuildInPublic</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

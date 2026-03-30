@@ -32,6 +32,7 @@ Current public assets include:
 - judge-mode operating model
 - a narrow web demo shell for judges
 - demo script
+- a submission asset pack with a cover image, canonical screenshots, and a social card
 - public schema definitions
 - sample intent, verdict, registration, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
@@ -94,8 +95,9 @@ Out of scope for this repository:
 2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
 4. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-5. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-6. Inspect the example payloads under [examples/](./examples/)
+5. Inspect [assets/README.md](./assets/README.md)
+6. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+7. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -155,6 +157,21 @@ node --test api/tests/*.test.ts
 The smallest prepared hosting path is Render.
 
 Deployment-oriented notes are in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
+
+## Submission Assets
+
+The curated asset pack lives in [assets/README.md](./assets/README.md).
+
+Use these paths for submission materials:
+
+- cover image: `assets/cover/sentinel-8004-cover.png`
+- canonical judge screenshots:
+  - `assets/screenshots/judge-demo-allow-btc-buy.png`
+  - `assets/screenshots/judge-demo-downsize-eth-buy.png`
+- social/share card: `assets/social/sentinel-8004-thread-card.png`
+
+For demo videos and judge callouts, the most reusable single proof object is the
+`Validation Artifact` panel shown in the judge demo shell.
 
 ## Demo Scenarios
 

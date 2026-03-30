@@ -16,6 +16,16 @@ This folder contains the public-safe documentation for the
 - `DEMO_SCRIPT.md`
   - recommended live demo sequence for judges and streams
 
+## Related Asset Pack
+
+Submission-ready visual assets live outside this folder in `../assets/README.md`.
+
+Use that index to find:
+
+- the default cover image
+- the canonical judge demo screenshots
+- the public-safe social/share card
+
 ## Documentation Boundary
 
 These docs are public-safe by design.
