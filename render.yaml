@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sentinel-8004-judge-demo
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run start:prod
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22

@@ -1,9 +1,34 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { handleJudgeModeRequest } from "../app/server.ts";
+import { handleJudgeModeRequest, resolveServerConfig } from "../app/server.ts";
 import { evaluateTradeIntent, verifyTradePermit } from "../app/policy.ts";
 import { loadExpectedVerdict, loadScenarioIntent } from "../app/scenarios.ts";
+
+test("resolveServerConfig defaults to localhost for local development", () => {
+  assert.deepEqual(resolveServerConfig({}), {
+    host: "127.0.0.1",
+    port: 8787,
+  });
+});
+
+test("resolveServerConfig respects deployment-style host and port overrides", () => {
+  assert.deepEqual(resolveServerConfig({ PORT: "10000", HOST: "0.0.0.0" }), {
+    host: "0.0.0.0",
+    port: 10000,
+  });
+});
+
+test("GET /healthz returns a deployment-friendly health payload", async () => {
+  const response = await handleJudgeModeRequest("GET", "/healthz", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, {
+    status: "ok",
+    service: "vartovii-sentinel-8004",
+    judge_mode: true,
+  });
+});
 
 test("GET / returns the judge demo shell HTML", async () => {
   const response = await handleJudgeModeRequest("GET", "/", "");

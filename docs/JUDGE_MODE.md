@@ -43,6 +43,10 @@ The shell uses a narrow read-only bundle route:
 
 `GET /api/demo/scenarios/:scenario-name`
 
+For deployment-readiness and host health checks, the same server also exposes:
+
+`GET /healthz`
+
 ## Local Run
 
 Start the API:
@@ -55,6 +59,12 @@ Open the demo shell:
 
 ```text
 http://127.0.0.1:8787/
+```
+
+Check service health:
+
+```bash
+curl http://127.0.0.1:8787/healthz
 ```
 
 Run a scenario directly from the CLI:

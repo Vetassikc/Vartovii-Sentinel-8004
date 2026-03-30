@@ -9,8 +9,10 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "judge:dev": "node api/app/server.ts",
-    "judge:web": "node api/app/server.ts",
+    "start": "node api/app/server.ts",
+    "start:prod": "HOST=0.0.0.0 NODE_ENV=production node api/app/server.ts",
+    "judge:dev": "npm run start",
+    "judge:web": "npm run start",
     "judge:scenario": "node scripts/run-scenario.ts",
     "judge:verify": "node scripts/verify-permit.ts",
     "test": "node --test api/tests/*.test.ts"

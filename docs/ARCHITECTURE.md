@@ -108,6 +108,7 @@ See [../shared/schemas/sentinel.ts](../shared/schemas/sentinel.ts).
 The local judge-mode surface exposes:
 
 - `GET /`
+- `GET /healthz`
 - `GET /api/demo/scenarios`
 - `GET /api/demo/scenarios/:scenario-name`
 - `POST /api/demo/evaluate-intent`

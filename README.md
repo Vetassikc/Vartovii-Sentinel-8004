@@ -37,6 +37,7 @@ Current public assets include:
 - a local `POST /api/demo/evaluate-intent` endpoint
 - a local `POST /api/demo/verify-permit` endpoint
 - a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
+- a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI permit verifier for the signed execution envelope
 - Node test coverage for fixture and endpoint parity
@@ -104,19 +105,25 @@ dependencies.
 Start the local API:
 
 ```bash
-node api/app/server.ts
+npm run start
 ```
 
-Or use the npm alias:
+Start the same server in production-style mode:
 
 ```bash
-npm run judge:web
+npm run start:prod
 ```
 
 Open the judge demo shell:
 
 ```text
 http://127.0.0.1:8787/
+```
+
+Check the health endpoint:
+
+```bash
+curl http://127.0.0.1:8787/healthz
 ```
 
 Run a fixture directly:
@@ -142,6 +149,12 @@ Run the local tests:
 ```bash
 node --test api/tests/*.test.ts
 ```
+
+## Deployment Target
+
+The smallest prepared hosting path is Render.
+
+Deployment-oriented notes are in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 ## Demo Scenarios
 

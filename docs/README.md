@@ -11,6 +11,8 @@ This folder contains the public-safe documentation for the
   - local and offline-friendly evaluation model
 - `ERC8004_PROOF.md`
   - public-safe explanation of the additive proof layer
+- `DEPLOYMENT.md`
+  - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
   - recommended live demo sequence for judges and streams
 

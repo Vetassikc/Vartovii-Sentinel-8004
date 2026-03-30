@@ -19,6 +19,12 @@ type JudgeModeResponse = {
   contentType?: string;
 };
 
+type ServerEnv = {
+  HOST?: string;
+  NODE_ENV?: string;
+  PORT?: string;
+};
+
 const ROOT_DIR = new URL("../../", import.meta.url);
 const STATIC_ASSETS = {
   "/": {
@@ -56,6 +62,17 @@ async function readStaticAsset(pathname: keyof typeof STATIC_ASSETS): Promise<st
 }
 
 async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse | null> {
+  if (pathname === "/healthz") {
+    return {
+      statusCode: 200,
+      payload: {
+        status: "ok",
+        service: "vartovii-sentinel-8004",
+        judge_mode: true,
+      },
+    };
+  }
+
   if (pathname === "/api/demo/scenarios") {
     return {
       statusCode: 200,
@@ -95,6 +112,19 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
         signed_verdict: evaluation.signed_verdict,
       }),
     },
+  };
+}
+
+export function resolveServerConfig(env: ServerEnv = process.env): {
+  host: string;
+  port: number;
+} {
+  const port = Number(env.PORT ?? "8787");
+  const host = env.HOST ?? (env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
+
+  return {
+    host,
+    port,
   };
 }
 
@@ -207,9 +237,9 @@ const isEntryPoint =
   import.meta.url === new URL(`file://${process.argv[1]}`).href;
 
 if (isEntryPoint) {
-  const port = Number(process.env.PORT ?? "8787");
+  const { host, port } = resolveServerConfig();
   const server = createJudgeModeServer();
-  server.listen(port, "127.0.0.1", () => {
-    console.log(`Sentinel judge mode listening on http://127.0.0.1:${port}`);
+  server.listen(port, host, () => {
+    console.log(`Sentinel judge mode listening on http://${host}:${port}`);
   });
 }
