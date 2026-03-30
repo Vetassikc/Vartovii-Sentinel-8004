@@ -23,10 +23,16 @@ Start the server the same way a simple host would:
 npm run start:prod
 ```
 
-The demo shell will be available at:
+The hosted submission hub will be available at:
 
 ```text
 http://127.0.0.1:8787/
+```
+
+The live judge demo shell will be available at:
+
+```text
+http://127.0.0.1:8787/judge
 ```
 
 The health endpoint will be available at:
@@ -44,7 +50,8 @@ http://127.0.0.1:8787/healthz
    - `npm install`
    - `npm run start:prod`
    - `/healthz`
-5. After the service is live, open the root URL for the judge demo shell.
+5. After the service is live, use the root URL as the hosted submission hub.
+6. Use `/judge` as the stable path for the live judge demo shell.
 
 ## Explicit Boundary
 

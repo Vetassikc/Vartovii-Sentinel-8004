@@ -28,6 +28,14 @@ type ServerEnv = {
 const ROOT_DIR = new URL("../../", import.meta.url);
 const STATIC_ASSETS = {
   "/": {
+    fileUrl: new URL("web/hub.html", ROOT_DIR),
+    contentType: "text/html; charset=utf-8",
+  },
+  "/judge": {
+    fileUrl: new URL("web/index.html", ROOT_DIR),
+    contentType: "text/html; charset=utf-8",
+  },
+  "/judge/": {
     fileUrl: new URL("web/index.html", ROOT_DIR),
     contentType: "text/html; charset=utf-8",
   },

@@ -19,6 +19,10 @@ body {
   margin-bottom: 20px;
 }
 
+.hub-page {
+  max-width: 1120px;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   font-size: 12px;
@@ -39,6 +43,10 @@ h2 {
   color: #43506a;
 }
 
+a {
+  color: #2647d3;
+}
+
 .card {
   background: #ffffff;
   border: 1px solid #d9e0ee;
@@ -50,6 +58,48 @@ h2 {
 
 .controls {
   margin-bottom: 20px;
+}
+
+.hub-primary {
+  margin-bottom: 16px;
+}
+
+.cta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #c5d0e6;
+  background: #ffffff;
+  color: #142033;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.button-link-primary {
+  background: #142033;
+  border-color: #142033;
+  color: #ffffff;
+}
+
+.hub-grid {
+  margin-bottom: 16px;
+}
+
+.hub-back-link {
+  margin: 0 0 8px;
+}
+
+.link-list li + li {
+  margin-top: 8px;
 }
 
 .control-row {
@@ -83,6 +133,10 @@ button {
 
 .notes {
   margin-top: 16px;
+}
+
+.hub-notes {
+  margin-top: 0;
 }
 
 pre {

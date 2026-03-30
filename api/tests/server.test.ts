@@ -30,8 +30,26 @@ test("GET /healthz returns a deployment-friendly health payload", async () => {
   });
 });
 
-test("GET / returns the judge demo shell HTML", async () => {
+test("GET / returns the hosted submission hub HTML", async () => {
   const response = await handleJudgeModeRequest("GET", "/", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.contentType, "text/html; charset=utf-8");
+  assert.match(response.payload as string, /Sentinel-8004 public submission entrypoint/);
+  assert.match(response.payload as string, /Open Live Judge Demo/);
+});
+
+test("GET /judge returns the judge demo shell HTML", async () => {
+  const response = await handleJudgeModeRequest("GET", "/judge", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.contentType, "text/html; charset=utf-8");
+  assert.match(response.payload as string, /Sentinel-8004 public proof walkthrough/);
+  assert.match(response.payload as string, /Back to Hosted Submission Hub/);
+});
+
+test("GET /judge/ also returns the judge demo shell HTML", async () => {
+  const response = await handleJudgeModeRequest("GET", "/judge/", "");
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.contentType, "text/html; charset=utf-8");

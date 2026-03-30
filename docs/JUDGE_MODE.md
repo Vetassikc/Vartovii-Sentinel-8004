@@ -34,10 +34,14 @@ The verifier accepts a `TradeIntent`, a `signed_verdict`, and an optional
 execution notional override to prove that execution stays inside the signed
 permit envelope.
 
-For judges who want a single-screen walkthrough, the same local server now also
-serves a minimal demo shell at:
+For judges who need a clean hosted entrypoint, the same local server now serves
+a small submission hub at:
 
 `GET /`
+
+The live judge demo shell remains available at:
+
+`GET /judge`
 
 The shell uses a narrow read-only bundle route:
 
@@ -55,10 +59,16 @@ Start the API:
 node api/app/server.ts
 ```
 
-Open the demo shell:
+Open the hosted submission hub:
 
 ```text
 http://127.0.0.1:8787/
+```
+
+Open the demo shell directly:
+
+```text
+http://127.0.0.1:8787/judge
 ```
 
 Check service health:
@@ -124,6 +134,9 @@ The web shell presents the same information in four narrow inspection panels:
 - verdict
 - validation artifact
 - permit verification
+
+The hosted root page is intentionally smaller. It exists only to route judges to
+the live demo, public repository, proof notes, and reusable submission assets.
 
 ## Example Request
 

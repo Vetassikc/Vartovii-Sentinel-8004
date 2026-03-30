@@ -21,8 +21,12 @@ Explain the narrow flow:
 
 ### 3. Walk Through Four Scenarios
 
-If you are using the local demo shell, open `http://127.0.0.1:8787/` and keep
-the browser on the single scenario picker throughout the walkthrough.
+If you are using the hosted app root, open `http://127.0.0.1:8787/` first and
+use the primary CTA to enter the live judge demo.
+
+If you are using the demo shell directly, open
+`http://127.0.0.1:8787/judge` and keep the browser on the single scenario
+picker throughout the walkthrough.
 
 #### Scenario A: Safe Trade Approved
 

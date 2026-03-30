@@ -30,6 +30,7 @@ Current public assets include:
 
 - public architecture notes
 - judge-mode operating model
+- a hosted submission hub at the root URL
 - a narrow web demo shell for judges
 - demo script
 - a submission asset pack with a cover image, canonical screenshots, and a social card
@@ -116,10 +117,16 @@ Start the same server in production-style mode:
 npm run start:prod
 ```
 
-Open the judge demo shell:
+Open the hosted submission hub:
 
 ```text
 http://127.0.0.1:8787/
+```
+
+Open the judge demo shell:
+
+```text
+http://127.0.0.1:8787/judge
 ```
 
 Check the health endpoint:
@@ -157,6 +164,13 @@ node --test api/tests/*.test.ts
 The smallest prepared hosting path is Render.
 
 Deployment-oriented notes are in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
+
+The intended hosted entrypoint is now:
+
+- root URL
+  - hosted submission hub
+- `/judge`
+  - live judge demo shell
 
 ## Submission Assets
 
