@@ -52,5 +52,33 @@
       "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
       "expires_at": "2026-03-27T09:05:00.000Z"
     }
+  },
+  "validation_artifact": {
+    "artifact_id": "validation-intent-allow-btc-buy-001",
+    "trace_id": "trace-allow-btc-buy-001",
+    "intent_id": "intent-allow-btc-buy-001",
+    "agent_id": "strategy-agent-demo",
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "registration_status": "ACTIVE",
+    "registration_hash": "0x4b05fa67bf7ba321001305eb5d2729d95facae0dbdfc08b938da50435e43d8fa",
+    "verdict": "ALLOW",
+    "allowed_notional_usd": "2400.00",
+    "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
+    "permit_hash": "0x706ba65764be631b02377fe95c2c25e3a1cdd20412f2c5e1bc07a0df6c2ee070",
+    "proof_status": "VALIDATED",
+    "proof_checks": [
+      "agent_registration_active",
+      "chain_in_registration_scope",
+      "venue_in_registration_scope",
+      "market_in_registration_scope",
+      "decision_hash_bound",
+      "permit_hash_bound",
+      "execution_permitted"
+    ],
+    "created_at": "2026-03-27T09:00:00Z",
+    "expires_at": "2026-03-27T09:05:00.000Z",
+    "schema_version": "sentinel-8004-validation-artifact-v1",
+    "demo_only": true,
+    "artifact_hash": "0x0ac3a539da4d5a1146488e6534c1b664a1bee3c82e59c3846416f3eb3395fddd"
   }
 }

@@ -9,6 +9,8 @@ This folder contains the public-safe documentation for the
   - public architecture overview
 - `JUDGE_MODE.md`
   - local and offline-friendly evaluation model
+- `ERC8004_PROOF.md`
+  - public-safe explanation of the additive proof layer
 - `DEMO_SCRIPT.md`
   - recommended live demo sequence for judges and streams
 

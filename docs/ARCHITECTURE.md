@@ -22,6 +22,7 @@ Strategy Agent / Fixture Runner
   -> Policy Engine
   -> Risk Verdict
   -> Verdict Signer + Permit Envelope
+  -> Validation Artifact Builder
   -> Audit JSON Trace
   -> Judge-Mode Permit Verifier
   -> Judge-Mode Execution Gate
@@ -64,6 +65,16 @@ Binds the signed artifact to the public demo execution scope:
 - approved notional envelope
 - expiry boundary
 
+### Agent Registration
+
+Provides a public-safe demo registration record for the agent identity handle
+used in judge mode.
+
+### Validation Artifact
+
+Binds the agent registration, decision hash, permit hash, and proof status into
+one inspectable payload that can be surfaced alongside the signed verdict.
+
 ### Audit Trace
 
 Preserves the decision context so that a judge or operator can inspect what
@@ -79,9 +90,11 @@ the execution request stays within the approved decision envelope.
 The public scaffold uses these core types:
 
 - `TradeIntent`
+- `AgentRegistration`
 - `RiskVerdict`
 - `ExecutionPermit`
 - `SignedVerdict`
+- `ValidationArtifact`
 - `SentinelEvaluationResponse`
 - `PermitVerificationResponse`
 
@@ -112,6 +125,7 @@ The minimum demo profile is intentionally conservative:
 - fail-closed behavior when required inputs are missing
 - fixed `judge-demo-v1` policy version and deterministic demo signatures
 - permit verification that fails closed when the signed envelope no longer matches execution scope
+- demo-only registrations and validation artifacts that stay public-safe
 
 ## Public Boundary
 

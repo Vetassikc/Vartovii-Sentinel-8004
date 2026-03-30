@@ -50,5 +50,33 @@
       "decision_hash": "0xdeb214788d3b07a6f969c21821dba9692c5fd1371e97f53121ab453432009254",
       "expires_at": "2026-03-27T09:10:00.000Z"
     }
+  },
+  "validation_artifact": {
+    "artifact_id": "validation-intent-deny-oversize-eth-001",
+    "trace_id": "trace-deny-oversize-eth-001",
+    "intent_id": "intent-deny-oversize-eth-001",
+    "agent_id": "strategy-agent-demo",
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "registration_status": "ACTIVE",
+    "registration_hash": "0x4b05fa67bf7ba321001305eb5d2729d95facae0dbdfc08b938da50435e43d8fa",
+    "verdict": "DENY",
+    "allowed_notional_usd": "0.00",
+    "decision_hash": "0xdeb214788d3b07a6f969c21821dba9692c5fd1371e97f53121ab453432009254",
+    "permit_hash": "0xae2103d978ddf986b0944c12656795b5bdd63929032a79fc917593d0b97ba12f",
+    "proof_status": "BLOCKED",
+    "proof_checks": [
+      "agent_registration_active",
+      "chain_in_registration_scope",
+      "venue_in_registration_scope",
+      "market_in_registration_scope",
+      "decision_hash_bound",
+      "permit_hash_bound",
+      "execution_blocked"
+    ],
+    "created_at": "2026-03-27T09:05:00Z",
+    "expires_at": "2026-03-27T09:10:00.000Z",
+    "schema_version": "sentinel-8004-validation-artifact-v1",
+    "demo_only": true,
+    "artifact_hash": "0x2328d2f12c1a8e0f5129992d9fa666edee53998444f0d118848ddb590419a5a8"
   }
 }

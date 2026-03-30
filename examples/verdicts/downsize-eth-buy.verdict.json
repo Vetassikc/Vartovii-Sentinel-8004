@@ -50,5 +50,33 @@
       "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
       "expires_at": "2026-03-27T09:15:00.000Z"
     }
+  },
+  "validation_artifact": {
+    "artifact_id": "validation-intent-downsize-eth-buy-001",
+    "trace_id": "trace-downsize-eth-buy-001",
+    "intent_id": "intent-downsize-eth-buy-001",
+    "agent_id": "strategy-agent-demo",
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "registration_status": "ACTIVE",
+    "registration_hash": "0x4b05fa67bf7ba321001305eb5d2729d95facae0dbdfc08b938da50435e43d8fa",
+    "verdict": "ALLOW_WITH_DOWNSIZE",
+    "allowed_notional_usd": "2500.00",
+    "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
+    "permit_hash": "0xad2b2ab110a442e1bda502fbece0836d78c77f91ee5b43a9896622f6a13a41f7",
+    "proof_status": "CONSTRAINED",
+    "proof_checks": [
+      "agent_registration_active",
+      "chain_in_registration_scope",
+      "venue_in_registration_scope",
+      "market_in_registration_scope",
+      "decision_hash_bound",
+      "permit_hash_bound",
+      "downsized_execution_only"
+    ],
+    "created_at": "2026-03-27T09:10:00Z",
+    "expires_at": "2026-03-27T09:15:00.000Z",
+    "schema_version": "sentinel-8004-validation-artifact-v1",
+    "demo_only": true,
+    "artifact_hash": "0xeaf8f7dc18853230d670e3858c1bf3c0186bdae1d2df4f49731ede7bfb9c55f5"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "registration_id": "agent-reg-strategy-agent-demo-001",
+  "chain_id": 1,
+  "venue_scope": [
+    "kraken",
+    "demo"
+  ],
+  "market_scope": [
+    "BTC/USD",
+    "ETH/USD"
+  ],
+  "status": "ACTIVE",
+  "registry": "sentinel-demo-registry",
+  "registered_at": "2026-03-27T08:55:00Z",
+  "schema_version": "sentinel-8004-agent-registration-v1",
+  "demo_only": true,
+  "agent_id": "strategy-agent-demo",
+  "registration_hash": "0x4b05fa67bf7ba321001305eb5d2729d95facae0dbdfc08b938da50435e43d8fa"
+}

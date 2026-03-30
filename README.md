@@ -20,7 +20,7 @@ decision:
 
 The core flow is:
 
-`agent proposes trade -> Sentinel evaluates -> signed verdict + permit envelope -> auditable trace -> execution continues only if the permit remains valid`
+`agent proposes trade -> Sentinel evaluates -> signed verdict + permit envelope + validation artifact -> auditable trace -> execution continues only if the permit remains valid`
 
 ## Current Repository Status
 
@@ -32,7 +32,7 @@ Current public assets include:
 - judge-mode operating model
 - demo script
 - public schema definitions
-- sample intent and verdict payloads
+- sample intent, verdict, registration, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
 - a local `POST /api/demo/verify-permit` endpoint
 - a CLI scenario runner for the canonical demo fixtures
@@ -89,9 +89,10 @@ Out of scope for this repository:
 
 1. Read [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
-3. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-4. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-5. Inspect the example payloads under [examples/](./examples/)
+3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
+4. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
+5. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+6. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 

@@ -17,7 +17,7 @@ Use a one-sentence framing:
 
 Explain the narrow flow:
 
-`agent proposes trade -> Sentinel evaluates -> allow / deny / downsize -> signed verdict + permit envelope -> auditable trace`
+`agent proposes trade -> Sentinel evaluates -> allow / deny / downsize -> signed verdict + validation artifact -> auditable trace`
 
 ### 3. Walk Through Four Scenarios
 
@@ -52,7 +52,19 @@ Highlight fields such as:
 - `signed_verdict.permit_payload.approved_notional_usd`
 - `signed_verdict.signature`
 
-### 5. Show Permit Verification
+### 5. Show The Validation Artifact
+
+Point out fields such as:
+
+- `validation_artifact.registration_id`
+- `validation_artifact.proof_status`
+- `validation_artifact.permit_hash`
+- `validation_artifact.demo_only`
+
+Explain that this is the public-safe ERC-8004-facing proof layer for the demo,
+not a claim of live on-chain registry verification.
+
+### 6. Show Permit Verification
 
 Run the permit verifier on the downsized ETH scenario and point out:
 
@@ -60,7 +72,7 @@ Run the permit verifier on the downsized ETH scenario and point out:
 - the downsized request becomes executable
 - the signed artifact binds execution scope to the agent and market context
 
-### 6. Close With The Positioning
+### 7. Close With The Positioning
 
 End with:
 

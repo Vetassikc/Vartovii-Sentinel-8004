@@ -23,7 +23,8 @@ Judge mode centers around this public evaluation path:
 `POST /api/demo/evaluate-intent`
 
 The endpoint accepts a canonical `TradeIntent` payload and returns a canonical
-`SentinelEvaluationResponse` payload with nested `signed_verdict`.
+`SentinelEvaluationResponse` payload with nested `signed_verdict` and
+`validation_artifact`.
 
 Judge mode also exposes a narrow permit verification path:
 
@@ -85,6 +86,8 @@ A judge-mode response should make it obvious:
 - why that decision was returned
 - whether downsizing occurred
 - whether the verdict was signed
+- which agent registration the proof layer referenced
+- whether the validation artifact is `VALIDATED`, `CONSTRAINED`, or `BLOCKED`
 - whether the signed permit still validates
 - whether the requested execution stayed within the approved envelope
 - which policy version produced the decision
@@ -129,6 +132,14 @@ curl -X POST http://127.0.0.1:8787/api/demo/evaluate-intent \
     "verdict_payload": {
       "...": "..."
     }
+  },
+  "validation_artifact": {
+    "artifact_id": "validation-intent-downsize-eth-buy-001",
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "proof_status": "CONSTRAINED",
+    "permit_hash": "0x...",
+    "artifact_hash": "0x...",
+    "demo_only": true
   }
 }
 ```
@@ -154,10 +165,28 @@ The verifier returns a machine-readable gate result with:
 - `approved_notional_usd`
 - `checks[]`
 
+## Proof Boundary
+
+The public judge-mode proof layer is intentionally demo-only.
+
+It demonstrates:
+
+- schema shape
+- hash binding
+- registration linkage
+- deterministic validation flow
+
+It does not claim to demonstrate:
+
+- live on-chain registry verification
+- production signing custody
+- private bridge logic
+
 ## Public Limitation
 
 Judge mode is not presented as a complete production deployment.
 
 It is the public, inspectable proof that Sentinel can evaluate trading intents,
-emit machine-readable guardrail decisions, and verify whether a requested
-execution still fits the signed permit envelope.
+emit machine-readable guardrail decisions, attach a public-safe validation
+artifact, and verify whether a requested execution still fits the signed permit
+envelope.

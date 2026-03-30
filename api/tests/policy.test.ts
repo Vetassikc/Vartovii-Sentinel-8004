@@ -3,11 +3,18 @@ import assert from "node:assert/strict";
 
 import {
   evaluateTradeIntent,
+  resolveAgentRegistration,
   validatePermitVerificationRequest,
   validateTradeIntent,
   verifyTradePermit,
 } from "../app/policy.ts";
-import { listScenarioNames, loadExpectedVerdict, loadScenarioIntent } from "../app/scenarios.ts";
+import {
+  listScenarioNames,
+  loadAgentRegistration,
+  loadExpectedValidationArtifact,
+  loadExpectedVerdict,
+  loadScenarioIntent,
+} from "../app/scenarios.ts";
 
 for (const scenarioName of listScenarioNames()) {
   test(`evaluateTradeIntent matches fixture for ${scenarioName}`, async () => {
@@ -87,3 +94,24 @@ test("validatePermitVerificationRequest rejects invalid payloads", () => {
     assert.ok(validation.error.details.length >= 2);
   }
 });
+
+test("resolveAgentRegistration matches the canonical demo registration example", async () => {
+  const expectedRegistration = await loadAgentRegistration("strategy-agent-demo");
+  const registration = resolveAgentRegistration(
+    "strategy-agent-demo",
+    1,
+    "2026-03-27T09:00:00Z",
+  );
+
+  assert.deepEqual(registration, expectedRegistration);
+});
+
+for (const scenarioName of ["allow-btc-buy", "downsize-eth-buy"] as const) {
+  test(`evaluateTradeIntent surfaces the expected validation artifact for ${scenarioName}`, async () => {
+    const intent = await loadScenarioIntent(scenarioName);
+    const expectedArtifact = await loadExpectedValidationArtifact(scenarioName);
+    const evaluation = evaluateTradeIntent(intent);
+
+    assert.deepEqual(evaluation.validation_artifact, expectedArtifact);
+  });
+}

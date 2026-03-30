@@ -50,5 +50,33 @@
       "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
       "expires_at": "2026-03-27T09:20:00.000Z"
     }
+  },
+  "validation_artifact": {
+    "artifact_id": "validation-intent-fail-closed-oracle-001",
+    "trace_id": "trace-fail-closed-oracle-001",
+    "intent_id": "intent-fail-closed-oracle-001",
+    "agent_id": "strategy-agent-demo",
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "registration_status": "ACTIVE",
+    "registration_hash": "0x4b05fa67bf7ba321001305eb5d2729d95facae0dbdfc08b938da50435e43d8fa",
+    "verdict": "DENY",
+    "allowed_notional_usd": "0.00",
+    "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
+    "permit_hash": "0x0e08620e7d15553db5483d58ca02ac29bc4d9e057f055c77980c6a3dbd7c1dcc",
+    "proof_status": "BLOCKED",
+    "proof_checks": [
+      "agent_registration_active",
+      "chain_in_registration_scope",
+      "venue_in_registration_scope",
+      "market_in_registration_scope",
+      "decision_hash_bound",
+      "permit_hash_bound",
+      "execution_blocked"
+    ],
+    "created_at": "2026-03-27T09:15:00Z",
+    "expires_at": "2026-03-27T09:20:00.000Z",
+    "schema_version": "sentinel-8004-validation-artifact-v1",
+    "demo_only": true,
+    "artifact_hash": "0xa4f3110e13d15466573a1169fcf7d4ac8366de7126fcc183c4ab3c259ec638d6"
   }
 }

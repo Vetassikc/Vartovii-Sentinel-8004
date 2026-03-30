@@ -1,16 +1,19 @@
 import { createHash } from "node:crypto";
 
 import type {
+  AgentRegistration,
   ExecutionPermit,
   ErrorResponse,
   PermitCheck,
   PermitVerificationRequest,
   PermitVerificationResponse,
+  RegistrationStatus,
   RiskVerdict,
   SentinelEvaluationResponse,
   SignedVerdict,
   TradeIntent,
   TradeVenue,
+  ValidationArtifact,
   VerdictAction,
   OrderSide,
   OrderType,
@@ -22,7 +25,36 @@ const HARD_NOTIONAL_CAP_USD = 5000;
 const DEFAULT_TTL_MS = 5 * 60 * 1000;
 const POLICY_VERSION = "judge-demo-v1";
 const SCHEMA_VERSION = "sentinel-8004-v1";
+const AGENT_REGISTRATION_SCHEMA_VERSION = "sentinel-8004-agent-registration-v1";
+const VALIDATION_ARTIFACT_SCHEMA_VERSION = "sentinel-8004-validation-artifact-v1";
 const DEMO_SIGNER = "sentinel-demo-signer";
+const DEMO_REGISTRY = "sentinel-demo-registry";
+
+type AgentRegistrationSeed = {
+  registration_id: string;
+  chain_id: number;
+  venue_scope: TradeVenue[];
+  market_scope: string[];
+  status: RegistrationStatus;
+  registry: string;
+  registered_at: string;
+  schema_version: string;
+  demo_only: boolean;
+};
+
+const DEMO_AGENT_REGISTRATIONS: Record<string, AgentRegistrationSeed> = {
+  "strategy-agent-demo": {
+    registration_id: "agent-reg-strategy-agent-demo-001",
+    chain_id: 1,
+    venue_scope: ["kraken", "demo"],
+    market_scope: ["BTC/USD", "ETH/USD"],
+    status: "ACTIVE",
+    registry: DEMO_REGISTRY,
+    registered_at: "2026-03-27T08:55:00Z",
+    schema_version: AGENT_REGISTRATION_SCHEMA_VERSION,
+    demo_only: true,
+  },
+};
 
 type ValidationSuccess = {
   ok: true;
@@ -333,6 +365,12 @@ function hashExecutionPermit(permit: ExecutionPermit): string {
   return sha256Hex(stableStringify(permit));
 }
 
+function hashAgentRegistrationPayload(
+  registration: Omit<AgentRegistration, "registration_hash">,
+): string {
+  return sha256Hex(stableStringify(registration));
+}
+
 function buildVerdictSignature(
   decisionHash: string,
   permitHash: string,
@@ -341,6 +379,113 @@ function buildVerdictSignature(
   return sha256Hex(
     `${DEMO_SIGNER}:${decisionHash}:${permitHash}:${signedAt}:${SCHEMA_VERSION}`,
   );
+}
+
+export function resolveAgentRegistration(
+  agentId: string,
+  chainId: number,
+  submittedAt: string,
+): AgentRegistration {
+  const seed = DEMO_AGENT_REGISTRATIONS[agentId];
+  const registrationPayload: Omit<AgentRegistration, "registration_hash"> = seed
+    ? {
+        ...seed,
+        agent_id: agentId,
+      }
+    : {
+        registration_id: `agent-reg-${agentId}-pending`,
+        agent_id: agentId,
+        chain_id: chainId,
+        venue_scope: [],
+        market_scope: [],
+        status: "PENDING",
+        registry: DEMO_REGISTRY,
+        registered_at: submittedAt,
+        schema_version: AGENT_REGISTRATION_SCHEMA_VERSION,
+        demo_only: true,
+      };
+
+  return {
+    ...registrationPayload,
+    registration_hash: hashAgentRegistrationPayload(registrationPayload),
+  };
+}
+
+function hashValidationArtifactPayload(
+  artifact: Omit<ValidationArtifact, "artifact_hash">,
+): string {
+  return sha256Hex(stableStringify(artifact));
+}
+
+function buildValidationArtifact(
+  intent: TradeIntent,
+  verdict: RiskVerdict,
+  signedVerdict: SignedVerdict,
+  registration: AgentRegistration,
+): ValidationArtifact {
+  const registrationActive = registration.status === "ACTIVE";
+  const chainInScope = registration.chain_id === intent.chain_id;
+  const venueInScope = registration.venue_scope.includes(intent.venue);
+  const marketInScope = registration.market_scope.includes(intent.market);
+  const decisionHashBound = signedVerdict.decision_hash === verdict.decision_hash;
+  const permitHashBound =
+    signedVerdict.permit_hash === hashExecutionPermit(signedVerdict.permit_payload);
+
+  let proofStatus: ValidationArtifact["proof_status"] = "VALIDATED";
+  if (
+    !registrationActive ||
+    !chainInScope ||
+    !venueInScope ||
+    !marketInScope ||
+    verdict.verdict === "DENY"
+  ) {
+    proofStatus = "BLOCKED";
+  } else if (verdict.verdict === "ALLOW_WITH_DOWNSIZE") {
+    proofStatus = "CONSTRAINED";
+  }
+
+  const proofChecks = [
+    registrationActive
+      ? "agent_registration_active"
+      : registration.status === "PENDING"
+        ? "agent_registration_pending"
+        : "agent_registration_revoked",
+    chainInScope ? "chain_in_registration_scope" : "chain_out_of_registration_scope",
+    venueInScope ? "venue_in_registration_scope" : "venue_out_of_registration_scope",
+    marketInScope ? "market_in_registration_scope" : "market_out_of_registration_scope",
+    decisionHashBound ? "decision_hash_bound" : "decision_hash_unbound",
+    permitHashBound ? "permit_hash_bound" : "permit_hash_unbound",
+    proofStatus === "VALIDATED"
+      ? "execution_permitted"
+      : proofStatus === "CONSTRAINED"
+        ? "downsized_execution_only"
+        : "execution_blocked",
+  ];
+
+  const artifactPayload: Omit<ValidationArtifact, "artifact_hash"> = {
+    artifact_id: `validation-${intent.intent_id}`,
+    trace_id: intent.trace_id,
+    intent_id: intent.intent_id,
+    agent_id: intent.agent_id,
+    registration_id: registration.registration_id,
+    registration_status: registration.status,
+    registration_hash: registration.registration_hash,
+    verdict: verdict.verdict,
+    allowed_notional_usd: verdict.allowed_notional_usd,
+    decision_hash: verdict.decision_hash,
+    permit_hash: signedVerdict.permit_hash,
+    proof_status: proofStatus,
+    proof_checks: proofChecks,
+    created_at: signedVerdict.signed_at,
+    expires_at: verdict.expires_at,
+    schema_version: VALIDATION_ARTIFACT_SCHEMA_VERSION,
+    demo_only: true,
+  };
+
+  return {
+    ...artifactPayload,
+    artifact_hash: hashValidationArtifactPayload(artifactPayload),
+  };
 }
 
 function buildRiskVerdict(
@@ -470,9 +615,22 @@ export function evaluateTradeIntent(intent: TradeIntent): SentinelEvaluationResp
     );
   }
 
+  const signedVerdict = signVerdict(intent, verdict);
+  const agentRegistration = resolveAgentRegistration(
+    intent.agent_id,
+    intent.chain_id,
+    intent.submitted_at,
+  );
+
   return {
     ...verdict,
-    signed_verdict: signVerdict(intent, verdict),
+    signed_verdict: signedVerdict,
+    validation_artifact: buildValidationArtifact(
+      intent,
+      verdict,
+      signedVerdict,
+      agentRegistration,
+    ),
   };
 }
 

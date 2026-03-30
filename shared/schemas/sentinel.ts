@@ -2,6 +2,8 @@ export type VerdictAction = "ALLOW" | "DENY" | "ALLOW_WITH_DOWNSIZE";
 export type TradeVenue = "kraken" | "aerodrome" | "demo";
 export type OrderSide = "BUY" | "SELL";
 export type OrderType = "MARKET" | "LIMIT";
+export type RegistrationStatus = "ACTIVE" | "PENDING" | "REVOKED";
+export type ProofStatus = "VALIDATED" | "CONSTRAINED" | "BLOCKED";
 
 export interface TradeIntent {
   trace_id: string;
@@ -47,6 +49,20 @@ export interface ExecutionPermit {
   expires_at: string;
 }
 
+export interface AgentRegistration {
+  registration_id: string;
+  agent_id: string;
+  chain_id: number;
+  venue_scope: TradeVenue[];
+  market_scope: string[];
+  status: RegistrationStatus;
+  registry: string;
+  registered_at: string;
+  schema_version: string;
+  demo_only: boolean;
+  registration_hash: string;
+}
+
 export interface SignedVerdict {
   trace_id: string;
   decision_hash: string;
@@ -60,8 +76,30 @@ export interface SignedVerdict {
   permit_payload: ExecutionPermit;
 }
 
+export interface ValidationArtifact {
+  artifact_id: string;
+  trace_id: string;
+  intent_id: string;
+  agent_id: string;
+  registration_id: string;
+  registration_status: RegistrationStatus;
+  registration_hash: string;
+  verdict: VerdictAction;
+  allowed_notional_usd: string;
+  decision_hash: string;
+  permit_hash: string;
+  proof_status: ProofStatus;
+  proof_checks: string[];
+  created_at: string;
+  expires_at: string;
+  schema_version: string;
+  demo_only: boolean;
+  artifact_hash: string;
+}
+
 export interface SentinelEvaluationResponse extends RiskVerdict {
   signed_verdict: SignedVerdict;
+  validation_artifact: ValidationArtifact;
 }
 
 export interface PermitVerificationRequest {
