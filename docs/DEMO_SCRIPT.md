@@ -21,6 +21,9 @@ Explain the narrow flow:
 
 ### 3. Walk Through Four Scenarios
 
+If you are using the local demo shell, open `http://127.0.0.1:8787/` and keep
+the browser on the single scenario picker throughout the walkthrough.
+
 #### Scenario A: Safe Trade Approved
 
 Show the approved BTC example.

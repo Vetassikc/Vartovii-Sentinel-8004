@@ -1,3 +1,4 @@
+import { readFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 
 import {
@@ -6,18 +7,95 @@ import {
   validateTradeIntent,
   verifyTradePermit,
 } from "./policy.ts";
+import {
+  isScenarioName,
+  listScenarioNames,
+  loadScenarioIntent,
+} from "./scenarios.ts";
 
-function respondJson(
+type JudgeModeResponse = {
+  statusCode: number;
+  payload: unknown;
+  contentType?: string;
+};
+
+const ROOT_DIR = new URL("../../", import.meta.url);
+const STATIC_ASSETS = {
+  "/": {
+    fileUrl: new URL("web/index.html", ROOT_DIR),
+    contentType: "text/html; charset=utf-8",
+  },
+  "/web/app.js": {
+    fileUrl: new URL("web/app.js", ROOT_DIR),
+    contentType: "text/javascript; charset=utf-8",
+  },
+  "/web/styles.css": {
+    fileUrl: new URL("web/styles.css", ROOT_DIR),
+    contentType: "text/css; charset=utf-8",
+  },
+} as const;
+
+function respond(
   response: ServerResponse,
-  statusCode: number,
-  payload: unknown,
+  result: JudgeModeResponse,
 ): void {
-  const body = JSON.stringify(payload, null, 2);
-  response.writeHead(statusCode, {
-    "content-type": "application/json; charset=utf-8",
+  const isTextResponse = typeof result.payload === "string" && result.contentType !== undefined;
+  const body = isTextResponse
+    ? result.payload
+    : JSON.stringify(result.payload, null, 2);
+
+  response.writeHead(result.statusCode, {
+    "content-type": result.contentType ?? "application/json; charset=utf-8",
     "content-length": Buffer.byteLength(body),
   });
   response.end(body);
+}
+
+async function readStaticAsset(pathname: keyof typeof STATIC_ASSETS): Promise<string> {
+  return readFile(STATIC_ASSETS[pathname].fileUrl, "utf8");
+}
+
+async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse | null> {
+  if (pathname === "/api/demo/scenarios") {
+    return {
+      statusCode: 200,
+      payload: {
+        scenarios: listScenarioNames(),
+      },
+    };
+  }
+
+  const prefix = "/api/demo/scenarios/";
+  if (!pathname.startsWith(prefix)) {
+    return null;
+  }
+
+  const scenarioName = pathname.slice(prefix.length);
+  if (!isScenarioName(scenarioName)) {
+    return {
+      statusCode: 404,
+      payload: {
+        error: "not_found",
+        details: [`Unknown scenario: ${scenarioName}`],
+      },
+    };
+  }
+
+  const intent = await loadScenarioIntent(scenarioName);
+  const evaluation = evaluateTradeIntent(intent);
+
+  return {
+    statusCode: 200,
+    payload: {
+      scenario_name: scenarioName,
+      intent,
+      evaluation,
+      permit_verification: verifyTradePermit({
+        intent,
+        signed_verdict: evaluation.signed_verdict,
+      }),
+    },
+  };
 }
 
 async function readRawBody(request: IncomingMessage): Promise<string> {
@@ -38,7 +116,22 @@ export async function handleJudgeModeRequest(
   method: string,
   pathname: string,
   rawBody: string,
-): Promise<{ statusCode: number; payload: unknown }> {
+): Promise<JudgeModeResponse> {
+  if (method === "GET" && pathname in STATIC_ASSETS) {
+    return {
+      statusCode: 200,
+      payload: await readStaticAsset(pathname as keyof typeof STATIC_ASSETS),
+      contentType: STATIC_ASSETS[pathname as keyof typeof STATIC_ASSETS].contentType,
+    };
+  }
+
+  if (method === "GET") {
+    const scenarioBundle = await buildScenarioBundle(pathname);
+    if (scenarioBundle) {
+      return scenarioBundle;
+    }
+  }
+
   if (
     method === "POST" &&
     (pathname === "/api/demo/evaluate-intent" || pathname === "/api/demo/verify-permit")
@@ -105,7 +198,7 @@ export function createJudgeModeServer() {
       requestUrl.pathname,
       rawBody,
     );
-    respondJson(response, result.statusCode, result.payload);
+    respond(response, result);
   });
 }
 

@@ -10,6 +10,7 @@
   },
   "scripts": {
     "judge:dev": "node api/app/server.ts",
+    "judge:web": "node api/app/server.ts",
     "judge:scenario": "node scripts/run-scenario.ts",
     "judge:verify": "node scripts/verify-permit.ts",
     "test": "node --test api/tests/*.test.ts"

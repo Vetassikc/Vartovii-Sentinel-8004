@@ -34,12 +34,27 @@ The verifier accepts a `TradeIntent`, a `signed_verdict`, and an optional
 execution notional override to prove that execution stays inside the signed
 permit envelope.
 
+For judges who want a single-screen walkthrough, the same local server now also
+serves a minimal demo shell at:
+
+`GET /`
+
+The shell uses a narrow read-only bundle route:
+
+`GET /api/demo/scenarios/:scenario-name`
+
 ## Local Run
 
 Start the API:
 
 ```bash
 node api/app/server.ts
+```
+
+Open the demo shell:
+
+```text
+http://127.0.0.1:8787/
 ```
 
 Run a scenario directly from the CLI:
@@ -76,6 +91,7 @@ Judge mode solves three problems at once:
 - reproducibility for judges
 - safe public demo operation
 - clean separation between public and private infrastructure
+- one obvious local walkthrough without requiring CLI-only inspection
 
 ## Output Expectations
 
@@ -91,6 +107,13 @@ A judge-mode response should make it obvious:
 - whether the signed permit still validates
 - whether the requested execution stayed within the approved envelope
 - which policy version produced the decision
+
+The web shell presents the same information in four narrow inspection panels:
+
+- trade intent
+- verdict
+- validation artifact
+- permit verification
 
 ## Example Request
 
@@ -164,6 +187,16 @@ The verifier returns a machine-readable gate result with:
 - `requested_notional_usd`
 - `approved_notional_usd`
 - `checks[]`
+
+## Demo Shell Boundary
+
+The web demo shell is intentionally narrow:
+
+- scenario picker only
+- read-only JSON inspection
+- no authentication
+- no live execution
+- no product dashboard claims
 
 ## Proof Boundary
 

@@ -129,6 +129,13 @@ export interface PermitVerificationResponse {
   checks: PermitCheck[];
 }
 
+export interface JudgeScenarioBundle {
+  scenario_name: string;
+  intent: TradeIntent;
+  evaluation: SentinelEvaluationResponse;
+  permit_verification: PermitVerificationResponse;
+}
+
 export interface ErrorResponse {
   error: string;
   details: string[];

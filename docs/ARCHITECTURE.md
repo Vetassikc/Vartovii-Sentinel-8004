@@ -75,6 +75,11 @@ used in judge mode.
 Binds the agent registration, decision hash, permit hash, and proof status into
 one inspectable payload that can be surfaced alongside the signed verdict.
 
+### Judge Demo Shell
+
+Provides a read-only local browser view over the canonical scenario bundle so a
+judge can inspect the public-safe JSON objects without using the CLI directly.
+
 ### Audit Trace
 
 Preserves the decision context so that a judge or operator can inspect what
@@ -102,6 +107,9 @@ See [../shared/schemas/sentinel.ts](../shared/schemas/sentinel.ts).
 
 The local judge-mode surface exposes:
 
+- `GET /`
+- `GET /api/demo/scenarios`
+- `GET /api/demo/scenarios/:scenario-name`
 - `POST /api/demo/evaluate-intent`
 - `POST /api/demo/verify-permit`
 - `node scripts/run-scenario.ts <scenario-name>`

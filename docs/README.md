@@ -23,6 +23,7 @@ They should explain:
 - what the submission does
 - how judges can inspect it
 - how the demo is structured
+- how the demo shell is launched locally
 
 They should not expose:
 

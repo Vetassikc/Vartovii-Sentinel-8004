@@ -30,11 +30,13 @@ Current public assets include:
 
 - public architecture notes
 - judge-mode operating model
+- a narrow web demo shell for judges
 - demo script
 - public schema definitions
 - sample intent, verdict, registration, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
 - a local `POST /api/demo/verify-permit` endpoint
+- a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI permit verifier for the signed execution envelope
 - Node test coverage for fixture and endpoint parity
@@ -105,6 +107,18 @@ Start the local API:
 node api/app/server.ts
 ```
 
+Or use the npm alias:
+
+```bash
+npm run judge:web
+```
+
+Open the judge demo shell:
+
+```text
+http://127.0.0.1:8787/
+```
+
 Run a fixture directly:
 
 ```bash
@@ -115,6 +129,12 @@ Verify the signed execution envelope:
 
 ```bash
 node scripts/verify-permit.ts downsize-eth-buy 2500.00
+```
+
+Fetch the same bundle used by the web shell:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/scenarios/allow-btc-buy
 ```
 
 Run the local tests:
