@@ -1,0 +1,23 @@
+{
+  "name": "vartovii-sentinel-8004",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "description": "Public hackathon submission surface for Vartovii Sentinel-8004.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "judge:dev": "node api/app/server.ts",
+    "judge:scenario": "node scripts/run-scenario.ts",
+    "test": "node --test api/tests/*.test.ts"
+  },
+  "keywords": [
+    "hackathon",
+    "trading-agents",
+    "erc-8004",
+    "risk-guardrails",
+    "judge-mode"
+  ]
+}

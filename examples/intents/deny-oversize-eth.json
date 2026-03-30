@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace-deny-oversize-eth-001",
+  "agent_id": "strategy-agent-demo",
+  "intent_id": "intent-deny-oversize-eth-001",
+  "venue": "kraken",
+  "chain_id": 1,
+  "market": "ETH/USD",
+  "side": "BUY",
+  "order_type": "MARKET",
+  "size_base": "4.5000",
+  "notional_usd": "6500.00",
+  "max_slippage_bps": 45,
+  "strategy_context": {
+    "demo_scenario": "deny_oversize",
+    "thesis": "High conviction request, but the requested notional breaches the hard demo cap.",
+    "required_signals": {
+      "market_data": "available",
+      "position_limit": "available"
+    }
+  },
+  "submitted_at": "2026-03-27T09:05:00Z"
+}

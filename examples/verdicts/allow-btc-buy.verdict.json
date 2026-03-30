@@ -1,0 +1,41 @@
+{
+  "trace_id": "trace-allow-btc-buy-001",
+  "verdict": "ALLOW",
+  "risk_score": 20,
+  "reason_code": "RISK_WITHIN_POLICY",
+  "reason_detail": [
+    "market_allowlisted",
+    "requested_notional_within_policy_cap",
+    "required_signals_available"
+  ],
+  "allowed_notional_usd": "2400.00",
+  "expires_at": "2026-03-27T09:05:00.000Z",
+  "policy_version": "judge-demo-v1",
+  "judge_mode": true,
+  "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
+  "signed_verdict": {
+    "trace_id": "trace-allow-btc-buy-001",
+    "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630",
+    "signature": "0xefaef07715eee9f3c2111f62e53dd5b52fa01eef33f626a194e5ca36bf54f71f",
+    "signer": "sentinel-demo-signer",
+    "signed_at": "2026-03-27T09:00:00Z",
+    "expires_at": "2026-03-27T09:05:00.000Z",
+    "schema_version": "sentinel-8004-v1",
+    "verdict_payload": {
+      "trace_id": "trace-allow-btc-buy-001",
+      "verdict": "ALLOW",
+      "risk_score": 20,
+      "reason_code": "RISK_WITHIN_POLICY",
+      "reason_detail": [
+        "market_allowlisted",
+        "requested_notional_within_policy_cap",
+        "required_signals_available"
+      ],
+      "allowed_notional_usd": "2400.00",
+      "expires_at": "2026-03-27T09:05:00.000Z",
+      "policy_version": "judge-demo-v1",
+      "judge_mode": true,
+      "decision_hash": "0xf41f785c1363a4e3c2022173629c2681675468a38ed5d55d61281df4f97df630"
+    }
+  }
+}

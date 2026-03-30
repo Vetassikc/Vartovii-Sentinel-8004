@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace-fail-closed-oracle-001",
+  "agent_id": "strategy-agent-demo",
+  "intent_id": "intent-fail-closed-oracle-001",
+  "venue": "demo",
+  "chain_id": 1,
+  "market": "BTC/USD",
+  "side": "SELL",
+  "order_type": "MARKET",
+  "size_base": "0.0300",
+  "notional_usd": "1500.00",
+  "max_slippage_bps": 30,
+  "strategy_context": {
+    "demo_scenario": "fail_closed",
+    "thesis": "Trade request submitted while a required market validation input is unavailable.",
+    "required_signals": {
+      "market_data": "unavailable",
+      "position_limit": "available"
+    }
+  },
+  "submitted_at": "2026-03-27T09:15:00Z"
+}

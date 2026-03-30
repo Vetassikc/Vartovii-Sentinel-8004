@@ -1,0 +1,39 @@
+{
+  "trace_id": "trace-downsize-eth-buy-001",
+  "verdict": "ALLOW_WITH_DOWNSIZE",
+  "risk_score": 61,
+  "reason_code": "POSITION_SIZE_EXCEEDS_LIMIT",
+  "reason_detail": [
+    "requested_notional_above_soft_cap",
+    "downsized_to_policy_cap"
+  ],
+  "allowed_notional_usd": "2500.00",
+  "expires_at": "2026-03-27T09:15:00.000Z",
+  "policy_version": "judge-demo-v1",
+  "judge_mode": true,
+  "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
+  "signed_verdict": {
+    "trace_id": "trace-downsize-eth-buy-001",
+    "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110",
+    "signature": "0xf01e47fccce00eda1d4aa455333ea55892f28045d73486fe6b898c9408e873bd",
+    "signer": "sentinel-demo-signer",
+    "signed_at": "2026-03-27T09:10:00Z",
+    "expires_at": "2026-03-27T09:15:00.000Z",
+    "schema_version": "sentinel-8004-v1",
+    "verdict_payload": {
+      "trace_id": "trace-downsize-eth-buy-001",
+      "verdict": "ALLOW_WITH_DOWNSIZE",
+      "risk_score": 61,
+      "reason_code": "POSITION_SIZE_EXCEEDS_LIMIT",
+      "reason_detail": [
+        "requested_notional_above_soft_cap",
+        "downsized_to_policy_cap"
+      ],
+      "allowed_notional_usd": "2500.00",
+      "expires_at": "2026-03-27T09:15:00.000Z",
+      "policy_version": "judge-demo-v1",
+      "judge_mode": true,
+      "decision_hash": "0xfe4c2b9eab1f2c7e9280f1f7900a211cc12e2528016152be3fef913b9edc9110"
+    }
+  }
+}

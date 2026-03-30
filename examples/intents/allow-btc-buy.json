@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace-allow-btc-buy-001",
+  "agent_id": "strategy-agent-demo",
+  "intent_id": "intent-allow-btc-buy-001",
+  "venue": "kraken",
+  "chain_id": 1,
+  "market": "BTC/USD",
+  "side": "BUY",
+  "order_type": "MARKET",
+  "size_base": "0.0500",
+  "notional_usd": "2400.00",
+  "max_slippage_bps": 35,
+  "strategy_context": {
+    "demo_scenario": "allow",
+    "thesis": "Momentum confirmation with approved size and asset allowlist match.",
+    "required_signals": {
+      "market_data": "available",
+      "position_limit": "available"
+    }
+  },
+  "submitted_at": "2026-03-27T09:00:00Z"
+}

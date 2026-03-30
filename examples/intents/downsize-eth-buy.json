@@ -1,0 +1,22 @@
+{
+  "trace_id": "trace-downsize-eth-buy-001",
+  "agent_id": "strategy-agent-demo",
+  "intent_id": "intent-downsize-eth-buy-001",
+  "venue": "kraken",
+  "chain_id": 1,
+  "market": "ETH/USD",
+  "side": "BUY",
+  "order_type": "MARKET",
+  "size_base": "1.2000",
+  "notional_usd": "3200.00",
+  "max_slippage_bps": 40,
+  "strategy_context": {
+    "demo_scenario": "downsize",
+    "thesis": "Direction is acceptable, but requested exposure is above the preferred demo threshold.",
+    "required_signals": {
+      "market_data": "available",
+      "position_limit": "available"
+    }
+  },
+  "submitted_at": "2026-03-27T09:10:00Z"
+}

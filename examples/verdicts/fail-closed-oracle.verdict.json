@@ -1,0 +1,39 @@
+{
+  "trace_id": "trace-fail-closed-oracle-001",
+  "verdict": "DENY",
+  "risk_score": 80,
+  "reason_code": "ORACLE_UNAVAILABLE",
+  "reason_detail": [
+    "required_signal_unavailable:market_data",
+    "fail_closed_policy_triggered"
+  ],
+  "allowed_notional_usd": "0.00",
+  "expires_at": "2026-03-27T09:20:00.000Z",
+  "policy_version": "judge-demo-v1",
+  "judge_mode": true,
+  "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
+  "signed_verdict": {
+    "trace_id": "trace-fail-closed-oracle-001",
+    "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d",
+    "signature": "0x6e31d564b6d79af0b1264130baba78b75329b2bff9279615b0b9e8cbb389d9aa",
+    "signer": "sentinel-demo-signer",
+    "signed_at": "2026-03-27T09:15:00Z",
+    "expires_at": "2026-03-27T09:20:00.000Z",
+    "schema_version": "sentinel-8004-v1",
+    "verdict_payload": {
+      "trace_id": "trace-fail-closed-oracle-001",
+      "verdict": "DENY",
+      "risk_score": 80,
+      "reason_code": "ORACLE_UNAVAILABLE",
+      "reason_detail": [
+        "required_signal_unavailable:market_data",
+        "fail_closed_policy_triggered"
+      ],
+      "allowed_notional_usd": "0.00",
+      "expires_at": "2026-03-27T09:20:00.000Z",
+      "policy_version": "judge-demo-v1",
+      "judge_mode": true,
+      "decision_hash": "0xf566b8477779025e6ddbcac3e186a30693b5c117576923b4ec3278c24e119a5d"
+    }
+  }
+}
