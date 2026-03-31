@@ -22,6 +22,11 @@ The core flow is:
 
 `agent proposes trade -> Sentinel evaluates -> signed verdict + permit envelope + validation artifact -> auditable trace -> execution continues only if the permit remains valid`
 
+The public ERC-8004-facing slice adds an explicit tutorial-style proof path in
+front of that flow:
+
+`agent identity binding -> EIP-712-compatible typed trade intent -> signed intent bundle -> Sentinel evaluation -> validation artifact + signed permit`
+
 ## Current Repository Status
 
 This public repository now includes a runnable judge-mode foundation.
@@ -36,12 +41,15 @@ Current public assets include:
 - a submission asset pack with a cover image, canonical screenshots, and a social card
 - a small submission slide deck source plus a reproducible PDF export path
 - public schema definitions
-- sample intent, verdict, registration, and validation-artifact payloads
+- sample intent, verdict, registration, identity-binding, signed-intent, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
+- a local `POST /api/demo/verify-signed-intent` endpoint
 - a local `POST /api/demo/verify-permit` endpoint
 - a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
+- a local `GET /api/demo/signed-intents/:scenario-name` route for the canonical typed bundle
 - a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
+- a CLI signed-intent verifier for the canonical typed bundle
 - a CLI permit verifier for the signed execution envelope
 - Node test coverage for fixture and endpoint parity
 
@@ -149,10 +157,22 @@ Verify the signed execution envelope:
 node scripts/verify-permit.ts downsize-eth-buy 2500.00
 ```
 
+Verify the signed ERC-8004-style intent bundle:
+
+```bash
+node scripts/verify-signed-intent.ts allow-btc-buy
+```
+
 Fetch the same bundle used by the web shell:
 
 ```bash
 curl http://127.0.0.1:8787/api/demo/scenarios/allow-btc-buy
+```
+
+Fetch the canonical signed intent bundle:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/signed-intents/allow-btc-buy
 ```
 
 Run the local tests:

@@ -2,7 +2,9 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type {
+  AgentIdentityBinding,
   AgentRegistration,
+  SignedTradeIntentBundle,
   SentinelEvaluationResponse,
   TradeIntent,
   ValidationArtifact,
@@ -47,6 +49,14 @@ export function resolveAgentRegistrationPath(name: string): URL {
   return resolveFromRoot(`examples/agent-registrations/${name}.registration.json`);
 }
 
+export function resolveAgentIdentityPath(name: string): URL {
+  return resolveFromRoot(`examples/agent-identities/${name}.identity.json`);
+}
+
+export function resolveSignedIntentBundlePath(name: string): URL {
+  return resolveFromRoot(`examples/signed-intents/${name}.signed-intent.json`);
+}
+
 export function resolveInputPath(input: string): URL {
   if (path.isAbsolute(input)) {
     return new URL(`file://${input}`);
@@ -78,6 +88,18 @@ export async function loadExpectedValidationArtifact(
 
 export async function loadAgentRegistration(name: string): Promise<AgentRegistration> {
   return readJsonFile<AgentRegistration>(resolveAgentRegistrationPath(name));
+}
+
+export async function loadAgentIdentityBinding(
+  name: string,
+): Promise<AgentIdentityBinding> {
+  return readJsonFile<AgentIdentityBinding>(resolveAgentIdentityPath(name));
+}
+
+export async function loadSignedIntentBundle(
+  name: string,
+): Promise<SignedTradeIntentBundle> {
+  return readJsonFile<SignedTradeIntentBundle>(resolveSignedIntentBundlePath(name));
 }
 
 export async function loadIntentFromFile(fileUrl: URL): Promise<TradeIntent> {

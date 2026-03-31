@@ -2,6 +2,11 @@ import { readFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 
 import {
+  buildSignedTradeIntentBundle,
+  validateSignedTradeIntentBundle,
+  verifySignedTradeIntentBundle,
+} from "./erc8004.ts";
+import {
   evaluateTradeIntent,
   validatePermitVerificationRequest,
   validateTradeIntent,
@@ -90,6 +95,28 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
     };
   }
 
+  const signedIntentPrefix = "/api/demo/signed-intents/";
+  if (pathname.startsWith(signedIntentPrefix)) {
+    const scenarioName = pathname.slice(signedIntentPrefix.length);
+    if (!isScenarioName(scenarioName)) {
+      return {
+        statusCode: 404,
+        payload: {
+          error: "not_found",
+          details: [`Unknown scenario: ${scenarioName}`],
+        },
+      };
+    }
+
+    const intent = await loadScenarioIntent(scenarioName);
+    const signedIntentBundle = buildSignedTradeIntentBundle(intent);
+
+    return {
+      statusCode: 200,
+      payload: signedIntentBundle,
+    };
+  }
+
   const prefix = "/api/demo/scenarios/";
   if (!pathname.startsWith(prefix)) {
     return null;
@@ -107,6 +134,7 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
   }
 
   const intent = await loadScenarioIntent(scenarioName);
+  const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
 
   return {
@@ -114,6 +142,8 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
     payload: {
       scenario_name: scenarioName,
       intent,
+      signed_intent_bundle: signedIntentBundle,
+      signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
       evaluation,
       permit_verification: verifyTradePermit({
         intent,
@@ -172,7 +202,11 @@ export async function handleJudgeModeRequest(
 
   if (
     method === "POST" &&
-    (pathname === "/api/demo/evaluate-intent" || pathname === "/api/demo/verify-permit")
+    (
+      pathname === "/api/demo/evaluate-intent" ||
+      pathname === "/api/demo/verify-permit" ||
+      pathname === "/api/demo/verify-signed-intent"
+    )
   ) {
     try {
       const payload = rawBody.length === 0 ? {} : JSON.parse(rawBody);
@@ -189,6 +223,21 @@ export async function handleJudgeModeRequest(
         return {
           statusCode: 200,
           payload: evaluateTradeIntent(validation.value),
+        };
+      }
+
+      if (pathname === "/api/demo/verify-signed-intent") {
+        const validation = validateSignedTradeIntentBundle(payload);
+        if (!validation.ok) {
+          return {
+            statusCode: 400,
+            payload: validation.error,
+          };
+        }
+
+        return {
+          statusCode: 200,
+          payload: verifySignedTradeIntentBundle(validation.value),
         };
       }
 

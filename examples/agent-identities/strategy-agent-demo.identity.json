@@ -1,0 +1,36 @@
+{
+  "binding_id": "identity-strategy-agent-demo-001",
+  "agent_id": "strategy-agent-demo",
+  "agent_numeric_id": "0",
+  "operator_wallet": "0x1111111111111111111111111111111111118004",
+  "agent_wallet": "0x2222222222222222222222222222222222228004",
+  "registry_address": "0x8004000000000000000000000000000000000001",
+  "registration_payload": {
+    "registration_id": "agent-reg-strategy-agent-demo-001",
+    "name": "StrategyAgentDemo",
+    "description": "Public-safe ERC-8004-style trading agent identity used for Sentinel judge mode.",
+    "capabilities": [
+      "trading",
+      "analysis",
+      "eip712-intent-signing",
+      "guardrail-verification"
+    ],
+    "agent_uri": "ipfs://sentinel-8004-demo-agent",
+    "chain_id": 1,
+    "venue_scope": [
+      "kraken",
+      "demo"
+    ],
+    "market_scope": [
+      "BTC/USD",
+      "ETH/USD"
+    ],
+    "registered_at": "2026-03-27T08:55:00Z",
+    "active": true,
+    "schema_version": "sentinel-erc8004-agent-registration-payload-v1",
+    "demo_only": true
+  },
+  "schema_version": "sentinel-erc8004-identity-binding-v1",
+  "demo_only": true,
+  "binding_hash": "0x762cdf2335c9e0f51d192c35ed063b323ae633e87d90206aec1ade66a4393881"
+}

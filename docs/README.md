@@ -10,7 +10,7 @@ This folder contains the public-safe documentation for the
 - `JUDGE_MODE.md`
   - local and offline-friendly evaluation model
 - `ERC8004_PROOF.md`
-  - public-safe explanation of the additive proof layer
+  - public-safe explanation of agent identity binding, typed trade intent, and proof flow alignment
 - `DEPLOYMENT.md`
   - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
@@ -37,6 +37,7 @@ They should explain:
 - what the submission does
 - how judges can inspect it
 - how the demo is structured
+- how the typed signed-intent layer maps to the judge-mode flow
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

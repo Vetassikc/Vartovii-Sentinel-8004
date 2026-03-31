@@ -5,51 +5,121 @@
 This document describes the additive ERC-8004-facing proof layer exposed by the
 public Sentinel-8004 repository.
 
-It exists so that judges can inspect a public-safe validation artifact without
-requiring access to private bridges, private registries, or live execution
-rails.
+It exists so that judges can inspect a public-safe identity and typed-intent
+flow without requiring private infrastructure, a testnet deployment, or live
+execution credentials.
 
-## Public Proof Objects
+## Tutorial Alignment
 
-The public repo now exposes two explicit proof objects:
+The reference tutorial flow introduces four ideas:
 
-- `AgentRegistration`
-  - a public-safe demo registration record for an agent identity handle
-- `ValidationArtifact`
-  - a machine-readable artifact that binds the evaluated intent to:
-    - the agent registration
-    - the signed verdict
-    - the permit hash
-    - the proof status returned in judge mode
+- agent identity
+- typed trade intent
+- validation or action proof
+- execution approval
+
+The public Sentinel MVP now maps those ideas to these public-safe objects:
+
+- tutorial agent identity
+  - `AgentIdentityBinding`
+  - contains `operator_wallet`, `agent_wallet`, and the embedded
+    `registration_payload`
+- tutorial typed trade intent
+  - `TypedTradeIntentData`
+  - an EIP-712-compatible typed data shape for trade evaluation
+- tutorial signed action proof
+  - `SignedTradeIntentBundle`
+  - binds the identity, typed data, signature envelope, and projected
+    `TradeIntent`
+- tutorial validation output
+  - `ValidationArtifact`
+  - binds registration linkage, decision hash, permit hash, and proof status
+- Sentinel execution approval
+  - `SignedVerdict` plus `ExecutionPermit`
+  - remains the explicit execution gate in judge mode
 
 See [../shared/schemas/sentinel.ts](../shared/schemas/sentinel.ts).
 
-## How It Fits Judge Mode
+## End-To-End Flow
 
-Judge mode is still the reproducible public evaluation path.
+The public repo now exposes this additive proof path:
 
-The additive proof layer does not replace the guardrail story.
+`AgentIdentityBinding -> TypedTradeIntentData -> SignedTradeIntentBundle -> SentinelEvaluationResponse -> ValidationArtifact -> SignedVerdict -> ExecutionPermit`
 
-It extends it:
+That path stays aligned with the Sentinel thesis:
 
-`TradeIntent -> RiskVerdict -> SignedVerdict -> ValidationArtifact -> Judge-Mode Inspection`
+`proposed trade -> guardrail decision -> bounded execution permit`
 
-The validation artifact is surfaced in the same judge-mode response so judges
-can see:
+## What Is Signed
 
-- which agent registration was used
-- whether the proof is `VALIDATED`, `CONSTRAINED`, or `BLOCKED`
-- which hashes were bound into the artifact
-- whether the artifact is explicitly marked as demo-only
+The canonical typed message signs these fields:
+
+- `agentId`
+- `agentWallet`
+- `pair`
+- `action`
+- `amountUsdScaled`
+- `maxSlippageBps`
+- `nonce`
+- `deadline`
+
+Those fields live inside `TypedTradeIntentData.message`.
+
+The bundle also includes:
+
+- the `AgentIdentityBinding`
+- the `typed_data_hash`
+- a demo-only deterministic signature envelope
+- the projected `TradeIntent` used by Sentinel policy evaluation
+
+## What Is Verified
+
+The signed-intent verifier checks:
+
+- typed data shape and hash parity
+- identity binding shape and binding hash parity
+- signer wallet matches the bound agent wallet
+- typed trade intent fields match the projected Sentinel `TradeIntent`
+- the resulting Sentinel verdict expiry matches the typed intent deadline
+- the resulting permit still passes the existing permit verifier
+
+Verification is available through:
+
+- `node scripts/verify-signed-intent.ts allow-btc-buy`
+- `POST /api/demo/verify-signed-intent`
 
 ## Example Payloads
 
 Public-safe examples are included under:
 
 - `examples/agent-registrations/`
+- `examples/agent-identities/`
+- `examples/signed-intents/`
 - `examples/validation-artifacts/`
 
-These are deterministic demo payloads designed for inspection and local tests.
+The canonical allow-path typed bundle is:
+
+- `examples/signed-intents/allow-btc-buy.signed-intent.json`
+
+## How It Fits Judge Mode
+
+Judge mode is still the reproducible public evaluation path.
+
+The additive proof layer does not replace the guardrail story. It extends it.
+
+The scenario bundle route now shows:
+
+- the original `TradeIntent`
+- the `SignedTradeIntentBundle`
+- the signed-intent verification result
+- the `SentinelEvaluationResponse`
+- the final permit verification result
+
+This makes the mapping explicit:
+
+- signed typed intent proves what the agent asked for
+- validation artifact proves how Sentinel classified it
+- signed verdict and permit prove what execution is still allowed to do
 
 ## Demo-Only Boundary
 
@@ -59,13 +129,13 @@ It should be understood as:
 
 - a schema proof
 - a flow proof
-- a deterministic artifact proof
+- a deterministic verification proof
 
 It should not be interpreted as:
 
 - a live on-chain registry lookup
-- a production attestation network
-- a final trust guarantee
+- a live ERC-8004 contract deployment
+- a production custody or signing system
 - a legal or compliance certification
 
 ## What Is Real In This Public Repo
@@ -75,16 +145,17 @@ The public repo does provide:
 - deterministic schemas
 - deterministic hashes
 - reproducible fixtures
-- a consistent judge-mode response shape
-- local tests that verify example parity
+- explicit typed-data verification
+- parity tests between fixtures and runtime outputs
 
 ## What Remains Demo-Only
 
 The public repo does not claim to provide:
 
 - live ERC-8004 registry verification
+- wallet signature recovery against a public network
 - production key management
-- live settlement guarantees
 - private bridge or adapter logic
 
-That boundary is surfaced directly in the payloads through `demo_only: true`.
+That boundary is surfaced directly in the payloads through `demo_only: true`
+and the signature scheme label `demo-eip712-compatible-v1`.

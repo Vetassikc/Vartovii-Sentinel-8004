@@ -15,6 +15,7 @@
     "judge:web": "npm run start",
     "judge:scenario": "node scripts/run-scenario.ts",
     "judge:verify": "node scripts/verify-permit.ts",
+    "judge:verify-intent": "node scripts/verify-signed-intent.ts",
     "slides:pdf": "bash scripts/export-slides-pdf.sh",
     "test": "node --test api/tests/*.test.ts"
   },

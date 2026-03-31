@@ -17,9 +17,23 @@ Use a one-sentence framing:
 
 Explain the narrow flow:
 
-`agent proposes trade -> Sentinel evaluates -> allow / deny / downsize -> signed verdict + validation artifact -> auditable trace`
+`agent identity binds to a typed trade intent -> Sentinel evaluates -> allow / deny / downsize -> signed verdict + validation artifact -> auditable trace`
 
-### 3. Walk Through Four Scenarios
+### 3. Show The Signed Intent Bundle
+
+Before jumping into the live scenarios, show the canonical typed bundle:
+
+```bash
+node scripts/verify-signed-intent.ts allow-btc-buy
+```
+
+Point out:
+
+- the operator wallet and agent wallet binding
+- the EIP-712-compatible typed fields
+- the fact that the verifier recomputes the Sentinel evaluation and permit check
+
+### 4. Walk Through Four Scenarios
 
 If you are using the hosted app root, open `http://127.0.0.1:8787/` first and
 use the primary CTA to enter the live judge demo.
@@ -45,7 +59,7 @@ that only the downsized execution envelope is permitted.
 
 Show that missing critical inputs lead to a blocked execution path.
 
-### 4. Show The Signed Verdict Shape
+### 5. Show The Signed Verdict Shape
 
 Highlight fields such as:
 
@@ -59,7 +73,7 @@ Highlight fields such as:
 - `signed_verdict.permit_payload.approved_notional_usd`
 - `signed_verdict.signature`
 
-### 5. Show The Validation Artifact
+### 6. Show The Validation Artifact
 
 Point out fields such as:
 
@@ -71,7 +85,7 @@ Point out fields such as:
 Explain that this is the public-safe ERC-8004-facing proof layer for the demo,
 not a claim of live on-chain registry verification.
 
-### 6. Show Permit Verification
+### 7. Show Permit Verification
 
 Run the permit verifier on the downsized ETH scenario and point out:
 
@@ -79,7 +93,7 @@ Run the permit verifier on the downsized ETH scenario and point out:
 - the downsized request becomes executable
 - the signed artifact binds execution scope to the agent and market context
 
-### 7. Close With The Positioning
+### 8. Close With The Positioning
 
 End with:
 
@@ -103,6 +117,11 @@ Recommended mapping:
 For video overlays and narration, the `Validation Artifact` payload is the best
 single proof object to keep on screen because it ties the agent registration,
 decision hash, permit hash, and demo-only proof status together.
+
+If you want one command-line proof cutaway before the browser segment, use the
+signed intent verifier output. It is the most explicit way to show what was
+signed, what was verified, and how that bundle maps into the existing Sentinel
+guardrail flow.
 
 ## Demo Rule
 

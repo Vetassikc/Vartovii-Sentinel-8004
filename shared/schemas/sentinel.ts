@@ -63,6 +63,65 @@ export interface AgentRegistration {
   registration_hash: string;
 }
 
+export interface AgentRegistrationPayload {
+  registration_id: string;
+  name: string;
+  description: string;
+  capabilities: string[];
+  agent_uri: string;
+  chain_id: number;
+  venue_scope: TradeVenue[];
+  market_scope: string[];
+  registered_at: string;
+  active: boolean;
+  schema_version: string;
+  demo_only: boolean;
+}
+
+export interface AgentIdentityBinding {
+  binding_id: string;
+  agent_id: string;
+  agent_numeric_id: string;
+  operator_wallet: string;
+  agent_wallet: string;
+  registry_address: string;
+  registration_payload: AgentRegistrationPayload;
+  schema_version: string;
+  demo_only: boolean;
+  binding_hash: string;
+}
+
+export interface Eip712TypeField {
+  name: string;
+  type: string;
+}
+
+export interface TypedTradeIntentMessage {
+  agentId: string;
+  agentWallet: string;
+  pair: string;
+  action: OrderSide;
+  amountUsdScaled: string;
+  maxSlippageBps: number;
+  nonce: string;
+  deadline: string;
+}
+
+export interface TypedTradeIntentData {
+  domain: {
+    name: string;
+    version: string;
+    chainId: number;
+    verifyingContract: string;
+  };
+  primaryType: "TradeIntent";
+  types: {
+    EIP712Domain: Eip712TypeField[];
+    TradeIntent: Eip712TypeField[];
+  };
+  message: TypedTradeIntentMessage;
+}
+
 export interface SignedVerdict {
   trace_id: string;
   decision_hash: string;
@@ -95,6 +154,36 @@ export interface ValidationArtifact {
   schema_version: string;
   demo_only: boolean;
   artifact_hash: string;
+}
+
+export interface SignedTradeIntentBundle {
+  bundle_id: string;
+  agent_id: string;
+  identity_binding: AgentIdentityBinding;
+  typed_data: TypedTradeIntentData;
+  typed_data_hash: string;
+  signature: string;
+  signer_wallet: string;
+  signature_scheme: string;
+  signed_at: string;
+  sentinel_projection: TradeIntent;
+  demo_only: boolean;
+}
+
+export interface SignedTradeIntentVerification {
+  bundle_id: string;
+  typed_data_hash: string;
+  signer_wallet: string;
+  verification_code: string;
+  typed_data_valid: boolean;
+  identity_binding_valid: boolean;
+  signature_valid: boolean;
+  sentinel_projection_valid: boolean;
+  verified_checks: string[];
+  signed_fields: string[];
+  demo_only: boolean;
+  evaluation?: SentinelEvaluationResponse;
+  permit_verification?: PermitVerificationResponse;
 }
 
 export interface SentinelEvaluationResponse extends RiskVerdict {
@@ -132,6 +221,8 @@ export interface PermitVerificationResponse {
 export interface JudgeScenarioBundle {
   scenario_name: string;
   intent: TradeIntent;
+  signed_intent_bundle: SignedTradeIntentBundle;
+  signed_intent_verification: SignedTradeIntentVerification;
   evaluation: SentinelEvaluationResponse;
   permit_verification: PermitVerificationResponse;
 }

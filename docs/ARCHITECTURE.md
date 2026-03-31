@@ -17,6 +17,9 @@ controlled execution:
 
 ```text
 Strategy Agent / Fixture Runner
+  -> Agent Identity Binding
+  -> EIP-712-Compatible Typed Trade Intent
+  -> Signed Intent Bundle
   -> TradeIntent
   -> Intent Normalizer + Validator
   -> Policy Engine
@@ -35,6 +38,29 @@ Strategy Agent / Fixture Runner
 Produces a `TradeIntent`. In the public repo this may be represented by fixture
 payloads, judge-mode scenarios, the local CLI runner, or a lightweight demo
 shell.
+
+### Agent Identity Binding
+
+Provides the public-safe bridge between the tutorial-style ERC-8004 identity
+model and the Sentinel demo flow.
+
+The binding carries:
+
+- operator wallet
+- agent wallet
+- public registration payload
+- deterministic binding hash
+
+### Typed Trade Intent
+
+Captures the trade request as an EIP-712-compatible typed data envelope before
+it is evaluated by Sentinel policy.
+
+### Signed Intent Bundle
+
+Binds the typed trade intent, the identity binding, the signer wallet, and the
+projected Sentinel `TradeIntent` into one public-safe bundle that can be
+verified locally.
 
 ### Intent Normalizer
 
@@ -96,6 +122,10 @@ The public scaffold uses these core types:
 
 - `TradeIntent`
 - `AgentRegistration`
+- `AgentIdentityBinding`
+- `TypedTradeIntentData`
+- `SignedTradeIntentBundle`
+- `SignedTradeIntentVerification`
 - `RiskVerdict`
 - `ExecutionPermit`
 - `SignedVerdict`
@@ -111,9 +141,12 @@ The local judge-mode surface exposes:
 - `GET /healthz`
 - `GET /api/demo/scenarios`
 - `GET /api/demo/scenarios/:scenario-name`
+- `GET /api/demo/signed-intents/:scenario-name`
 - `POST /api/demo/evaluate-intent`
+- `POST /api/demo/verify-signed-intent`
 - `POST /api/demo/verify-permit`
 - `node scripts/run-scenario.ts <scenario-name>`
+- `node scripts/verify-signed-intent.ts <scenario-name>`
 - `node scripts/verify-permit.ts <scenario-name> [requested-notional-usd]`
 
 ## Decision Outcomes
@@ -133,6 +166,7 @@ The minimum demo profile is intentionally conservative:
 - emphasis on low drawdown and controlled approvals
 - fail-closed behavior when required inputs are missing
 - fixed `judge-demo-v1` policy version and deterministic demo signatures
+- tutorial-compatible typed trade intents with demo-only deterministic verification
 - permit verification that fails closed when the signed envelope no longer matches execution scope
 - demo-only registrations and validation artifacts that stay public-safe
 

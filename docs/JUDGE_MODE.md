@@ -26,6 +26,14 @@ The endpoint accepts a canonical `TradeIntent` payload and returns a canonical
 `SentinelEvaluationResponse` payload with nested `signed_verdict` and
 `validation_artifact`.
 
+Judge mode also exposes a narrow signed-intent verification path:
+
+`POST /api/demo/verify-signed-intent`
+
+The verifier accepts a `SignedTradeIntentBundle` and proves that the typed
+trade intent, the identity binding, and the projected Sentinel trade all remain
+aligned before the existing guardrail flow is evaluated.
+
 Judge mode also exposes a narrow permit verification path:
 
 `POST /api/demo/verify-permit`
@@ -46,6 +54,10 @@ The live judge demo shell remains available at:
 The shell uses a narrow read-only bundle route:
 
 `GET /api/demo/scenarios/:scenario-name`
+
+The same server also exposes the canonical signed intent fixture at:
+
+`GET /api/demo/signed-intents/:scenario-name`
 
 For deployment-readiness and host health checks, the same server also exposes:
 
@@ -89,6 +101,12 @@ Verify a signed permit directly from the CLI:
 node scripts/verify-permit.ts downsize-eth-buy 2500.00
 ```
 
+Verify a signed ERC-8004-style intent bundle directly from the CLI:
+
+```bash
+node scripts/verify-signed-intent.ts allow-btc-buy
+```
+
 Run tests:
 
 ```bash
@@ -118,6 +136,8 @@ Judge mode solves three problems at once:
 A judge-mode response should make it obvious:
 
 - what the input trade was
+- which operator wallet and agent wallet the typed intent was bound to
+- which fields were signed in the typed intent
 - what decision was returned
 - why that decision was returned
 - whether downsizing occurred
@@ -137,6 +157,9 @@ The web shell presents the same information in four narrow inspection panels:
 
 The hosted root page is intentionally smaller. It exists only to route judges to
 the live demo, public repository, proof notes, and reusable submission assets.
+
+The signed-intent bundle is intentionally exposed through CLI and API rather
+than the current UI so the hosted `/judge` shell stays narrow and judge-first.
 
 ## Example Request
 
@@ -211,6 +234,24 @@ The verifier returns a machine-readable gate result with:
 - `approved_notional_usd`
 - `checks[]`
 
+## Example Signed Intent Verification
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/demo/verify-signed-intent \
+  -H "Content-Type: application/json" \
+  --data @examples/signed-intents/allow-btc-buy.signed-intent.json
+```
+
+The verifier returns a machine-readable proof result with:
+
+- `verification_code`
+- `typed_data_valid`
+- `identity_binding_valid`
+- `signature_valid`
+- `sentinel_projection_valid`
+- `evaluation`
+- `permit_verification`
+
 ## Demo Shell Boundary
 
 The web demo shell is intentionally narrow:
@@ -228,7 +269,9 @@ The public judge-mode proof layer is intentionally demo-only.
 It demonstrates:
 
 - schema shape
+- tutorial-compatible typed data shape
 - hash binding
+- wallet-to-agent identity binding
 - registration linkage
 - deterministic validation flow
 

@@ -1,9 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import { buildSignedTradeIntentBundle, verifySignedTradeIntentBundle } from "../app/erc8004.ts";
 import { handleJudgeModeRequest, resolveServerConfig } from "../app/server.ts";
 import { evaluateTradeIntent, verifyTradePermit } from "../app/policy.ts";
-import { loadExpectedVerdict, loadScenarioIntent } from "../app/scenarios.ts";
+import { loadExpectedVerdict, loadScenarioIntent, loadSignedIntentBundle } from "../app/scenarios.ts";
 
 test("resolveServerConfig defaults to localhost for local development", () => {
   assert.deepEqual(resolveServerConfig({}), {
@@ -72,6 +73,7 @@ test("GET /api/demo/scenarios returns the canonical scenario names", async () =>
 
 test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shell", async () => {
   const intent = await loadScenarioIntent("allow-btc-buy");
+  const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
   const response = await handleJudgeModeRequest(
     "GET",
@@ -83,12 +85,26 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
   assert.deepEqual(response.payload, {
     scenario_name: "allow-btc-buy",
     intent,
+    signed_intent_bundle: signedIntentBundle,
+    signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
     evaluation,
     permit_verification: verifyTradePermit({
       intent,
       signed_verdict: evaluation.signed_verdict,
     }),
   });
+});
+
+test("GET /api/demo/signed-intents/:name returns the canonical signed intent bundle", async () => {
+  const expectedBundle = await loadSignedIntentBundle("allow-btc-buy");
+  const response = await handleJudgeModeRequest(
+    "GET",
+    "/api/demo/signed-intents/allow-btc-buy",
+    "",
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, expectedBundle);
 });
 
 test("POST /api/demo/evaluate-intent route logic returns the canonical evaluation response", async () => {
@@ -152,6 +168,38 @@ test("POST /api/demo/verify-permit route logic returns 400 for invalid payloads"
   assert.equal(
     (response.payload as { error: string }).error,
     "invalid_permit_verification_request",
+  );
+});
+
+test("POST /api/demo/verify-signed-intent returns a verified ERC-8004-style proof bundle", async () => {
+  const bundle = await loadSignedIntentBundle("allow-btc-buy");
+  const response = await handleJudgeModeRequest(
+    "POST",
+    "/api/demo/verify-signed-intent",
+    JSON.stringify(bundle),
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(
+    (response.payload as { verification_code: string }).verification_code,
+    "SIGNED_INTENT_VERIFIED",
+  );
+});
+
+test("POST /api/demo/verify-signed-intent returns 400 for invalid payloads", async () => {
+  const response = await handleJudgeModeRequest(
+    "POST",
+    "/api/demo/verify-signed-intent",
+    JSON.stringify({
+      bundle_id: "broken",
+      signer_wallet: "not-a-wallet",
+    }),
+  );
+
+  assert.equal(response.statusCode, 400);
+  assert.equal(
+    (response.payload as { error: string }).error,
+    "invalid_signed_trade_intent_bundle",
   );
 });
 

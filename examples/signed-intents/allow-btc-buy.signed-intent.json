@@ -1,0 +1,141 @@
+{
+  "bundle_id": "signed-intent-intent-allow-btc-buy-001",
+  "agent_id": "strategy-agent-demo",
+  "identity_binding": {
+    "binding_id": "identity-strategy-agent-demo-001",
+    "agent_id": "strategy-agent-demo",
+    "agent_numeric_id": "0",
+    "operator_wallet": "0x1111111111111111111111111111111111118004",
+    "agent_wallet": "0x2222222222222222222222222222222222228004",
+    "registry_address": "0x8004000000000000000000000000000000000001",
+    "registration_payload": {
+      "registration_id": "agent-reg-strategy-agent-demo-001",
+      "name": "StrategyAgentDemo",
+      "description": "Public-safe ERC-8004-style trading agent identity used for Sentinel judge mode.",
+      "capabilities": [
+        "trading",
+        "analysis",
+        "eip712-intent-signing",
+        "guardrail-verification"
+      ],
+      "agent_uri": "ipfs://sentinel-8004-demo-agent",
+      "chain_id": 1,
+      "venue_scope": [
+        "kraken",
+        "demo"
+      ],
+      "market_scope": [
+        "BTC/USD",
+        "ETH/USD"
+      ],
+      "registered_at": "2026-03-27T08:55:00Z",
+      "active": true,
+      "schema_version": "sentinel-erc8004-agent-registration-payload-v1",
+      "demo_only": true
+    },
+    "schema_version": "sentinel-erc8004-identity-binding-v1",
+    "demo_only": true,
+    "binding_hash": "0x762cdf2335c9e0f51d192c35ed063b323ae633e87d90206aec1ade66a4393881"
+  },
+  "typed_data": {
+    "domain": {
+      "name": "SentinelTradeIntent",
+      "version": "1",
+      "chainId": 1,
+      "verifyingContract": "0x8004000000000000000000000000000000000001"
+    },
+    "primaryType": "TradeIntent",
+    "types": {
+      "EIP712Domain": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "chainId",
+          "type": "uint256"
+        },
+        {
+          "name": "verifyingContract",
+          "type": "address"
+        }
+      ],
+      "TradeIntent": [
+        {
+          "name": "agentId",
+          "type": "uint256"
+        },
+        {
+          "name": "agentWallet",
+          "type": "address"
+        },
+        {
+          "name": "pair",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "amountUsdScaled",
+          "type": "uint256"
+        },
+        {
+          "name": "maxSlippageBps",
+          "type": "uint256"
+        },
+        {
+          "name": "nonce",
+          "type": "uint256"
+        },
+        {
+          "name": "deadline",
+          "type": "uint256"
+        }
+      ]
+    },
+    "message": {
+      "agentId": "0",
+      "agentWallet": "0x2222222222222222222222222222222222228004",
+      "pair": "BTC/USD",
+      "action": "BUY",
+      "amountUsdScaled": "240000",
+      "maxSlippageBps": 35,
+      "nonce": "1",
+      "deadline": "1774602300"
+    }
+  },
+  "typed_data_hash": "0xe734850a05c7a50d4453d6501a7f409593b17e768c414589886cdda97a3e6d08",
+  "signature": "0x206a9cc0832f626cc8f6cddceeff84f87c0c629e04d1f82f354a780c0be53cad",
+  "signer_wallet": "0x2222222222222222222222222222222222228004",
+  "signature_scheme": "demo-eip712-compatible-v1",
+  "signed_at": "2026-03-27T09:00:00Z",
+  "sentinel_projection": {
+    "trace_id": "trace-allow-btc-buy-001",
+    "agent_id": "strategy-agent-demo",
+    "intent_id": "intent-allow-btc-buy-001",
+    "venue": "kraken",
+    "chain_id": 1,
+    "market": "BTC/USD",
+    "side": "BUY",
+    "order_type": "MARKET",
+    "size_base": "0.0500",
+    "notional_usd": "2400.00",
+    "max_slippage_bps": 35,
+    "strategy_context": {
+      "demo_scenario": "allow",
+      "thesis": "Momentum confirmation with approved size and asset allowlist match.",
+      "required_signals": {
+        "market_data": "available",
+        "position_limit": "available"
+      }
+    },
+    "submitted_at": "2026-03-27T09:00:00Z"
+  },
+  "demo_only": true
+}
