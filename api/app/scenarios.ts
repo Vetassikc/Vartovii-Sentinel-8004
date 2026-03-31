@@ -4,6 +4,7 @@ import path from "node:path";
 import type {
   AgentIdentityBinding,
   AgentRegistration,
+  KrakenExecutionPreview,
   SignedTradeIntentBundle,
   SentinelEvaluationResponse,
   TradeIntent,
@@ -57,6 +58,10 @@ export function resolveSignedIntentBundlePath(name: string): URL {
   return resolveFromRoot(`examples/signed-intents/${name}.signed-intent.json`);
 }
 
+export function resolveExecutionPreviewPath(name: string): URL {
+  return resolveFromRoot(`examples/execution-previews/${name}.execution-preview.json`);
+}
+
 export function resolveInputPath(input: string): URL {
   if (path.isAbsolute(input)) {
     return new URL(`file://${input}`);
@@ -100,6 +105,12 @@ export async function loadSignedIntentBundle(
   name: string,
 ): Promise<SignedTradeIntentBundle> {
   return readJsonFile<SignedTradeIntentBundle>(resolveSignedIntentBundlePath(name));
+}
+
+export async function loadExpectedExecutionPreview(
+  name: string,
+): Promise<KrakenExecutionPreview> {
+  return readJsonFile<KrakenExecutionPreview>(resolveExecutionPreviewPath(name));
 }
 
 export async function loadIntentFromFile(fileUrl: URL): Promise<TradeIntent> {

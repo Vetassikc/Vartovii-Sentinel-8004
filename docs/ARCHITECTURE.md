@@ -28,6 +28,7 @@ Strategy Agent / Fixture Runner
   -> Validation Artifact Builder
   -> Audit JSON Trace
   -> Judge-Mode Permit Verifier
+  -> Kraken Execution Preview Builder
   -> Judge-Mode Execution Gate
 ```
 
@@ -116,6 +117,12 @@ happened and why.
 Allows execution only when a valid signed permit exists, remains unexpired, and
 the execution request stays within the approved decision envelope.
 
+### Kraken Execution Preview
+
+Projects the signed verdict into a Kraken-facing `validate-only` request shape
+so judges can see what a downstream execution rail would receive after Sentinel
+finishes its part of the flow.
+
 ## Public Interface Contract
 
 The public scaffold uses these core types:
@@ -128,6 +135,7 @@ The public scaffold uses these core types:
 - `SignedTradeIntentVerification`
 - `RiskVerdict`
 - `ExecutionPermit`
+- `KrakenExecutionPreview`
 - `SignedVerdict`
 - `ValidationArtifact`
 - `SentinelEvaluationResponse`
@@ -142,6 +150,7 @@ The local judge-mode surface exposes:
 - `GET /api/demo/scenarios`
 - `GET /api/demo/scenarios/:scenario-name`
 - `GET /api/demo/signed-intents/:scenario-name`
+- `GET /api/demo/execution-previews/:scenario-name`
 - `POST /api/demo/evaluate-intent`
 - `POST /api/demo/verify-signed-intent`
 - `POST /api/demo/verify-permit`
@@ -168,6 +177,7 @@ The minimum demo profile is intentionally conservative:
 - fixed `judge-demo-v1` policy version and deterministic demo signatures
 - tutorial-compatible typed trade intents with demo-only deterministic verification
 - permit verification that fails closed when the signed envelope no longer matches execution scope
+- Kraken-facing `validate-only` execution previews that do not submit live orders
 - demo-only registrations and validation artifacts that stay public-safe
 
 ## Public Boundary

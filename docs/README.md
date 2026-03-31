@@ -11,6 +11,8 @@ This folder contains the public-safe documentation for the
   - local and offline-friendly evaluation model
 - `ERC8004_PROOF.md`
   - public-safe explanation of agent identity binding, typed trade intent, and proof flow alignment
+- `EXECUTION_PREVIEW.md`
+  - public-safe explanation of the Kraken-facing execution preview layer
 - `DEPLOYMENT.md`
   - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
@@ -38,6 +40,7 @@ They should explain:
 - how judges can inspect it
 - how the demo is structured
 - how the typed signed-intent layer maps to the judge-mode flow
+- how the Kraken execution preview begins only after Sentinel emits a permit
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

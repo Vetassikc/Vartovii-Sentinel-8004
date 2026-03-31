@@ -47,6 +47,7 @@ Current public assets include:
 - a local `POST /api/demo/verify-permit` endpoint
 - a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
 - a local `GET /api/demo/signed-intents/:scenario-name` route for the canonical typed bundle
+- a local `GET /api/demo/execution-previews/:scenario-name` route for the Kraken-facing execution preview
 - a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI signed-intent verifier for the canonical typed bundle
@@ -104,11 +105,12 @@ Out of scope for this repository:
 1. Read [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
-4. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-5. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
-6. Inspect [assets/README.md](./assets/README.md)
-7. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-8. Inspect the example payloads under [examples/](./examples/)
+4. Read [docs/EXECUTION_PREVIEW.md](./docs/EXECUTION_PREVIEW.md)
+5. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
+6. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
+7. Inspect [assets/README.md](./assets/README.md)
+8. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+9. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -175,6 +177,12 @@ Fetch the canonical signed intent bundle:
 curl http://127.0.0.1:8787/api/demo/signed-intents/allow-btc-buy
 ```
 
+Fetch the Kraken-facing execution preview:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
+```
+
 Run the local tests:
 
 ```bash
@@ -214,6 +222,9 @@ Use these paths for submission materials:
 
 For demo videos and judge callouts, the most reusable single proof object is the
 `Validation Artifact` panel shown in the judge demo shell.
+
+For execution-rail narration, the most direct bridge between Sentinel and a
+Kraken-first rail is now the `Kraken Execution Preview` panel.
 
 ## Submission Media
 

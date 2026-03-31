@@ -6,6 +6,7 @@ import {
   validateSignedTradeIntentBundle,
   verifySignedTradeIntentBundle,
 } from "./erc8004.ts";
+import { buildKrakenExecutionPreview } from "./execution-preview.ts";
 import {
   evaluateTradeIntent,
   validatePermitVerificationRequest,
@@ -95,6 +96,28 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
     };
   }
 
+  const executionPreviewPrefix = "/api/demo/execution-previews/";
+  if (pathname.startsWith(executionPreviewPrefix)) {
+    const scenarioName = pathname.slice(executionPreviewPrefix.length);
+    if (!isScenarioName(scenarioName)) {
+      return {
+        statusCode: 404,
+        payload: {
+          error: "not_found",
+          details: [`Unknown scenario: ${scenarioName}`],
+        },
+      };
+    }
+
+    const intent = await loadScenarioIntent(scenarioName);
+    const evaluation = evaluateTradeIntent(intent);
+
+    return {
+      statusCode: 200,
+      payload: buildKrakenExecutionPreview(intent, evaluation),
+    };
+  }
+
   const signedIntentPrefix = "/api/demo/signed-intents/";
   if (pathname.startsWith(signedIntentPrefix)) {
     const scenarioName = pathname.slice(signedIntentPrefix.length);
@@ -136,6 +159,7 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
   const intent = await loadScenarioIntent(scenarioName);
   const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
+  const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
 
   return {
     statusCode: 200,
@@ -149,6 +173,7 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
         intent,
         signed_verdict: evaluation.signed_verdict,
       }),
+      execution_preview: executionPreview,
     },
   };
 }

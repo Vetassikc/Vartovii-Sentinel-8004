@@ -1,0 +1,36 @@
+{
+  "preview_id": "execution-preview-intent-deny-oversize-eth-001",
+  "trace_id": "trace-deny-oversize-eth-001",
+  "intent_id": "intent-deny-oversize-eth-001",
+  "agent_id": "strategy-agent-demo",
+  "source_venue": "kraken",
+  "execution_rail": "kraken_ws_v2_add_order",
+  "execution_disposition": "BLOCKED",
+  "requested_order": {
+    "symbol": "ETH/USD",
+    "side": "buy",
+    "order_type": "market",
+    "order_qty": "4.5000",
+    "cash_order_qty": "6500.00",
+    "validate": true
+  },
+  "requested_notional_usd": "6500.00",
+  "executable_notional_usd": "0.00",
+  "requested_size_base": "4.5000",
+  "executable_size_base": "0.0000",
+  "requested_verification_code": "VERDICT_DENIES_EXECUTION",
+  "executable_verification_code": "NOT_EMITTED",
+  "reason_code": "POSITION_SIZE_EXCEEDS_LIMIT",
+  "preview_checks": [
+    "kraken_validate_only_preview",
+    "source_venue_is_kraken",
+    "requested_order_projected_from_trade_intent",
+    "sentinel_verdict_blocks_kraken_execution",
+    "no_executable_order_emitted"
+  ],
+  "decision_hash": "0xdeb214788d3b07a6f969c21821dba9692c5fd1371e97f53121ab453432009254",
+  "permit_hash": "0xae2103d978ddf986b0944c12656795b5bdd63929032a79fc917593d0b97ba12f",
+  "expires_at": "2026-03-27T09:10:00.000Z",
+  "schema_version": "sentinel-8004-kraken-execution-preview-v1",
+  "demo_only": true
+}

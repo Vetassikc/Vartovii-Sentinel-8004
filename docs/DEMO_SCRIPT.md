@@ -93,7 +93,15 @@ Run the permit verifier on the downsized ETH scenario and point out:
 - the downsized request becomes executable
 - the signed artifact binds execution scope to the agent and market context
 
-### 8. Close With The Positioning
+### 8. Show The Kraken Execution Preview
+
+On the same downsized scenario, point out:
+
+- the requested Kraken-shaped order preview
+- the smaller executable order emitted behind the permit gate
+- `validate: true` means preview only, not live trading
+
+### 9. Close With The Positioning
 
 End with:
 

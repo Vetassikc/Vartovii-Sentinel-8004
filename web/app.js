@@ -5,6 +5,7 @@ const intentPanel = document.querySelector("#intent-panel");
 const verdictPanel = document.querySelector("#verdict-panel");
 const artifactPanel = document.querySelector("#artifact-panel");
 const permitPanel = document.querySelector("#permit-panel");
+const executionPanel = document.querySelector("#execution-panel");
 
 function renderJson(element, value) {
   element.textContent = JSON.stringify(value, null, 2);
@@ -17,6 +18,7 @@ function buildSummary(bundle) {
     `Verdict: ${evaluation.verdict}`,
     `Proof: ${evaluation.validation_artifact.proof_status}`,
     `Permit executable: ${permitVerification.executable ? "yes" : "no"}`,
+    `Execution rail: ${bundle.execution_preview.execution_disposition}`,
   ].join(" | ");
 }
 
@@ -55,6 +57,7 @@ async function renderScenario(scenarioName) {
     renderJson(verdictPanel, bundle.evaluation);
     renderJson(artifactPanel, bundle.evaluation.validation_artifact);
     renderJson(permitPanel, bundle.permit_verification);
+    renderJson(executionPanel, bundle.execution_preview);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown loading error";
     summaryElement.textContent = message;
@@ -62,6 +65,7 @@ async function renderScenario(scenarioName) {
     verdictPanel.textContent = message;
     artifactPanel.textContent = message;
     permitPanel.textContent = message;
+    executionPanel.textContent = message;
   }
 }
 

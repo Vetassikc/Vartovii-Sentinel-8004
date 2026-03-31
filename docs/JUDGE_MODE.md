@@ -59,6 +59,10 @@ The same server also exposes the canonical signed intent fixture at:
 
 `GET /api/demo/signed-intents/:scenario-name`
 
+The same server also exposes the Kraken-facing execution projection at:
+
+`GET /api/demo/execution-previews/:scenario-name`
+
 For deployment-readiness and host health checks, the same server also exposes:
 
 `GET /healthz`
@@ -107,6 +111,12 @@ Verify a signed ERC-8004-style intent bundle directly from the CLI:
 node scripts/verify-signed-intent.ts allow-btc-buy
 ```
 
+Fetch a Kraken-facing execution preview:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
+```
+
 Run tests:
 
 ```bash
@@ -146,14 +156,16 @@ A judge-mode response should make it obvious:
 - whether the validation artifact is `VALIDATED`, `CONSTRAINED`, or `BLOCKED`
 - whether the signed permit still validates
 - whether the requested execution stayed within the approved envelope
+- what Kraken-shaped order preview would be emitted after the permit gate
 - which policy version produced the decision
 
-The web shell presents the same information in four narrow inspection panels:
+The web shell presents the same information in five narrow inspection panels:
 
 - trade intent
 - verdict
 - validation artifact
 - permit verification
+- Kraken execution preview
 
 The hosted root page is intentionally smaller. It exists only to route judges to
 the live demo, public repository, proof notes, and reusable submission assets.
@@ -252,6 +264,22 @@ The verifier returns a machine-readable proof result with:
 - `evaluation`
 - `permit_verification`
 
+## Example Execution Preview
+
+```bash
+curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
+```
+
+The preview returns a machine-readable Kraken-facing projection with:
+
+- `execution_disposition`
+- `requested_order`
+- `executable_order`
+- `requested_verification_code`
+- `executable_verification_code`
+- `decision_hash`
+- `permit_hash`
+
 ## Demo Shell Boundary
 
 The web demo shell is intentionally narrow:
@@ -274,6 +302,7 @@ It demonstrates:
 - wallet-to-agent identity binding
 - registration linkage
 - deterministic validation flow
+- deterministic execution projection after the permit gate
 
 It does not claim to demonstrate:
 
@@ -287,5 +316,6 @@ Judge mode is not presented as a complete production deployment.
 
 It is the public, inspectable proof that Sentinel can evaluate trading intents,
 emit machine-readable guardrail decisions, attach a public-safe validation
-artifact, and verify whether a requested execution still fits the signed permit
-envelope.
+artifact, verify whether a requested execution still fits the signed permit
+envelope, and project that bounded decision into a Kraken-facing validate-only
+execution preview.

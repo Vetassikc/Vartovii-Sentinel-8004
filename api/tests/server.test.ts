@@ -1,10 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import { buildKrakenExecutionPreview } from "../app/execution-preview.ts";
 import { buildSignedTradeIntentBundle, verifySignedTradeIntentBundle } from "../app/erc8004.ts";
 import { handleJudgeModeRequest, resolveServerConfig } from "../app/server.ts";
 import { evaluateTradeIntent, verifyTradePermit } from "../app/policy.ts";
-import { loadExpectedVerdict, loadScenarioIntent, loadSignedIntentBundle } from "../app/scenarios.ts";
+import {
+  loadExpectedExecutionPreview,
+  loadExpectedVerdict,
+  loadScenarioIntent,
+  loadSignedIntentBundle,
+} from "../app/scenarios.ts";
 
 test("resolveServerConfig defaults to localhost for local development", () => {
   assert.deepEqual(resolveServerConfig({}), {
@@ -46,6 +52,7 @@ test("GET /judge returns the judge demo shell HTML", async () => {
   assert.equal(response.statusCode, 200);
   assert.equal(response.contentType, "text/html; charset=utf-8");
   assert.match(response.payload as string, /Sentinel-8004 public proof walkthrough/);
+  assert.match(response.payload as string, /Kraken Execution Preview/);
   assert.match(response.payload as string, /Back to Hosted Submission Hub/);
 });
 
@@ -75,6 +82,7 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
   const intent = await loadScenarioIntent("allow-btc-buy");
   const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
+  const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
   const response = await handleJudgeModeRequest(
     "GET",
     "/api/demo/scenarios/allow-btc-buy",
@@ -92,7 +100,20 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
       intent,
       signed_verdict: evaluation.signed_verdict,
     }),
+    execution_preview: executionPreview,
   });
+});
+
+test("GET /api/demo/execution-previews/:name returns the canonical execution preview", async () => {
+  const expectedPreview = await loadExpectedExecutionPreview("downsize-eth-buy");
+  const response = await handleJudgeModeRequest(
+    "GET",
+    "/api/demo/execution-previews/downsize-eth-buy",
+    "",
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, expectedPreview);
 });
 
 test("GET /api/demo/signed-intents/:name returns the canonical signed intent bundle", async () => {

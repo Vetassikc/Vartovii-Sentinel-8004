@@ -4,6 +4,10 @@ export type OrderSide = "BUY" | "SELL";
 export type OrderType = "MARKET" | "LIMIT";
 export type RegistrationStatus = "ACTIVE" | "PENDING" | "REVOKED";
 export type ProofStatus = "VALIDATED" | "CONSTRAINED" | "BLOCKED";
+export type ExecutionPreviewDisposition =
+  | "BLOCKED"
+  | "ALLOWED_AS_REQUESTED"
+  | "ALLOWED_WITH_DOWNSIZE";
 
 export interface TradeIntent {
   trace_id: string;
@@ -218,6 +222,40 @@ export interface PermitVerificationResponse {
   checks: PermitCheck[];
 }
 
+export interface KrakenOrderValidatePreview {
+  symbol: string;
+  side: "buy" | "sell";
+  order_type: "market" | "limit";
+  order_qty: string;
+  cash_order_qty: string;
+  validate: true;
+}
+
+export interface KrakenExecutionPreview {
+  preview_id: string;
+  trace_id: string;
+  intent_id: string;
+  agent_id: string;
+  source_venue: TradeVenue;
+  execution_rail: "kraken_ws_v2_add_order";
+  execution_disposition: ExecutionPreviewDisposition;
+  requested_order: KrakenOrderValidatePreview;
+  executable_order?: KrakenOrderValidatePreview;
+  requested_notional_usd: string;
+  executable_notional_usd: string;
+  requested_size_base: string;
+  executable_size_base: string;
+  requested_verification_code: string;
+  executable_verification_code: string;
+  reason_code: string;
+  preview_checks: string[];
+  decision_hash: string;
+  permit_hash: string;
+  expires_at: string;
+  schema_version: string;
+  demo_only: boolean;
+}
+
 export interface JudgeScenarioBundle {
   scenario_name: string;
   intent: TradeIntent;
@@ -225,6 +263,7 @@ export interface JudgeScenarioBundle {
   signed_intent_verification: SignedTradeIntentVerification;
   evaluation: SentinelEvaluationResponse;
   permit_verification: PermitVerificationResponse;
+  execution_preview: KrakenExecutionPreview;
 }
 
 export interface ErrorResponse {
