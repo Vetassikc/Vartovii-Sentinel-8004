@@ -16,11 +16,11 @@ function renderJson(element, value) {
 function buildSummary(bundle) {
   const { scenario_name: scenarioName, evaluation, permit_verification: permitVerification } = bundle;
   return [
-    `Scenario: ${scenarioName}`,
-    `Verdict: ${evaluation.verdict}`,
-    `Proof: ${evaluation.validation_artifact.proof_status}`,
+    `Scenario: ${formatScenarioLabel(scenarioName)}`,
+    `Verdict: ${formatDisplayLabel(evaluation.verdict)}`,
+    `Proof: ${formatDisplayLabel(evaluation.validation_artifact.proof_status)}`,
     `Permit executable: ${permitVerification.executable ? "yes" : "no"}`,
-    `Execution rail: ${bundle.execution_preview.execution_disposition}`,
+    `Execution rail: ${formatDisplayLabel(bundle.execution_preview.execution_disposition)}`,
   ].join(" | ");
 }
 
@@ -30,6 +30,16 @@ function formatVerdictLabel(verdict) {
 
 function formatScenarioLabel(scenarioName) {
   return scenarioName.replaceAll("-", " ");
+}
+
+function formatMachineLabel(value) {
+  return value.replaceAll("_", " ").replaceAll("-", " ");
+}
+
+function formatDisplayLabel(value) {
+  return formatMachineLabel(value)
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }
 
 function getBadgeVariant(bundle) {
@@ -61,17 +71,17 @@ function renderHighlights(bundle) {
     },
     {
       label: "Verdict",
-      value: formatVerdictLabel(evaluation.verdict),
-      note: evaluation.reason_code,
+      value: formatDisplayLabel(evaluation.verdict),
+      note: formatDisplayLabel(evaluation.reason_code),
     },
     {
       label: "Permit",
       value: permitVerification.executable ? "Executable" : "Blocked",
-      note: permitVerification.verification_code,
+      note: formatDisplayLabel(permitVerification.verification_code),
     },
     {
       label: "Proof",
-      value: evaluation.validation_artifact.proof_status,
+      value: formatDisplayLabel(evaluation.validation_artifact.proof_status),
       note: `${evaluation.validation_artifact.proof_checks.length} checks`,
     },
     {
@@ -81,8 +91,8 @@ function renderHighlights(bundle) {
     },
     {
       label: "Execution rail",
-      value: executionPreview.execution_disposition.replaceAll("_", " "),
-      note: executionPreview.execution_rail,
+      value: formatDisplayLabel(executionPreview.execution_disposition),
+      note: formatDisplayLabel(executionPreview.execution_rail),
     },
   ];
 

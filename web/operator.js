@@ -33,6 +33,16 @@ function formatVerdictLabel(verdict) {
   return verdict.replaceAll("_", " ");
 }
 
+function formatMachineLabel(value) {
+  return value.replaceAll("_", " ").replaceAll("-", " ");
+}
+
+function formatDisplayLabel(value) {
+  return formatMachineLabel(value)
+    .toLowerCase()
+    .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
 function getBadgeVariant(bundle) {
   if (bundle.evaluation.verdict === "ALLOW") {
     return "allow";
@@ -48,10 +58,10 @@ function getBadgeVariant(bundle) {
 function buildSummary(bundle) {
   return [
     `Intent: ${bundle.intent.intent_id}`,
-    `Verdict: ${bundle.evaluation.verdict}`,
-    `Proof: ${bundle.evaluation.validation_artifact.proof_status}`,
+    `Verdict: ${formatDisplayLabel(bundle.evaluation.verdict)}`,
+    `Proof: ${formatDisplayLabel(bundle.evaluation.validation_artifact.proof_status)}`,
     `Permit executable: ${bundle.permit_verification.executable ? "yes" : "no"}`,
-    `Execution rail: ${bundle.execution_preview.execution_disposition}`,
+    `Execution rail: ${formatDisplayLabel(bundle.execution_preview.execution_disposition)}`,
   ].join(" | ");
 }
 
@@ -69,23 +79,23 @@ function renderHighlights(bundle) {
     },
     {
       label: "Verdict",
-      value: formatVerdictLabel(bundle.evaluation.verdict),
-      note: bundle.evaluation.reason_code,
+      value: formatDisplayLabel(bundle.evaluation.verdict),
+      note: formatDisplayLabel(bundle.evaluation.reason_code),
     },
     {
       label: "Proof",
-      value: bundle.evaluation.validation_artifact.proof_status,
+      value: formatDisplayLabel(bundle.evaluation.validation_artifact.proof_status),
       note: `${bundle.evaluation.validation_artifact.proof_checks.length} checks`,
     },
     {
       label: "Permit",
       value: bundle.permit_verification.executable ? "Executable" : "Blocked",
-      note: bundle.permit_verification.verification_code,
+      note: formatDisplayLabel(bundle.permit_verification.verification_code),
     },
     {
       label: "Execution",
-      value: bundle.execution_preview.execution_disposition.replaceAll("_", " "),
-      note: bundle.execution_preview.execution_rail,
+      value: formatDisplayLabel(bundle.execution_preview.execution_disposition),
+      note: formatDisplayLabel(bundle.execution_preview.execution_rail),
     },
   ];
 
