@@ -9,7 +9,7 @@
   </head>
   <body>
     <main class="page">
-      <header class="hero">
+      <header class="hero hero-panel">
         <p class="eyebrow">Judge Mode Demo Shell</p>
         <p class="hub-back-link"><a href="/">Back to Hosted Submission Hub</a></p>
         <h1>Sentinel-8004 public proof walkthrough</h1>
@@ -17,36 +17,110 @@
           Pick one canonical scenario and inspect the exact public-safe payloads
           that drive the guardrail story.
         </p>
+        <div id="trace-rail" class="trace-rail" aria-label="Proof flow">
+          <div class="trace-step">
+            <span class="trace-step-index">1</span>
+            <div>
+              <strong>Intent</strong>
+              <p>Requested trade and trace anchor.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">2</span>
+            <div>
+              <strong>Verdict</strong>
+              <p>Decision, reason code, and signed envelope.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">3</span>
+            <div>
+              <strong>Proof</strong>
+              <p>Validation artifact binds the decision path.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">4</span>
+            <div>
+              <strong>Permit gate</strong>
+              <p>Executable only if the permit remains in scope.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">5</span>
+            <div>
+              <strong>Execution preview</strong>
+              <p>Kraken request shape with <code>validate: true</code>.</p>
+            </div>
+          </div>
+        </div>
       </header>
 
       <section class="controls card">
-        <label for="scenario-select">Scenario</label>
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Scenario Control</p>
+            <label for="scenario-select">Scenario</label>
+          </div>
+          <span id="scenario-badge" class="status-pill status-pill-neutral">Loading scenario</span>
+        </div>
         <div class="control-row">
           <select id="scenario-select" aria-label="Scenario selector"></select>
           <button id="reload-button" type="button">Reload</button>
         </div>
         <p id="scenario-summary" class="summary"></p>
+        <div id="scenario-highlights" class="highlights-grid" aria-live="polite"></div>
       </section>
 
-      <section class="grid">
-        <article class="card">
-          <h2>Trade Intent</h2>
+      <section class="grid judge-grid">
+        <article class="card panel panel-intent">
+          <div class="panel-heading">
+            <span class="panel-step">1</span>
+            <div>
+              <h2>Trade Intent</h2>
+              <p class="panel-summary">Original request from the agent.</p>
+            </div>
+          </div>
           <pre id="intent-panel">Loading…</pre>
         </article>
-        <article class="card">
-          <h2>Verdict</h2>
+        <article class="card panel panel-verdict">
+          <div class="panel-heading">
+            <span class="panel-step">2</span>
+            <div>
+              <h2>Verdict</h2>
+              <p class="panel-summary">Signed decision and policy rationale.</p>
+            </div>
+          </div>
           <pre id="verdict-panel">Loading…</pre>
         </article>
-        <article class="card">
-          <h2>Validation Artifact</h2>
+        <article class="card panel panel-artifact">
+          <div class="panel-heading">
+            <span class="panel-step">3</span>
+            <div>
+              <h2>Validation Artifact</h2>
+              <p class="panel-summary">Primary proof object for judges.</p>
+            </div>
+          </div>
           <pre id="artifact-panel">Loading…</pre>
         </article>
-        <article class="card">
-          <h2>Permit Verification</h2>
+        <article class="card panel panel-permit">
+          <div class="panel-heading">
+            <span class="panel-step">4</span>
+            <div>
+              <h2>Permit Verification</h2>
+              <p class="panel-summary">Checks whether execution remains in scope.</p>
+            </div>
+          </div>
           <pre id="permit-panel">Loading…</pre>
         </article>
-        <article class="card">
-          <h2>Kraken Execution Preview</h2>
+        <article class="card panel panel-execution">
+          <div class="panel-heading">
+            <span class="panel-step">5</span>
+            <div>
+              <h2>Kraken Execution Preview</h2>
+              <p class="panel-summary">Projected request shape, not a live order.</p>
+            </div>
+          </div>
           <pre id="execution-panel">Loading…</pre>
         </article>
       </section>
