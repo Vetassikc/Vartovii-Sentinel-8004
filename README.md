@@ -52,6 +52,7 @@ Current public assets include:
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI signed-intent verifier for the canonical typed bundle
 - a CLI permit verifier for the signed execution envelope
+- a CLI Kraken paper compatibility smoke artifact generator
 - Node test coverage for fixture and endpoint parity
 
 ## Why This Repo Exists Separately
@@ -106,11 +107,12 @@ Out of scope for this repository:
 2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
 4. Read [docs/EXECUTION_PREVIEW.md](./docs/EXECUTION_PREVIEW.md)
-5. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-6. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
-7. Inspect [assets/README.md](./assets/README.md)
-8. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-9. Inspect the example payloads under [examples/](./examples/)
+5. Read [docs/KRAKEN_CLI_COMPAT.md](./docs/KRAKEN_CLI_COMPAT.md)
+6. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
+7. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
+8. Inspect [assets/README.md](./assets/README.md)
+9. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+10. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -163,6 +165,12 @@ Verify the signed ERC-8004-style intent bundle:
 
 ```bash
 node scripts/verify-signed-intent.ts allow-btc-buy
+```
+
+Generate the Kraken paper compatibility artifact:
+
+```bash
+node scripts/kraken-paper-smoke.ts downsize-eth-buy
 ```
 
 Fetch the same bundle used by the web shell:

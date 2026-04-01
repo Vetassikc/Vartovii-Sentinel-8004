@@ -117,6 +117,12 @@ Fetch a Kraken-facing execution preview:
 curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
 ```
 
+Generate a corrected Kraken paper compatibility artifact:
+
+```bash
+node scripts/kraken-paper-smoke.ts downsize-eth-buy
+```
+
 Run tests:
 
 ```bash

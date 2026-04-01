@@ -13,6 +13,8 @@ This folder contains the public-safe documentation for the
   - public-safe explanation of agent identity binding, typed trade intent, and proof flow alignment
 - `EXECUTION_PREVIEW.md`
   - public-safe explanation of the Kraken-facing execution preview layer
+- `KRAKEN_CLI_COMPAT.md`
+  - corrected Kraken CLI paper-command compatibility guidance
 - `DEPLOYMENT.md`
   - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
@@ -41,6 +43,7 @@ They should explain:
 - how the demo is structured
 - how the typed signed-intent layer maps to the judge-mode flow
 - how the Kraken execution preview begins only after Sentinel emits a permit
+- how the corrected Kraken CLI paper syntax maps from the execution preview
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

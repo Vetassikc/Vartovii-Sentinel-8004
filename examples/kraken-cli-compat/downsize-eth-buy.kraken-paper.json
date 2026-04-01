@@ -1,0 +1,40 @@
+{
+  "artifact_id": "kraken-cli-paper-intent-downsize-eth-buy-001",
+  "trace_id": "trace-downsize-eth-buy-001",
+  "intent_id": "intent-downsize-eth-buy-001",
+  "execution_disposition": "ALLOWED_WITH_DOWNSIZE",
+  "cli_binary": "kraken",
+  "mode": "paper",
+  "command_group": "order",
+  "action": "buy",
+  "ticker": "ETHUSD",
+  "output_flag": "-o json",
+  "paper_command_template": "kraken paper order buy ETHUSD <ORDER_PARAMS...> -o json",
+  "order_parameters_placeholder": "<ORDER_PARAMS...>",
+  "should_emit_command": true,
+  "requested_size_base": "1.2000",
+  "executable_size_base": "0.9375",
+  "requested_notional_usd": "3200.00",
+  "executable_notional_usd": "2500.00",
+  "requested_verification_code": "REQUEST_EXCEEDS_APPROVED_NOTIONAL",
+  "executable_verification_code": "EXECUTION_PERMITTED",
+  "mcp_transport": "stdio",
+  "forbidden_patterns": [
+    "KRAKEN_SANDBOX",
+    "--sandbox",
+    "order add",
+    "BTC/USD",
+    "http://127.0.0.1:8080",
+    "serve --port 8080"
+  ],
+  "reason_code": "POSITION_SIZE_EXCEEDS_LIMIT",
+  "notes": [
+    "Use paper subcommands instead of sandbox flags or sandbox environment variables.",
+    "Use ticker symbols in BTCUSD style, not slash-delimited market names.",
+    "Use order buy or order sell, never order add.",
+    "Use -o json for smoke output.",
+    "Use Kraken MCP over stdio, not an HTTP serve mode on port 8080.",
+    "Use executable_size_base and executable_notional_usd from Sentinel, not the original requested size."
+  ],
+  "demo_only": true
+}

@@ -5,6 +5,7 @@ import type {
   AgentIdentityBinding,
   AgentRegistration,
   KrakenExecutionPreview,
+  KrakenCliPaperSmokeArtifact,
   SignedTradeIntentBundle,
   SentinelEvaluationResponse,
   TradeIntent,
@@ -62,6 +63,10 @@ export function resolveExecutionPreviewPath(name: string): URL {
   return resolveFromRoot(`examples/execution-previews/${name}.execution-preview.json`);
 }
 
+export function resolveKrakenCliCompatPath(name: string): URL {
+  return resolveFromRoot(`examples/kraken-cli-compat/${name}.kraken-paper.json`);
+}
+
 export function resolveInputPath(input: string): URL {
   if (path.isAbsolute(input)) {
     return new URL(`file://${input}`);
@@ -111,6 +116,12 @@ export async function loadExpectedExecutionPreview(
   name: string,
 ): Promise<KrakenExecutionPreview> {
   return readJsonFile<KrakenExecutionPreview>(resolveExecutionPreviewPath(name));
+}
+
+export async function loadExpectedKrakenCliCompatArtifact(
+  name: string,
+): Promise<KrakenCliPaperSmokeArtifact> {
+  return readJsonFile<KrakenCliPaperSmokeArtifact>(resolveKrakenCliCompatPath(name));
 }
 
 export async function loadIntentFromFile(fileUrl: URL): Promise<TradeIntent> {

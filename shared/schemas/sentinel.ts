@@ -256,6 +256,33 @@ export interface KrakenExecutionPreview {
   demo_only: boolean;
 }
 
+export interface KrakenCliPaperSmokeArtifact {
+  artifact_id: string;
+  trace_id: string;
+  intent_id: string;
+  execution_disposition: ExecutionPreviewDisposition;
+  cli_binary: "kraken";
+  mode: "paper";
+  command_group: "order";
+  action: "buy" | "sell";
+  ticker: string;
+  output_flag: "-o json";
+  paper_command_template: string;
+  order_parameters_placeholder: "<ORDER_PARAMS...>";
+  should_emit_command: boolean;
+  requested_size_base: string;
+  executable_size_base: string;
+  requested_notional_usd: string;
+  executable_notional_usd: string;
+  requested_verification_code: string;
+  executable_verification_code: string;
+  mcp_transport: "stdio";
+  forbidden_patterns: string[];
+  reason_code: string;
+  notes: string[];
+  demo_only: boolean;
+}
+
 export interface JudgeScenarioBundle {
   scenario_name: string;
   intent: TradeIntent;

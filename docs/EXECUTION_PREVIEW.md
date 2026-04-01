@@ -30,12 +30,9 @@ The public repo exposes:
 - `KrakenExecutionPreview`
 - `KrakenOrderValidatePreview`
 
-The preview uses Kraken-facing field names inspired by Kraken's add-order
-surface:
+The preview uses Kraken-facing field names and stays intentionally generic.
 
-Reference:
-
-- https://docs.kraken.com/api/docs/websocket-v2/add_order/
+For corrected Kraken CLI paper syntax, see `docs/KRAKEN_CLI_COMPAT.md`.
 
 - `symbol`
 - `side`
