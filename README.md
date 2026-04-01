@@ -25,7 +25,11 @@ The core flow is:
 The public ERC-8004-facing slice adds an explicit tutorial-style proof path in
 front of that flow:
 
-`agent identity binding -> EIP-712-compatible typed trade intent -> signed intent bundle -> Sentinel evaluation -> validation artifact + signed permit`
+`agent identity binding -> EIP-712 typed trade intent -> signed intent bundle -> Sentinel evaluation -> validation artifact + signed permit`
+
+The typed intent path now uses real EIP-712 digest signing and signature
+verification with demo-only fixture keys committed intentionally for public
+reproducibility.
 
 ## Current Repository Status
 
@@ -50,6 +54,7 @@ Current public assets include:
 - a local `GET /api/demo/execution-previews/:scenario-name` route for the Kraken-facing execution preview
 - a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
+- a CLI signed-intent generator for the canonical typed bundle
 - a CLI signed-intent verifier for the canonical typed bundle
 - a CLI permit verifier for the signed execution envelope
 - a CLI Kraken paper compatibility smoke artifact generator
@@ -165,6 +170,12 @@ Verify the signed ERC-8004-style intent bundle:
 
 ```bash
 node scripts/verify-signed-intent.ts allow-btc-buy
+```
+
+Generate the real EIP-712 signed intent bundle:
+
+```bash
+node scripts/sign-intent.ts allow-btc-buy
 ```
 
 Generate the Kraken paper compatibility artifact:

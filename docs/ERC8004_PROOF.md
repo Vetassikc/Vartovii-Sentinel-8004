@@ -26,7 +26,7 @@ The public Sentinel MVP now maps those ideas to these public-safe objects:
     `registration_payload`
 - tutorial typed trade intent
   - `TypedTradeIntentData`
-  - an EIP-712-compatible typed data shape for trade evaluation
+  - a real EIP-712 typed data shape for trade evaluation
 - tutorial signed action proof
   - `SignedTradeIntentBundle`
   - binds the identity, typed data, signature envelope, and projected
@@ -69,7 +69,7 @@ The bundle also includes:
 
 - the `AgentIdentityBinding`
 - the `typed_data_hash`
-- a demo-only deterministic signature envelope
+- a real secp256k1 EIP-712 signature over the typed data digest
 - the projected `TradeIntent` used by Sentinel policy evaluation
 
 ## What Is Verified
@@ -77,7 +77,9 @@ The bundle also includes:
 The signed-intent verifier checks:
 
 - typed data shape and hash parity
+- real EIP-712 digest parity
 - identity binding shape and binding hash parity
+- recovered signer wallet matches the bound agent wallet
 - signer wallet matches the bound agent wallet
 - typed trade intent fields match the projected Sentinel `TradeIntent`
 - the resulting Sentinel verdict expiry matches the typed intent deadline
@@ -85,6 +87,7 @@ The signed-intent verifier checks:
 
 Verification is available through:
 
+- `node scripts/sign-intent.ts allow-btc-buy`
 - `node scripts/verify-signed-intent.ts allow-btc-buy`
 - `POST /api/demo/verify-signed-intent`
 
@@ -129,7 +132,7 @@ It should be understood as:
 
 - a schema proof
 - a flow proof
-- a deterministic verification proof
+- a real typed-data signature proof with demo-only key material
 
 It should not be interpreted as:
 
@@ -143,7 +146,9 @@ It should not be interpreted as:
 The public repo does provide:
 
 - deterministic schemas
-- deterministic hashes
+- real EIP-712 digest hashes
+- real secp256k1 signature generation
+- real signer recovery during verification
 - reproducible fixtures
 - explicit typed-data verification
 - parity tests between fixtures and runtime outputs
@@ -153,9 +158,8 @@ The public repo does provide:
 The public repo does not claim to provide:
 
 - live ERC-8004 registry verification
-- wallet signature recovery against a public network
 - production key management
 - private bridge or adapter logic
 
 That boundary is surfaced directly in the payloads through `demo_only: true`
-and the signature scheme label `demo-eip712-compatible-v1`.
+and the signature scheme label `eip712-secp256k1-demo-v1`.

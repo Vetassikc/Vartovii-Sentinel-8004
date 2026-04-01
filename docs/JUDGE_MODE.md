@@ -111,6 +111,12 @@ Verify a signed ERC-8004-style intent bundle directly from the CLI:
 node scripts/verify-signed-intent.ts allow-btc-buy
 ```
 
+Generate a real EIP-712 signed intent bundle directly from the CLI:
+
+```bash
+node scripts/sign-intent.ts allow-btc-buy
+```
+
 Fetch a Kraken-facing execution preview:
 
 ```bash
@@ -303,9 +309,10 @@ The public judge-mode proof layer is intentionally demo-only.
 It demonstrates:
 
 - schema shape
-- tutorial-compatible typed data shape
+- real EIP-712 typed data shape
 - hash binding
 - wallet-to-agent identity binding
+- real secp256k1 signature generation and signer recovery
 - registration linkage
 - deterministic validation flow
 - deterministic execution projection after the permit gate
@@ -314,6 +321,7 @@ It does not claim to demonstrate:
 
 - live on-chain registry verification
 - production signing custody
+- production-safe private key handling
 - private bridge logic
 
 ## Public Limitation

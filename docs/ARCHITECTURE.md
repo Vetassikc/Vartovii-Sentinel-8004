@@ -54,7 +54,7 @@ The binding carries:
 
 ### Typed Trade Intent
 
-Captures the trade request as an EIP-712-compatible typed data envelope before
+Captures the trade request as a real EIP-712 typed data envelope before
 it is evaluated by Sentinel policy.
 
 ### Signed Intent Bundle
@@ -175,7 +175,7 @@ The minimum demo profile is intentionally conservative:
 - emphasis on low drawdown and controlled approvals
 - fail-closed behavior when required inputs are missing
 - fixed `judge-demo-v1` policy version and deterministic demo signatures
-- tutorial-compatible typed trade intents with demo-only deterministic verification
+- real EIP-712 typed trade intents signed with demo-only fixture keys
 - permit verification that fails closed when the signed envelope no longer matches execution scope
 - Kraken-facing `validate-only` execution previews that do not submit live orders
 - demo-only registrations and validation artifacts that stay public-safe

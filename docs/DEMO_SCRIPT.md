@@ -24,13 +24,15 @@ Explain the narrow flow:
 Before jumping into the live scenarios, show the canonical typed bundle:
 
 ```bash
+node scripts/sign-intent.ts allow-btc-buy
 node scripts/verify-signed-intent.ts allow-btc-buy
 ```
 
 Point out:
 
 - the operator wallet and agent wallet binding
-- the EIP-712-compatible typed fields
+- the demo-only fixture key is public by design and used only for reproducible signing
+- the EIP-712 digest and signature recovery are real
 - the fact that the verifier recomputes the Sentinel evaluation and permit check
 
 ### 4. Walk Through Four Scenarios

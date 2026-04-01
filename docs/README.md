@@ -42,6 +42,7 @@ They should explain:
 - how judges can inspect it
 - how the demo is structured
 - how the typed signed-intent layer maps to the judge-mode flow
+- how real EIP-712 signing is used with demo-only fixture keys
 - how the Kraken execution preview begins only after Sentinel emits a permit
 - how the corrected Kraken CLI paper syntax maps from the execution preview
 - why the hosted root URL is a submission hub

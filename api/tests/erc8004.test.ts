@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { TypedDataEncoder, verifyTypedData } from "ethers";
 
 import {
   buildSignedTradeIntentBundle,
@@ -20,6 +21,22 @@ test("buildSignedTradeIntentBundle matches the canonical signed intent fixture",
   const expectedBundle = await loadSignedIntentBundle("allow-btc-buy");
 
   assert.deepEqual(buildSignedTradeIntentBundle(intent), expectedBundle);
+});
+
+test("buildSignedTradeIntentBundle emits a real EIP-712 digest and recoverable signature", async () => {
+  const bundle = await loadSignedIntentBundle("allow-btc-buy");
+  const typedTypes = {
+    TradeIntent: bundle.typed_data.types.TradeIntent,
+  };
+
+  assert.equal(
+    bundle.typed_data_hash,
+    TypedDataEncoder.hash(bundle.typed_data.domain, typedTypes, bundle.typed_data.message),
+  );
+  assert.equal(
+    verifyTypedData(bundle.typed_data.domain, typedTypes, bundle.typed_data.message, bundle.signature),
+    bundle.signer_wallet,
+  );
 });
 
 test("validateSignedTradeIntentBundle rejects invalid payloads", () => {
@@ -45,6 +62,7 @@ test("verifySignedTradeIntentBundle returns a fully verified allow-path proof", 
   assert.equal(verification.identity_binding_valid, true);
   assert.equal(verification.signature_valid, true);
   assert.equal(verification.sentinel_projection_valid, true);
+  assert.equal(verification.recovered_signer_wallet, bundle.signer_wallet);
   assert.deepEqual(verification.evaluation, expectedEvaluation);
   assert.equal(
     verification.permit_verification?.verification_code,

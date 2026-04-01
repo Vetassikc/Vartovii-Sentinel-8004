@@ -14,6 +14,7 @@
     "judge:dev": "npm run start",
     "judge:web": "npm run start",
     "judge:scenario": "node scripts/run-scenario.ts",
+    "judge:sign-intent": "node scripts/sign-intent.ts",
     "judge:verify": "node scripts/verify-permit.ts",
     "judge:verify-intent": "node scripts/verify-signed-intent.ts",
     "judge:kraken-paper": "node scripts/kraken-paper-smoke.ts",
@@ -26,5 +27,8 @@
     "erc-8004",
     "risk-guardrails",
     "judge-mode"
-  ]
+  ],
+  "dependencies": {
+    "ethers": "^6.16.0"
+  }
 }

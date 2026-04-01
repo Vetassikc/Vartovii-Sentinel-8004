@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { TypedDataEncoder, Wallet, verifyTypedData } from "ethers";
 
 import type {
   AgentIdentityBinding,
@@ -16,24 +17,27 @@ import { evaluateTradeIntent, validateTradeIntent, verifyTradePermit } from "./p
 const DEMO_IDENTITY_SCHEMA_VERSION = "sentinel-erc8004-identity-binding-v1";
 const DEMO_REGISTRATION_PAYLOAD_SCHEMA_VERSION =
   "sentinel-erc8004-agent-registration-payload-v1";
-const DEMO_TYPED_SIGNATURE_SCHEME = "demo-eip712-compatible-v1";
+const DEMO_TYPED_SIGNATURE_SCHEME = "eip712-secp256k1-demo-v1";
 const DEMO_TYPED_DOMAIN_NAME = "SentinelTradeIntent";
 const DEMO_TYPED_DOMAIN_VERSION = "1";
 const DEMO_REGISTRY_ADDRESS = "0x8004000000000000000000000000000000000001";
 const DEFAULT_TTL_SECONDS = 5 * 60;
+const DEMO_INVALID_SIGNATURE = `0x${"0".repeat(130)}`;
 
 type DemoIdentitySeed = {
   agent_numeric_id: string;
-  operator_wallet: string;
-  agent_wallet: string;
+  operator_private_key: string;
+  agent_private_key: string;
   registration_payload: AgentRegistrationPayload;
 };
 
 const DEMO_IDENTITY_SEEDS: Record<string, DemoIdentitySeed> = {
   "strategy-agent-demo": {
     agent_numeric_id: "0",
-    operator_wallet: "0x1111111111111111111111111111111111118004",
-    agent_wallet: "0x2222222222222222222222222222222222228004",
+    // Intentionally public demo-only keys for reproducible EIP-712 fixtures.
+    // These keys must never be reused for real funds, custody, or production signing.
+    operator_private_key: "0x1000000000000000000000000000000000000000000000000000000000008004",
+    agent_private_key: "0x2000000000000000000000000000000000000000000000000000000000008004",
     registration_payload: {
       registration_id: "agent-reg-strategy-agent-demo-001",
       name: "StrategyAgentDemo",
@@ -104,6 +108,12 @@ function sha256Hex(value: string): string {
   return `0x${createHash("sha256").update(value).digest("hex")}`;
 }
 
+function resolveTypedDataValueTypes(typedData: TypedTradeIntentData) {
+  return {
+    TradeIntent: typedData.types.TradeIntent,
+  };
+}
+
 function stableStringify(value: unknown): string {
   if (Array.isArray(value)) {
     return `[${value.map((item) => stableStringify(item)).join(",")}]`;
@@ -134,18 +144,36 @@ function hashIdentityBindingPayload(
 }
 
 function hashTypedTradeIntentData(typedData: TypedTradeIntentData): string {
-  return sha256Hex(stableStringify(typedData));
+  return TypedDataEncoder.hash(
+    typedData.domain,
+    resolveTypedDataValueTypes(typedData),
+    typedData.message,
+  );
 }
 
-function buildTypedBundleSignature(
-  typedDataHash: string,
-  identityBindingHash: string,
-  signerWallet: string,
-  signedAt: string,
+function signTypedTradeIntentData(
+  typedData: TypedTradeIntentData,
+  privateKey: string,
 ): string {
-  return sha256Hex(
-    `${DEMO_TYPED_SIGNATURE_SCHEME}:${typedDataHash}:${identityBindingHash}:${signerWallet}:${signedAt}`,
-  );
+  const signingWallet = new Wallet(privateKey);
+  const typedDataHash = hashTypedTradeIntentData(typedData);
+  return signingWallet.signingKey.sign(typedDataHash).serialized;
+}
+
+function recoverTypedTradeIntentSigner(
+  typedData: TypedTradeIntentData,
+  signature: string,
+): string | null {
+  try {
+    return verifyTypedData(
+      typedData.domain,
+      resolveTypedDataValueTypes(typedData),
+      typedData.message,
+      signature,
+    );
+  } catch {
+    return null;
+  }
 }
 
 export function resolveAgentIdentityBinding(agentId: string): AgentIdentityBinding {
@@ -155,8 +183,8 @@ export function resolveAgentIdentityBinding(agentId: string): AgentIdentityBindi
         binding_id: `identity-${agentId}-001`,
         agent_id: agentId,
         agent_numeric_id: seed.agent_numeric_id,
-        operator_wallet: seed.operator_wallet,
-        agent_wallet: seed.agent_wallet,
+        operator_wallet: new Wallet(seed.operator_private_key).address,
+        agent_wallet: new Wallet(seed.agent_private_key).address,
         registry_address: DEMO_REGISTRY_ADDRESS,
         registration_payload: seed.registration_payload,
         schema_version: DEMO_IDENTITY_SCHEMA_VERSION,
@@ -237,9 +265,13 @@ export function buildTypedTradeIntentData(
 }
 
 export function buildSignedTradeIntentBundle(intent: TradeIntent): SignedTradeIntentBundle {
+  const seed = DEMO_IDENTITY_SEEDS[intent.agent_id];
   const identityBinding = resolveAgentIdentityBinding(intent.agent_id);
   const typedData = buildTypedTradeIntentData(intent, identityBinding);
   const typedDataHash = hashTypedTradeIntentData(typedData);
+  const signature = seed
+    ? signTypedTradeIntentData(typedData, seed.agent_private_key)
+    : DEMO_INVALID_SIGNATURE;
 
   return {
     bundle_id: `signed-intent-${intent.intent_id}`,
@@ -247,12 +279,7 @@ export function buildSignedTradeIntentBundle(intent: TradeIntent): SignedTradeIn
     identity_binding: identityBinding,
     typed_data: typedData,
     typed_data_hash: typedDataHash,
-    signature: buildTypedBundleSignature(
-      typedDataHash,
-      identityBinding.binding_hash,
-      identityBinding.agent_wallet,
-      intent.submitted_at,
-    ),
+    signature,
     signer_wallet: identityBinding.agent_wallet,
     signature_scheme: DEMO_TYPED_SIGNATURE_SCHEME,
     signed_at: intent.submitted_at,
@@ -328,6 +355,10 @@ function validateTypedTradeIntentData(input: unknown): input is TypedTradeIntent
   );
 }
 
+function isHexSignature(value: unknown): value is string {
+  return typeof value === "string" && /^0x[a-f0-9]{130}$/i.test(value);
+}
+
 export function validateSignedTradeIntentBundle(
   input: unknown,
 ): ValidationResult<SignedTradeIntentBundle> {
@@ -353,13 +384,13 @@ export function validateSignedTradeIntentBundle(
     errors.push("identity_binding must be a valid agent identity binding object.");
   }
   if (!validateTypedTradeIntentData(input.typed_data)) {
-    errors.push("typed_data must be a valid EIP-712-compatible trade intent envelope.");
+    errors.push("typed_data must be a valid EIP-712 trade intent envelope.");
   }
   if (!isNonEmptyString(input.typed_data_hash)) {
     errors.push("typed_data_hash must be a non-empty string.");
   }
-  if (!isNonEmptyString(input.signature)) {
-    errors.push("signature must be a non-empty string.");
+  if (!isHexSignature(input.signature)) {
+    errors.push("signature must be a 65-byte hex ECDSA signature.");
   }
   if (!isHexWalletAddress(input.signer_wallet)) {
     errors.push("signer_wallet must be a hex wallet address.");
@@ -420,6 +451,11 @@ export function verifySignedTradeIntentBundle(
     bundle.signer_wallet.toLowerCase() === bundle.identity_binding.agent_wallet.toLowerCase() &&
     bundle.signer_wallet.toLowerCase() ===
       bundle.typed_data.message.agentWallet.toLowerCase();
+  const recoveredSignerWallet = typedDataValid
+    ? recoverTypedTradeIntentSigner(bundle.typed_data, bundle.signature)
+    : null;
+  const recoveredSignerMatches =
+    recoveredSignerWallet?.toLowerCase() === bundle.signer_wallet.toLowerCase();
   const agentIdMatches =
     bundle.agent_id === bundle.identity_binding.agent_id &&
     bundle.typed_data.message.agentId === bundle.identity_binding.agent_numeric_id;
@@ -433,13 +469,8 @@ export function verifySignedTradeIntentBundle(
       bundle.typed_data.message.amountUsdScaled &&
     bundle.sentinel_projection.max_slippage_bps ===
       bundle.typed_data.message.maxSlippageBps;
-  const expectedSignature = buildTypedBundleSignature(
-    expectedTypedDataHash,
-    expectedBindingHash,
-    bundle.signer_wallet,
-    bundle.signed_at,
-  );
-  const signatureValid = bundle.signature === expectedSignature;
+  const signatureSchemeMatches = bundle.signature_scheme === DEMO_TYPED_SIGNATURE_SCHEME;
+  const signatureValid = Boolean(recoveredSignerWallet && recoveredSignerMatches);
 
   let evaluation;
   let permitVerification;
@@ -451,7 +482,9 @@ export function verifySignedTradeIntentBundle(
     typedDataHashMatches &&
     bindingHashMatches &&
     signerWalletMatches &&
+    recoveredSignerMatches &&
     agentIdMatches &&
+    signatureSchemeMatches &&
     signatureValid &&
     projectionMatchesTypedData &&
     projectionFieldsValid
@@ -472,8 +505,10 @@ export function verifySignedTradeIntentBundle(
     identityBindingValid ? "identity_binding_shape_valid" : "identity_binding_shape_invalid",
     bindingHashMatches ? "identity_binding_hash_matches" : "identity_binding_hash_mismatch",
     signerWalletMatches ? "signer_wallet_matches_identity" : "signer_wallet_mismatch",
+    recoveredSignerMatches ? "signature_recovers_agent_wallet" : "signature_recovery_mismatch",
     agentIdMatches ? "agent_id_matches_identity" : "agent_id_identity_mismatch",
-    signatureValid ? "signature_matches_demo_envelope" : "signature_invalid",
+    signatureSchemeMatches ? "signature_scheme_supported" : "signature_scheme_invalid",
+    signatureValid ? "signature_valid" : "signature_invalid",
     projectionMatchesTypedData
       ? "sentinel_projection_matches_signed_fields"
       : "sentinel_projection_mismatch",
@@ -490,7 +525,7 @@ export function verifySignedTradeIntentBundle(
     ? "INVALID_TYPED_DATA"
     : !identityBindingValid || !bindingHashMatches || !agentIdMatches
       ? "IDENTITY_BINDING_INVALID"
-      : !signerWalletMatches || !signatureValid
+      : !signerWalletMatches || !recoveredSignerMatches || !signatureSchemeMatches || !signatureValid
         ? "SIGNATURE_INVALID"
         : !projectionMatchesTypedData || !projectionFieldsValid
           ? "SENTINEL_PROJECTION_INVALID"
@@ -502,6 +537,7 @@ export function verifySignedTradeIntentBundle(
     bundle_id: bundle.bundle_id,
     typed_data_hash: bundle.typed_data_hash,
     signer_wallet: bundle.signer_wallet,
+    recovered_signer_wallet: recoveredSignerWallet ?? undefined,
     verification_code: verificationCode,
     typed_data_valid: typedDataValid && typedDataHashMatches,
     identity_binding_valid:

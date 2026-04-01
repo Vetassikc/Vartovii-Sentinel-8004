@@ -5,8 +5,8 @@
     "binding_id": "identity-strategy-agent-demo-001",
     "agent_id": "strategy-agent-demo",
     "agent_numeric_id": "0",
-    "operator_wallet": "0x1111111111111111111111111111111111118004",
-    "agent_wallet": "0x2222222222222222222222222222222222228004",
+    "operator_wallet": "0x4fcE26ae76a3e75ce42150f2a775B7CD525116Da",
+    "agent_wallet": "0xcD8e7F4Ad6fd92012338c68Bb355687F2B344542",
     "registry_address": "0x8004000000000000000000000000000000000001",
     "registration_payload": {
       "registration_id": "agent-reg-strategy-agent-demo-001",
@@ -35,7 +35,7 @@
     },
     "schema_version": "sentinel-erc8004-identity-binding-v1",
     "demo_only": true,
-    "binding_hash": "0x762cdf2335c9e0f51d192c35ed063b323ae633e87d90206aec1ade66a4393881"
+    "binding_hash": "0x07b5fbe4294be8133770b3523f2d750b3618763fead4eeb90e99af3aefc01b82"
   },
   "typed_data": {
     "domain": {
@@ -101,7 +101,7 @@
     },
     "message": {
       "agentId": "0",
-      "agentWallet": "0x2222222222222222222222222222222222228004",
+      "agentWallet": "0xcD8e7F4Ad6fd92012338c68Bb355687F2B344542",
       "pair": "BTC/USD",
       "action": "BUY",
       "amountUsdScaled": "240000",
@@ -110,10 +110,10 @@
       "deadline": "1774602300"
     }
   },
-  "typed_data_hash": "0xe734850a05c7a50d4453d6501a7f409593b17e768c414589886cdda97a3e6d08",
-  "signature": "0x206a9cc0832f626cc8f6cddceeff84f87c0c629e04d1f82f354a780c0be53cad",
-  "signer_wallet": "0x2222222222222222222222222222222222228004",
-  "signature_scheme": "demo-eip712-compatible-v1",
+  "typed_data_hash": "0x4b80d2d6c733dc9a9de5293fdcec00f88ea58da66c671a4fcbc8f128f5682bc6",
+  "signature": "0x00677a27975ecdb5cdc624b5d812c65586fc1207f9b8e394108cbeed4485400f25264769c90a2072ac117850f01bea609a47aae2577aab3dc30bbd2eb10f61df1b",
+  "signer_wallet": "0xcD8e7F4Ad6fd92012338c68Bb355687F2B344542",
+  "signature_scheme": "eip712-secp256k1-demo-v1",
   "signed_at": "2026-03-27T09:00:00Z",
   "sentinel_projection": {
     "trace_id": "trace-allow-btc-buy-001",

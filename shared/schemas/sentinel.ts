@@ -178,6 +178,7 @@ export interface SignedTradeIntentVerification {
   bundle_id: string;
   typed_data_hash: string;
   signer_wallet: string;
+  recovered_signer_wallet?: string;
   verification_code: string;
   typed_data_valid: boolean;
   identity_binding_valid: boolean;
