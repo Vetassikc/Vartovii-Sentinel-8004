@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sentinel-8004 Operator Test Shell</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/web/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero hero-panel">
+        <p class="eyebrow">Operator Test Shell</p>
+        <p class="hub-back-link">
+          <a href="/">Back to Hosted Submission Hub</a>
+          <span class="inline-divider">·</span>
+          <a href="/judge">Open Judge Demo</a>
+        </p>
+        <h1>Compose a trade intent and run the public-safe pipeline</h1>
+        <p class="intro">
+          Load one canonical intent, edit it if needed, then submit it through
+          the same Sentinel proof flow used by the judge surfaces.
+        </p>
+        <div class="trace-rail" aria-label="Operator pipeline">
+          <div class="trace-step">
+            <span class="trace-step-index">1</span>
+            <div>
+              <strong>Compose intent</strong>
+              <p>Start from a canonical scenario or edit the JSON directly.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">2</span>
+            <div>
+              <strong>Run pipeline</strong>
+              <p>Submit through the existing public-safe Sentinel routes.</p>
+            </div>
+          </div>
+          <div class="trace-step">
+            <span class="trace-step-index">3</span>
+            <div>
+              <strong>Inspect outputs</strong>
+              <p>Review signed intent, verdict, proof, permit, and execution preview.</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="controls card">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Operator Input</p>
+            <label for="operator-scenario-select">Canonical scenario</label>
+          </div>
+          <span id="operator-status-badge" class="status-pill status-pill-neutral">Ready to load</span>
+        </div>
+        <div class="control-row">
+          <select id="operator-scenario-select" aria-label="Canonical scenario selector"></select>
+          <button id="operator-load-button" type="button">Load Canonical Intent</button>
+          <button id="operator-run-button" type="button">Run Sentinel Pipeline</button>
+        </div>
+        <p id="operator-summary" class="summary">
+          Load a canonical intent, edit the JSON if needed, then run the pipeline.
+        </p>
+        <div id="operator-highlights" class="highlights-grid" aria-live="polite"></div>
+        <label class="section-label operator-textarea-label" for="operator-intent-input">
+          Trade Intent JSON
+        </label>
+        <textarea
+          id="operator-intent-input"
+          class="intent-textarea"
+          spellcheck="false"
+          aria-label="Trade intent JSON editor"
+        ></textarea>
+      </section>
+
+      <section class="grid operator-grid">
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">1</span>
+            <div>
+              <h2>Submitted Intent</h2>
+              <p class="panel-summary">Exact JSON sent through the operator dry-run flow.</p>
+            </div>
+          </div>
+          <pre id="operator-intent-panel">Load a scenario to begin.</pre>
+        </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">2</span>
+            <div>
+              <h2>Signed Intent</h2>
+              <p class="panel-summary">Typed data, signature, and verification summary.</p>
+            </div>
+          </div>
+          <pre id="operator-signed-intent-panel">Run the pipeline to generate a signed bundle.</pre>
+        </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">3</span>
+            <div>
+              <h2>Verdict</h2>
+              <p class="panel-summary">Policy decision and signed verdict payload.</p>
+            </div>
+          </div>
+          <pre id="operator-verdict-panel">Run the pipeline to inspect the verdict.</pre>
+        </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">4</span>
+            <div>
+              <h2>Validation Artifact</h2>
+              <p class="panel-summary">Primary proof object for the submitted intent.</p>
+            </div>
+          </div>
+          <pre id="operator-artifact-panel">Run the pipeline to inspect the proof artifact.</pre>
+        </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">5</span>
+            <div>
+              <h2>Permit Verification</h2>
+              <p class="panel-summary">Requested execution stays gated behind the signed permit.</p>
+            </div>
+          </div>
+          <pre id="operator-permit-panel">Run the pipeline to inspect permit scope.</pre>
+        </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">6</span>
+            <div>
+              <h2>Kraken Execution Preview</h2>
+              <p class="panel-summary">Projected validate-only request shape after Sentinel, including downsized execution.</p>
+            </div>
+          </div>
+          <pre id="operator-execution-panel">Run the pipeline to inspect the Kraken-facing preview.</pre>
+        </article>
+      </section>
+
+      <section class="notes card">
+        <h2>Operator Notes</h2>
+        <ul>
+          <li>This is a dry-run surface for public-safe testing, not a trading terminal.</li>
+          <li>The signing flow is real EIP-712, but the key material remains demo-only and fixture-scoped.</li>
+          <li>The permit panel reflects the original request; the execution preview may show the downsized executable path.</li>
+          <li>The execution preview remains a Kraken-shaped validate-only request, not a live order.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script type="module" src="/web/operator.js"></script>
+  </body>
+</html>

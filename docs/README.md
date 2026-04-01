@@ -45,6 +45,7 @@ They should explain:
 - how real EIP-712 signing is used with demo-only fixture keys
 - how the Kraken execution preview begins only after Sentinel emits a permit
 - how the corrected Kraken CLI paper syntax maps from the execution preview
+- how the operator dry-run shell reuses the same public-safe proof pipeline
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

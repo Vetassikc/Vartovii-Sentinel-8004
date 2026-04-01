@@ -37,6 +37,14 @@ const STATIC_ASSETS = {
     fileUrl: new URL("web/hub.html", ROOT_DIR),
     contentType: "text/html; charset=utf-8",
   },
+  "/operator": {
+    fileUrl: new URL("web/operator.html", ROOT_DIR),
+    contentType: "text/html; charset=utf-8",
+  },
+  "/operator/": {
+    fileUrl: new URL("web/operator.html", ROOT_DIR),
+    contentType: "text/html; charset=utf-8",
+  },
   "/judge": {
     fileUrl: new URL("web/index.html", ROOT_DIR),
     contentType: "text/html; charset=utf-8",
@@ -47,6 +55,10 @@ const STATIC_ASSETS = {
   },
   "/web/app.js": {
     fileUrl: new URL("web/app.js", ROOT_DIR),
+    contentType: "text/javascript; charset=utf-8",
+  },
+  "/web/operator.js": {
+    fileUrl: new URL("web/operator.js", ROOT_DIR),
     contentType: "text/javascript; charset=utf-8",
   },
   "/web/styles.css": {
@@ -73,6 +85,28 @@ function respond(
 
 async function readStaticAsset(pathname: keyof typeof STATIC_ASSETS): Promise<string> {
   return readFile(STATIC_ASSETS[pathname].fileUrl, "utf8");
+}
+
+function buildPipelineBundle(
+  intent: Parameters<typeof evaluateTradeIntent>[0],
+  bundleLabel: string,
+) {
+  const signedIntentBundle = buildSignedTradeIntentBundle(intent);
+  const evaluation = evaluateTradeIntent(intent);
+  const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
+
+  return {
+    bundle_label: bundleLabel,
+    intent,
+    signed_intent_bundle: signedIntentBundle,
+    signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
+    evaluation,
+    permit_verification: verifyTradePermit({
+      intent,
+      signed_verdict: evaluation.signed_verdict,
+    }),
+    execution_preview: executionPreview,
+  };
 }
 
 async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse | null> {
@@ -157,23 +191,12 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
   }
 
   const intent = await loadScenarioIntent(scenarioName);
-  const signedIntentBundle = buildSignedTradeIntentBundle(intent);
-  const evaluation = evaluateTradeIntent(intent);
-  const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
 
   return {
     statusCode: 200,
     payload: {
       scenario_name: scenarioName,
-      intent,
-      signed_intent_bundle: signedIntentBundle,
-      signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
-      evaluation,
-      permit_verification: verifyTradePermit({
-        intent,
-        signed_verdict: evaluation.signed_verdict,
-      }),
-      execution_preview: executionPreview,
+      ...buildPipelineBundle(intent, scenarioName),
     },
   };
 }
@@ -229,6 +252,7 @@ export async function handleJudgeModeRequest(
     method === "POST" &&
     (
       pathname === "/api/demo/evaluate-intent" ||
+      pathname === "/api/demo/run-pipeline" ||
       pathname === "/api/demo/verify-permit" ||
       pathname === "/api/demo/verify-signed-intent"
     )
@@ -248,6 +272,21 @@ export async function handleJudgeModeRequest(
         return {
           statusCode: 200,
           payload: evaluateTradeIntent(validation.value),
+        };
+      }
+
+      if (pathname === "/api/demo/run-pipeline") {
+        const validation = validateTradeIntent(payload);
+        if (!validation.ok) {
+          return {
+            statusCode: 400,
+            payload: validation.error,
+          };
+        }
+
+        return {
+          statusCode: 200,
+          payload: buildPipelineBundle(validation.value, validation.value.intent_id),
         };
       }
 

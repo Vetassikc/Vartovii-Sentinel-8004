@@ -286,6 +286,17 @@ export interface KrakenCliPaperSmokeArtifact {
 
 export interface JudgeScenarioBundle {
   scenario_name: string;
+  bundle_label: string;
+  intent: TradeIntent;
+  signed_intent_bundle: SignedTradeIntentBundle;
+  signed_intent_verification: SignedTradeIntentVerification;
+  evaluation: SentinelEvaluationResponse;
+  permit_verification: PermitVerificationResponse;
+  execution_preview: KrakenExecutionPreview;
+}
+
+export interface OperatorPipelineBundle {
+  bundle_label: string;
   intent: TradeIntent;
   signed_intent_bundle: SignedTradeIntentBundle;
   signed_intent_verification: SignedTradeIntentVerification;

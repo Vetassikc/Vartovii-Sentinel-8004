@@ -44,6 +44,16 @@ test("GET / returns the hosted submission hub HTML", async () => {
   assert.equal(response.contentType, "text/html; charset=utf-8");
   assert.match(response.payload as string, /Sentinel-8004 public submission entrypoint/);
   assert.match(response.payload as string, /Open Live Judge Demo/);
+  assert.match(response.payload as string, /Open Operator Test Flow/);
+});
+
+test("GET /operator returns the operator test shell HTML", async () => {
+  const response = await handleJudgeModeRequest("GET", "/operator", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.contentType, "text/html; charset=utf-8");
+  assert.match(response.payload as string, /Compose a trade intent and run the public-safe pipeline/);
+  assert.match(response.payload as string, /Run Sentinel Pipeline/);
 });
 
 test("GET /judge returns the judge demo shell HTML", async () => {
@@ -92,6 +102,7 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
   assert.equal(response.statusCode, 200);
   assert.deepEqual(response.payload, {
     scenario_name: "allow-btc-buy",
+    bundle_label: "allow-btc-buy",
     intent,
     signed_intent_bundle: signedIntentBundle,
     signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
@@ -102,6 +113,43 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
     }),
     execution_preview: executionPreview,
   });
+});
+
+test("POST /api/demo/run-pipeline returns the operator bundle for a submitted intent", async () => {
+  const intent = await loadScenarioIntent("downsize-eth-buy");
+  const signedIntentBundle = buildSignedTradeIntentBundle(intent);
+  const evaluation = evaluateTradeIntent(intent);
+  const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
+  const response = await handleJudgeModeRequest(
+    "POST",
+    "/api/demo/run-pipeline",
+    JSON.stringify(intent),
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, {
+    bundle_label: "intent-downsize-eth-buy-001",
+    intent,
+    signed_intent_bundle: signedIntentBundle,
+    signed_intent_verification: verifySignedTradeIntentBundle(signedIntentBundle),
+    evaluation,
+    permit_verification: verifyTradePermit({
+      intent,
+      signed_verdict: evaluation.signed_verdict,
+    }),
+    execution_preview: executionPreview,
+  });
+});
+
+test("POST /api/demo/run-pipeline returns 400 for invalid payloads", async () => {
+  const response = await handleJudgeModeRequest(
+    "POST",
+    "/api/demo/run-pipeline",
+    JSON.stringify({ trace_id: "broken" }),
+  );
+
+  assert.equal(response.statusCode, 400);
+  assert.equal((response.payload as { error: string }).error, "invalid_trade_intent");
 });
 
 test("GET /api/demo/execution-previews/:name returns the canonical execution preview", async () => {

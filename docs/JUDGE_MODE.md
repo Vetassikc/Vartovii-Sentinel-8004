@@ -42,6 +42,14 @@ The verifier accepts a `TradeIntent`, a `signed_verdict`, and an optional
 execution notional override to prove that execution stays inside the signed
 permit envelope.
 
+Judge mode now also exposes a narrow operator dry-run path:
+
+`POST /api/demo/run-pipeline`
+
+The route accepts a `TradeIntent` and returns the same proof set exposed in the
+hosted shells: signed intent bundle, signed intent verification, verdict,
+validation artifact, permit verification, and execution preview.
+
 For judges who need a clean hosted entrypoint, the same local server now serves
 a small submission hub at:
 
@@ -50,6 +58,10 @@ a small submission hub at:
 The live judge demo shell remains available at:
 
 `GET /judge`
+
+The operator test shell is available at:
+
+`GET /operator`
 
 The shell uses a narrow read-only bundle route:
 
@@ -87,6 +99,12 @@ Open the demo shell directly:
 http://127.0.0.1:8787/judge
 ```
 
+Open the operator test shell directly:
+
+```text
+http://127.0.0.1:8787/operator
+```
+
 Check service health:
 
 ```bash
@@ -121,6 +139,14 @@ Fetch a Kraken-facing execution preview:
 
 ```bash
 curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
+```
+
+Run the operator dry-run pipeline:
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/demo/run-pipeline \
+  -H "Content-Type: application/json" \
+  --data @examples/intents/downsize-eth-buy.json
 ```
 
 Generate a corrected Kraken paper compatibility artifact:
@@ -181,6 +207,10 @@ The web shell presents the same information in five narrow inspection panels:
 
 The hosted root page is intentionally smaller. It exists only to route judges to
 the live demo, public repository, proof notes, and reusable submission assets.
+
+The operator shell is intentionally narrow too. It exists only to let an
+operator or judge load a canonical intent, edit the JSON, and run the same
+public-safe proof pipeline without turning the repo into a trading dashboard.
 
 The signed-intent bundle is intentionally exposed through CLI and API rather
 than the current UI so the hosted `/judge` shell stays narrow and judge-first.

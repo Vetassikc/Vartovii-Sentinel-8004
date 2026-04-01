@@ -41,12 +41,14 @@ Current public assets include:
 - judge-mode operating model
 - a hosted submission hub at the root URL
 - a narrow web demo shell for judges
+- a narrow operator dry-run shell for intent testing
 - demo script
 - a submission asset pack with a cover image, canonical screenshots, and a social card
 - a small submission slide deck source plus a reproducible PDF export path
 - public schema definitions
 - sample intent, verdict, registration, identity-binding, signed-intent, and validation-artifact payloads
 - a local `POST /api/demo/evaluate-intent` endpoint
+- a local `POST /api/demo/run-pipeline` endpoint for operator-side dry runs
 - a local `POST /api/demo/verify-signed-intent` endpoint
 - a local `POST /api/demo/verify-permit` endpoint
 - a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
@@ -148,6 +150,12 @@ Open the judge demo shell:
 http://127.0.0.1:8787/judge
 ```
 
+Open the operator test shell:
+
+```text
+http://127.0.0.1:8787/operator
+```
+
 Check the health endpoint:
 
 ```bash
@@ -188,6 +196,14 @@ Fetch the same bundle used by the web shell:
 
 ```bash
 curl http://127.0.0.1:8787/api/demo/scenarios/allow-btc-buy
+```
+
+Run the operator dry-run pipeline for a submitted intent:
+
+```bash
+curl -X POST http://127.0.0.1:8787/api/demo/run-pipeline \
+  -H "Content-Type: application/json" \
+  --data @examples/intents/downsize-eth-buy.json
 ```
 
 Fetch the canonical signed intent bundle:

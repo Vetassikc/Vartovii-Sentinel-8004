@@ -107,6 +107,12 @@ one inspectable payload that can be surfaced alongside the signed verdict.
 Provides a read-only local browser view over the canonical scenario bundle so a
 judge can inspect the public-safe JSON objects without using the CLI directly.
 
+### Operator Test Shell
+
+Provides a narrow browser-based dry-run surface for loading one canonical
+intent, editing the JSON, and submitting it through the same public-safe
+pipeline used by the hosted judge surfaces.
+
 ### Audit Trace
 
 Preserves the decision context so that a judge or operator can inspect what
@@ -146,6 +152,8 @@ See [../shared/schemas/sentinel.ts](../shared/schemas/sentinel.ts).
 The local judge-mode surface exposes:
 
 - `GET /`
+- `GET /operator`
+- `POST /api/demo/run-pipeline`
 - `GET /healthz`
 - `GET /api/demo/scenarios`
 - `GET /api/demo/scenarios/:scenario-name`
