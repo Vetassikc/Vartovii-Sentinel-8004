@@ -11,6 +11,7 @@ const verdictPanel = document.querySelector("#operator-verdict-panel");
 const artifactPanel = document.querySelector("#operator-artifact-panel");
 const permitPanel = document.querySelector("#operator-permit-panel");
 const executionPanel = document.querySelector("#operator-execution-panel");
+const krakenPaperPanel = document.querySelector("#operator-kraken-paper-panel");
 
 function renderJson(element, value) {
   element.textContent = JSON.stringify(value, null, 2);
@@ -23,6 +24,7 @@ function renderMessage(message) {
   artifactPanel.textContent = message;
   permitPanel.textContent = message;
   executionPanel.textContent = message;
+  krakenPaperPanel.textContent = message;
 }
 
 function formatScenarioLabel(scenarioName) {
@@ -194,6 +196,7 @@ async function handlePipelineRun() {
     renderJson(artifactPanel, bundle.evaluation.validation_artifact);
     renderJson(permitPanel, bundle.permit_verification);
     renderJson(executionPanel, bundle.execution_preview);
+    renderJson(krakenPaperPanel, bundle.kraken_cli_paper_artifact);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown pipeline error";
     summaryElement.textContent = message;

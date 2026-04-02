@@ -91,3 +91,7 @@ The live API exposes the same projection at:
 
 The judge demo shell also surfaces the preview directly in the hosted
 walkthrough.
+
+The operator dry-run shell also derives a corrected
+`KrakenCliPaperSmokeArtifact` from the same execution preview so an operator can
+inspect the paper-command template without crossing into live execution.

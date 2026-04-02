@@ -142,6 +142,7 @@ The public scaffold uses these core types:
 - `RiskVerdict`
 - `ExecutionPermit`
 - `KrakenExecutionPreview`
+- `KrakenCliPaperSmokeArtifact`
 - `SignedVerdict`
 - `ValidationArtifact`
 - `SentinelEvaluationResponse`
@@ -186,6 +187,7 @@ The minimum demo profile is intentionally conservative:
 - real EIP-712 typed trade intents signed with demo-only fixture keys
 - permit verification that fails closed when the signed envelope no longer matches execution scope
 - Kraken-facing `validate-only` execution previews that do not submit live orders
+- corrected Kraken paper smoke artifacts derived from the execution preview
 - demo-only registrations and validation artifacts that stay public-safe
 
 ## Public Boundary

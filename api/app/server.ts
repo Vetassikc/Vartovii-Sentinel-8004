@@ -6,6 +6,7 @@ import {
   validateSignedTradeIntentBundle,
   verifySignedTradeIntentBundle,
 } from "./erc8004.ts";
+import { buildKrakenCliPaperSmokeArtifact } from "./kraken-cli-compat.ts";
 import { buildKrakenExecutionPreview } from "./execution-preview.ts";
 import {
   evaluateTradeIntent,
@@ -94,6 +95,7 @@ function buildPipelineBundle(
   const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
   const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
+  const krakenCliPaperArtifact = buildKrakenCliPaperSmokeArtifact(executionPreview);
 
   return {
     bundle_label: bundleLabel,
@@ -106,6 +108,7 @@ function buildPipelineBundle(
       signed_verdict: evaluation.signed_verdict,
     }),
     execution_preview: executionPreview,
+    kraken_cli_paper_artifact: krakenCliPaperArtifact,
   };
 }
 

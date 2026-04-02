@@ -40,7 +40,7 @@
             <span class="trace-step-index">3</span>
             <div>
               <strong>Inspect outputs</strong>
-              <p>Review signed intent, verdict, proof, permit, and execution preview.</p>
+              <p>Review signed intent, verdict, proof, permit, execution preview, and paper smoke artifact.</p>
             </div>
           </div>
         </div>
@@ -135,6 +135,16 @@
           </div>
           <pre id="operator-execution-panel">Run the pipeline to inspect the Kraken-facing preview.</pre>
         </article>
+        <article class="card panel">
+          <div class="panel-heading">
+            <span class="panel-step">7</span>
+            <div>
+              <h2>Kraken Paper Smoke Artifact</h2>
+              <p class="panel-summary">Corrected paper-command template and emission guidance derived from the execution preview.</p>
+            </div>
+          </div>
+          <pre id="operator-kraken-paper-panel">Run the pipeline to inspect the corrected Kraken paper artifact.</pre>
+        </article>
       </section>
 
       <section class="notes card">
@@ -144,6 +154,7 @@
           <li>The signing flow is real EIP-712, but the key material remains demo-only and fixture-scoped.</li>
           <li>The permit panel reflects the original request; the execution preview may show the downsized executable path.</li>
           <li>The execution preview remains a Kraken-shaped validate-only request, not a live order.</li>
+          <li>The Kraken paper artifact is a corrected smoke template, not an authenticated order submission.</li>
         </ul>
       </section>
     </main>

@@ -46,6 +46,7 @@ They should explain:
 - how the Kraken execution preview begins only after Sentinel emits a permit
 - how the corrected Kraken CLI paper syntax maps from the execution preview
 - how the operator dry-run shell reuses the same public-safe proof pipeline
+- how the operator shell also exposes a corrected Kraken paper smoke artifact
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

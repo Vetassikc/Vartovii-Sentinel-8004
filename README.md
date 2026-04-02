@@ -156,6 +156,9 @@ Open the operator test shell:
 http://127.0.0.1:8787/operator
 ```
 
+The operator shell now exposes the same proof set as the judge flow plus a
+corrected Kraken paper smoke artifact derived from the execution preview.
+
 Check the health endpoint:
 
 ```bash
@@ -205,6 +208,15 @@ curl -X POST http://127.0.0.1:8787/api/demo/run-pipeline \
   -H "Content-Type: application/json" \
   --data @examples/intents/downsize-eth-buy.json
 ```
+
+The bundle now includes:
+
+- `signed_intent_bundle`
+- `signed_intent_verification`
+- `evaluation`
+- `permit_verification`
+- `execution_preview`
+- `kraken_cli_paper_artifact`
 
 Fetch the canonical signed intent bundle:
 

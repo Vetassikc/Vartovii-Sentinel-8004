@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+import { buildKrakenCliPaperSmokeArtifact } from "../app/kraken-cli-compat.ts";
 import { buildKrakenExecutionPreview } from "../app/execution-preview.ts";
 import { buildSignedTradeIntentBundle, verifySignedTradeIntentBundle } from "../app/erc8004.ts";
 import { handleJudgeModeRequest, resolveServerConfig } from "../app/server.ts";
@@ -93,6 +94,7 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
   const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
   const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
+  const krakenCliPaperArtifact = buildKrakenCliPaperSmokeArtifact(executionPreview);
   const response = await handleJudgeModeRequest(
     "GET",
     "/api/demo/scenarios/allow-btc-buy",
@@ -112,6 +114,7 @@ test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shel
       signed_verdict: evaluation.signed_verdict,
     }),
     execution_preview: executionPreview,
+    kraken_cli_paper_artifact: krakenCliPaperArtifact,
   });
 });
 
@@ -120,6 +123,7 @@ test("POST /api/demo/run-pipeline returns the operator bundle for a submitted in
   const signedIntentBundle = buildSignedTradeIntentBundle(intent);
   const evaluation = evaluateTradeIntent(intent);
   const executionPreview = buildKrakenExecutionPreview(intent, evaluation);
+  const krakenCliPaperArtifact = buildKrakenCliPaperSmokeArtifact(executionPreview);
   const response = await handleJudgeModeRequest(
     "POST",
     "/api/demo/run-pipeline",
@@ -138,6 +142,7 @@ test("POST /api/demo/run-pipeline returns the operator bundle for a submitted in
       signed_verdict: evaluation.signed_verdict,
     }),
     execution_preview: executionPreview,
+    kraken_cli_paper_artifact: krakenCliPaperArtifact,
   });
 });
 

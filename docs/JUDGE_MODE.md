@@ -48,7 +48,8 @@ Judge mode now also exposes a narrow operator dry-run path:
 
 The route accepts a `TradeIntent` and returns the same proof set exposed in the
 hosted shells: signed intent bundle, signed intent verification, verdict,
-validation artifact, permit verification, and execution preview.
+validation artifact, permit verification, execution preview, and a corrected
+Kraken paper smoke artifact.
 
 For judges who need a clean hosted entrypoint, the same local server now serves
 a small submission hub at:
@@ -205,12 +206,18 @@ The web shell presents the same information in five narrow inspection panels:
 - permit verification
 - Kraken execution preview
 
+The operator shell adds one more narrow inspection panel:
+
+- Kraken paper smoke artifact
+
 The hosted root page is intentionally smaller. It exists only to route judges to
 the live demo, public repository, proof notes, and reusable submission assets.
 
 The operator shell is intentionally narrow too. It exists only to let an
 operator or judge load a canonical intent, edit the JSON, and run the same
 public-safe proof pipeline without turning the repo into a trading dashboard.
+It now also exposes the corrected Kraken paper command template that would be
+derived from the execution preview, while keeping execution itself demo-only.
 
 The signed-intent bundle is intentionally exposed through CLI and API rather
 than the current UI so the hosted `/judge` shell stays narrow and judge-first.

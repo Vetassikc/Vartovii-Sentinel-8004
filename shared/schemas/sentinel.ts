@@ -293,6 +293,7 @@ export interface JudgeScenarioBundle {
   evaluation: SentinelEvaluationResponse;
   permit_verification: PermitVerificationResponse;
   execution_preview: KrakenExecutionPreview;
+  kraken_cli_paper_artifact: KrakenCliPaperSmokeArtifact;
 }
 
 export interface OperatorPipelineBundle {
@@ -303,6 +304,7 @@ export interface OperatorPipelineBundle {
   evaluation: SentinelEvaluationResponse;
   permit_verification: PermitVerificationResponse;
   execution_preview: KrakenExecutionPreview;
+  kraken_cli_paper_artifact: KrakenCliPaperSmokeArtifact;
 }
 
 export interface ErrorResponse {
