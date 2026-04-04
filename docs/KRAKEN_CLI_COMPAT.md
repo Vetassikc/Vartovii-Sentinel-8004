@@ -73,6 +73,10 @@ The canonical fixture-backed example is:
 
 - `examples/kraken-cli-compat/downsize-eth-buy.kraken-paper.json`
 
+For the full founder-side dry-run sequence that connects `/operator`, the
+aggregate pipeline route, and the corrected paper artifact, see
+`docs/PAPER_SMOKE_REHEARSAL.md`.
+
 ## Demo-Only Boundary
 
 This repo does not provide:

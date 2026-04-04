@@ -115,11 +115,12 @@ Out of scope for this repository:
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
 4. Read [docs/EXECUTION_PREVIEW.md](./docs/EXECUTION_PREVIEW.md)
 5. Read [docs/KRAKEN_CLI_COMPAT.md](./docs/KRAKEN_CLI_COMPAT.md)
-6. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-7. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
-8. Inspect [assets/README.md](./assets/README.md)
-9. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-10. Inspect the example payloads under [examples/](./examples/)
+6. Read [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
+7. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
+8. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
+9. Inspect [assets/README.md](./assets/README.md)
+10. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+11. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -194,6 +195,10 @@ Generate the Kraken paper compatibility artifact:
 ```bash
 node scripts/kraken-paper-smoke.ts downsize-eth-buy
 ```
+
+Rehearse the closest founder-side paper path:
+
+- follow [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
 
 Fetch the same bundle used by the web shell:
 

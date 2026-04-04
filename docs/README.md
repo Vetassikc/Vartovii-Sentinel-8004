@@ -15,6 +15,8 @@ This folder contains the public-safe documentation for the
   - public-safe explanation of the Kraken-facing execution preview layer
 - `KRAKEN_CLI_COMPAT.md`
   - corrected Kraken CLI paper-command compatibility guidance
+- `PAPER_SMOKE_REHEARSAL.md`
+  - founder-side dry-run rehearsal path for the corrected paper flow
 - `DEPLOYMENT.md`
   - minimal deployment preparation for a simple public host
 - `DEMO_SCRIPT.md`
@@ -45,6 +47,7 @@ They should explain:
 - how real EIP-712 signing is used with demo-only fixture keys
 - how the Kraken execution preview begins only after Sentinel emits a permit
 - how the corrected Kraken CLI paper syntax maps from the execution preview
+- how a founder can rehearse the closest paper-only testing path without live credentials
 - how the operator dry-run shell reuses the same public-safe proof pipeline
 - how the operator shell also exposes a corrected Kraken paper smoke artifact
 - why the hosted root URL is a submission hub

@@ -103,6 +103,15 @@ On the same downsized scenario, point out:
 - the smaller executable order emitted behind the permit gate
 - `validate: true` means preview only, not live trading
 
+### 8.5. Optional Founder Rehearsal Cutaway
+
+If you want one extra realism cutaway outside the main judge walkthrough, use
+the founder rehearsal flow from `docs/PAPER_SMOKE_REHEARSAL.md`.
+
+This is useful when you want to show that the same downsized scenario can be
+walked from operator dry-run into a corrected Kraken paper smoke template
+without making any live execution claim.
+
 ### 9. Close With The Positioning
 
 End with:
