@@ -21,13 +21,13 @@ test("buildKrakenCliPaperSmokeArtifact follows corrected Kraken CLI guidance", a
 
   assert.equal(artifact.cli_binary, "kraken");
   assert.equal(artifact.mode, "paper");
-  assert.equal(artifact.command_group, "order");
+  assert.equal(artifact.command_group, "paper");
   assert.equal(artifact.action, "buy");
   assert.equal(artifact.ticker, "BTCUSD");
   assert.equal(artifact.output_flag, "-o json");
   assert.equal(
     artifact.paper_command_template,
-    "kraken paper order buy BTCUSD <ORDER_PARAMS...> -o json",
+    "kraken paper buy BTCUSD <ORDER_PARAMS...> -o json",
   );
   for (const forbiddenPattern of artifact.forbidden_patterns) {
     assert.equal(artifact.paper_command_template.includes(forbiddenPattern), false);

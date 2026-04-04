@@ -27,13 +27,13 @@ Use only these conventions in this repo:
 The canonical command template emitted by this repo is:
 
 ```bash
-kraken paper order buy BTCUSD <ORDER_PARAMS...> -o json
+kraken paper buy BTCUSD <ORDER_PARAMS...> -o json
 ```
 
 Or for sells:
 
 ```bash
-kraken paper order sell BTCUSD <ORDER_PARAMS...> -o json
+kraken paper sell BTCUSD <ORDER_PARAMS...> -o json
 ```
 
 `<ORDER_PARAMS...>` is intentionally left as a placeholder in this repo.

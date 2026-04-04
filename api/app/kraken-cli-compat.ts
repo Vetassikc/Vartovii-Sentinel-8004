@@ -16,7 +16,7 @@ export function buildKrakenCliPaperSmokeArtifact(
   const notes = [
     "Use paper subcommands instead of sandbox flags or sandbox environment variables.",
     "Use ticker symbols in BTCUSD style, not slash-delimited market names.",
-    "Use order buy or order sell, never order add.",
+    "Use kraken paper buy or kraken paper sell for paper trading, never order add.",
     "Use -o json for smoke output.",
     "Use Kraken MCP over stdio, not an HTTP serve mode on port 8080.",
   ];
@@ -42,11 +42,11 @@ export function buildKrakenCliPaperSmokeArtifact(
     execution_disposition: preview.execution_disposition,
     cli_binary: "kraken",
     mode: "paper",
-    command_group: "order",
+    command_group: "paper",
     action,
     ticker,
     output_flag: "-o json",
-    paper_command_template: `kraken paper order ${action} ${ticker} <ORDER_PARAMS...> -o json`,
+    paper_command_template: `kraken paper ${action} ${ticker} <ORDER_PARAMS...> -o json`,
     order_parameters_placeholder: "<ORDER_PARAMS...>",
     should_emit_command: shouldEmitCommand,
     requested_size_base: preview.requested_size_base,

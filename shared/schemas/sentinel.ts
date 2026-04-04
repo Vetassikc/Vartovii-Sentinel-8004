@@ -264,7 +264,7 @@ export interface KrakenCliPaperSmokeArtifact {
   execution_disposition: ExecutionPreviewDisposition;
   cli_binary: "kraken";
   mode: "paper";
-  command_group: "order";
+  command_group: "paper";
   action: "buy" | "sell";
   ticker: string;
   output_flag: "-o json";
