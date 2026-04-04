@@ -97,6 +97,11 @@ Binds the signed artifact to the public demo execution scope:
 Provides a public-safe demo registration record for the agent identity handle
 used in judge mode.
 
+### Shared Sepolia Anchor
+
+Provides an organizer-aligned config surface plus a bounded founder-run
+`AgentRegistry.register(...)` calldata plan for the shared Sepolia contracts.
+
 ### Validation Artifact
 
 Binds the agent registration, decision hash, permit hash, and proof status into
@@ -143,6 +148,8 @@ The public scaffold uses these core types:
 - `ExecutionPermit`
 - `KrakenExecutionPreview`
 - `KrakenCliPaperSmokeArtifact`
+- `SharedSepoliaContracts`
+- `AgentRegistryAnchorPlan`
 - `SignedVerdict`
 - `ValidationArtifact`
 - `SentinelEvaluationResponse`
@@ -160,6 +167,8 @@ The local judge-mode surface exposes:
 - `GET /api/demo/scenarios/:scenario-name`
 - `GET /api/demo/signed-intents/:scenario-name`
 - `GET /api/demo/execution-previews/:scenario-name`
+- `GET /api/demo/shared-sepolia`
+- `GET /api/demo/shared-sepolia/agent-registry-anchor/:agent-id`
 - `POST /api/demo/evaluate-intent`
 - `POST /api/demo/verify-signed-intent`
 - `POST /api/demo/verify-permit`
@@ -188,6 +197,7 @@ The minimum demo profile is intentionally conservative:
 - permit verification that fails closed when the signed envelope no longer matches execution scope
 - Kraken-facing `validate-only` execution previews that do not submit live orders
 - corrected Kraken paper smoke artifacts derived from the execution preview
+- organizer-aligned shared Sepolia contract config and AgentRegistry calldata preparation
 - demo-only registrations and validation artifacts that stay public-safe
 
 ## Public Boundary

@@ -76,6 +76,14 @@ The same server also exposes the Kraken-facing execution projection at:
 
 `GET /api/demo/execution-previews/:scenario-name`
 
+The same server also exposes the organizer shared Sepolia contract config at:
+
+`GET /api/demo/shared-sepolia`
+
+The same server also exposes a founder-run AgentRegistry anchor plan at:
+
+`GET /api/demo/shared-sepolia/agent-registry-anchor/:agent-id`
+
 For deployment-readiness and host health checks, the same server also exposes:
 
 `GET /healthz`
@@ -156,6 +164,12 @@ Generate a corrected Kraken paper compatibility artifact:
 node scripts/kraken-paper-smoke.ts downsize-eth-buy
 ```
 
+Prepare the shared-Sepolia AgentRegistry anchor plan:
+
+```bash
+node scripts/prepare-agent-registry-anchor.ts strategy-agent-demo
+```
+
 Run tests:
 
 ```bash
@@ -221,6 +235,10 @@ derived from the execution preview, while keeping execution itself demo-only.
 
 The signed-intent bundle is intentionally exposed through CLI and API rather
 than the current UI so the hosted `/judge` shell stays narrow and judge-first.
+
+The shared-Sepolia anchor slice is intentionally read-only in the hosted
+surface. It prepares organizer-aligned `AgentRegistry.register(...)` calldata,
+but any broadcast still requires founder wallet action outside the public app.
 
 ## Example Request
 

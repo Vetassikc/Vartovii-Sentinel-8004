@@ -13,6 +13,8 @@ This folder contains the public-safe documentation for the
   - public-safe explanation of agent identity binding, typed trade intent, and proof flow alignment
 - `EXECUTION_PREVIEW.md`
   - public-safe explanation of the Kraken-facing execution preview layer
+- `SHARED_SEPOLIA.md`
+  - organizer-aligned shared contract notes and AgentRegistry anchor plan
 - `KRAKEN_CLI_COMPAT.md`
   - corrected Kraken CLI paper-command compatibility guidance
 - `PAPER_SMOKE_REHEARSAL.md`
@@ -50,6 +52,7 @@ They should explain:
 - how a founder can rehearse the closest paper-only testing path without live credentials
 - how the operator dry-run shell reuses the same public-safe proof pipeline
 - how the operator shell also exposes a corrected Kraken paper smoke artifact
+- how the repo aligns to organizer shared Sepolia contracts without self-deploying alternates
 - why the hosted root URL is a submission hub
 - how the demo shell is launched locally
 

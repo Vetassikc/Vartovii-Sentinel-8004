@@ -307,6 +307,60 @@ export interface OperatorPipelineBundle {
   kraken_cli_paper_artifact: KrakenCliPaperSmokeArtifact;
 }
 
+export interface SharedSepoliaContracts {
+  network: "sepolia";
+  chain_id: 11155111;
+  agent_registry: string;
+  hackathon_vault: string;
+  risk_router: string;
+  reputation_registry: string;
+  validation_registry: string;
+  explorer_base_url: string;
+  source: string;
+  read_only: boolean;
+}
+
+export interface ExplorerLink {
+  label: string;
+  url: string;
+}
+
+export interface AgentRegistryAnchorPlan {
+  anchor_id: string;
+  agent_id: string;
+  network: "sepolia";
+  chain_id: 11155111;
+  contract_name: "AgentRegistry";
+  contract_address: string;
+  function_name: "register";
+  function_signature: string;
+  operator_wallet: string;
+  agent_wallet: string;
+  registration_payload: AgentRegistrationPayload;
+  registration_args: {
+    agentWallet: string;
+    name: string;
+    description: string;
+    capabilities: string[];
+    agentURI: string;
+  };
+  metadata_preview: Record<string, unknown>;
+  recommended_agent_uri: string;
+  recommended_agent_uri_kind: "data_uri_json";
+  calldata: string;
+  transaction_request: {
+    to: string;
+    data: string;
+    value: string;
+    chainId: number;
+  };
+  read_only_links: ExplorerLink[];
+  founder_action_required: boolean;
+  implemented_scope: string[];
+  not_implemented: string[];
+  demo_only: boolean;
+}
+
 export interface ErrorResponse {
   error: string;
   details: string[];

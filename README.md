@@ -31,6 +31,9 @@ The typed intent path now uses real EIP-712 digest signing and signature
 verification with demo-only fixture keys committed intentionally for public
 reproducibility.
 
+The current on-chain alignment target is the organizer-provided shared ERC-8004
+contracts on Sepolia, not self-deployed judging alternates.
+
 ## Current Repository Status
 
 This public repository now includes a runnable judge-mode foundation.
@@ -47,6 +50,7 @@ Current public assets include:
 - a small submission slide deck source plus a reproducible PDF export path
 - public schema definitions
 - sample intent, verdict, registration, identity-binding, signed-intent, and validation-artifact payloads
+- organizer shared Sepolia contract config plus a bounded AgentRegistry anchor helper
 - a local `POST /api/demo/evaluate-intent` endpoint
 - a local `POST /api/demo/run-pipeline` endpoint for operator-side dry runs
 - a local `POST /api/demo/verify-signed-intent` endpoint
@@ -54,6 +58,8 @@ Current public assets include:
 - a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
 - a local `GET /api/demo/signed-intents/:scenario-name` route for the canonical typed bundle
 - a local `GET /api/demo/execution-previews/:scenario-name` route for the Kraken-facing execution preview
+- a local `GET /api/demo/shared-sepolia` route for organizer shared contract config
+- a local `GET /api/demo/shared-sepolia/agent-registry-anchor/:agent-id` route for founder-run AgentRegistry calldata preparation
 - a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI signed-intent generator for the canonical typed bundle
@@ -115,12 +121,13 @@ Out of scope for this repository:
 3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
 4. Read [docs/EXECUTION_PREVIEW.md](./docs/EXECUTION_PREVIEW.md)
 5. Read [docs/KRAKEN_CLI_COMPAT.md](./docs/KRAKEN_CLI_COMPAT.md)
-6. Read [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
-7. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-8. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
-9. Inspect [assets/README.md](./assets/README.md)
-10. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-11. Inspect the example payloads under [examples/](./examples/)
+6. Read [docs/SHARED_SEPOLIA.md](./docs/SHARED_SEPOLIA.md)
+7. Read [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
+8. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
+9. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
+10. Inspect [assets/README.md](./assets/README.md)
+11. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
+12. Inspect the example payloads under [examples/](./examples/)
 
 ## Local Judge Mode
 
@@ -196,6 +203,12 @@ Generate the Kraken paper compatibility artifact:
 node scripts/kraken-paper-smoke.ts downsize-eth-buy
 ```
 
+Prepare the shared-Sepolia AgentRegistry anchor calldata:
+
+```bash
+node scripts/prepare-agent-registry-anchor.ts strategy-agent-demo
+```
+
 Rehearse the closest founder-side paper path:
 
 - follow [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
@@ -233,6 +246,18 @@ Fetch the Kraken-facing execution preview:
 
 ```bash
 curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
+```
+
+Fetch the organizer shared Sepolia config:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/shared-sepolia
+```
+
+Fetch the founder-run AgentRegistry anchor plan:
+
+```bash
+curl http://127.0.0.1:8787/api/demo/shared-sepolia/agent-registry-anchor/strategy-agent-demo
 ```
 
 Run the local tests:

@@ -19,6 +19,11 @@ import {
   listScenarioNames,
   loadScenarioIntent,
 } from "./scenarios.ts";
+import {
+  buildAgentRegistryAnchorPlan,
+  getSharedSepoliaContracts,
+  isSupportedAgentRegistryAnchor,
+} from "./shared-sepolia.ts";
 
 type JudgeModeResponse = {
   statusCode: number;
@@ -130,6 +135,34 @@ async function buildScenarioBundle(pathname: string): Promise<JudgeModeResponse 
       payload: {
         scenarios: listScenarioNames(),
       },
+    };
+  }
+
+  if (pathname === "/api/demo/shared-sepolia") {
+    return {
+      statusCode: 200,
+      payload: {
+        contracts: getSharedSepoliaContracts(),
+      },
+    };
+  }
+
+  const agentRegistryAnchorPrefix = "/api/demo/shared-sepolia/agent-registry-anchor/";
+  if (pathname.startsWith(agentRegistryAnchorPrefix)) {
+    const agentId = pathname.slice(agentRegistryAnchorPrefix.length);
+    if (!isSupportedAgentRegistryAnchor(agentId)) {
+      return {
+        statusCode: 404,
+        payload: {
+          error: "not_found",
+          details: [`Unknown shared-Sepolia anchor agent: ${agentId}`],
+        },
+      };
+    }
+
+    return {
+      statusCode: 200,
+      payload: buildAgentRegistryAnchorPlan(agentId),
     };
   }
 

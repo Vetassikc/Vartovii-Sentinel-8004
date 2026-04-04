@@ -7,6 +7,10 @@ import { buildSignedTradeIntentBundle, verifySignedTradeIntentBundle } from "../
 import { handleJudgeModeRequest, resolveServerConfig } from "../app/server.ts";
 import { evaluateTradeIntent, verifyTradePermit } from "../app/policy.ts";
 import {
+  buildAgentRegistryAnchorPlan,
+  getSharedSepoliaContracts,
+} from "../app/shared-sepolia.ts";
+import {
   loadExpectedExecutionPreview,
   loadExpectedVerdict,
   loadScenarioIntent,
@@ -87,6 +91,26 @@ test("GET /api/demo/scenarios returns the canonical scenario names", async () =>
       "fail-closed-oracle",
     ],
   });
+});
+
+test("GET /api/demo/shared-sepolia returns the organizer shared contract config", async () => {
+  const response = await handleJudgeModeRequest("GET", "/api/demo/shared-sepolia", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, {
+    contracts: getSharedSepoliaContracts(),
+  });
+});
+
+test("GET /api/demo/shared-sepolia/agent-registry-anchor/:agent returns a founder-run anchor plan", async () => {
+  const response = await handleJudgeModeRequest(
+    "GET",
+    "/api/demo/shared-sepolia/agent-registry-anchor/strategy-agent-demo",
+    "",
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.deepEqual(response.payload, buildAgentRegistryAnchorPlan("strategy-agent-demo"));
 });
 
 test("GET /api/demo/scenarios/:name returns the scenario bundle for the web shell", async () => {
