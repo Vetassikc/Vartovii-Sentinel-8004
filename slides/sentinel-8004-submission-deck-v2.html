@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sentinel-8004 Submission Slides v2</title>
+    <style>
+      @page {
+        size: 13.333in 7.5in;
+        margin: 0;
+      }
+
+      :root {
+        color-scheme: light;
+        --bg: #f5f7fb;
+        --ink: #142033;
+        --muted: #475772;
+        --line: #d6deed;
+        --panel: #ffffff;
+        --panel-strong: #0f1729;
+        --panel-ink: #dce6ff;
+        --blue: #4263eb;
+        --blue-soft: #eef2ff;
+        --green: #1f9d68;
+        --amber: #c48914;
+        --red: #d64040;
+        --cyan: #00b8d4;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        margin: 0;
+        font-family: "SF Pro Display", "Segoe UI", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      .deck {
+        width: 13.333in;
+        margin: 0 auto;
+      }
+
+      .slide {
+        width: 13.333in;
+        height: 7.5in;
+        padding: 0.58in 0.66in;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        page-break-after: always;
+        background:
+          radial-gradient(circle at top right, rgba(66, 99, 235, 0.08), transparent 32%),
+          linear-gradient(180deg, #fbfcff 0%, #f4f7fc 100%);
+      }
+
+      .slide:last-child {
+        page-break-after: auto;
+      }
+
+      .hero-slide {
+        background:
+          radial-gradient(circle at top right, rgba(31, 157, 104, 0.12), transparent 28%),
+          radial-gradient(circle at top left, rgba(66, 99, 235, 0.12), transparent 26%),
+          linear-gradient(180deg, #fbfcff 0%, #f4f7fc 100%);
+      }
+
+      .dark-slide {
+        background: linear-gradient(135deg, #0a0e1a 0%, #0f1729 50%, #0d1423 100%);
+        color: #e0e7ff;
+      }
+
+      .dark-slide .eyebrow { color: var(--cyan); }
+      .dark-slide h2 { color: #f0f4ff; }
+      .dark-slide .lede { color: #8b9cc0; }
+      .dark-slide .panel { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+      .dark-slide .panel-label { color: var(--cyan); }
+      .dark-slide .bullets { color: #8b9cc0; }
+      .dark-slide .bullets strong { color: #e0e7ff; }
+      .dark-slide .metric { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); }
+      .dark-slide .metric strong { color: #f0f4ff; }
+      .dark-slide .metric p { color: #8b9cc0; }
+
+      .eyebrow {
+        margin: 0 0 0.14in;
+        font-size: 12pt;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--blue);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 28pt;
+        line-height: 1.06;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 24pt;
+        line-height: 1.08;
+      }
+
+      p { margin: 0; }
+
+      .lede {
+        max-width: 7.5in;
+        margin-top: 0.16in;
+        font-size: 14.5pt;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      .grid-two {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 0.36in;
+        align-items: center;
+      }
+
+      .grid-halves {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.28in;
+      }
+
+      .stack {
+        display: grid;
+        gap: 0.16in;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 0.18in;
+        padding: 0.22in 0.24in;
+        box-shadow: 0 1px 2px rgba(20, 32, 51, 0.06);
+      }
+
+      .panel-dark {
+        background: var(--panel-strong);
+        border-color: #0f1729;
+        color: var(--panel-ink);
+      }
+
+      .panel-label {
+        margin: 0 0 0.1in;
+        font-size: 10.5pt;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--blue);
+      }
+
+      .bullets {
+        margin: 0;
+        padding-left: 0.2in;
+        display: grid;
+        gap: 0.1in;
+        font-size: 13pt;
+        line-height: 1.42;
+        color: var(--muted);
+      }
+
+      .bullets strong { color: var(--ink); }
+
+      .bullets-tight {
+        gap: 0.08in;
+        font-size: 12.2pt;
+      }
+
+      .quote {
+        margin-top: 0.18in;
+        padding: 0.18in 0.22in;
+        border-left: 4px solid var(--blue);
+        background: var(--blue-soft);
+        font-size: 16pt;
+        line-height: 1.35;
+        font-weight: 700;
+      }
+
+      .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.2in;
+      }
+
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.12in;
+        margin-top: 0.24in;
+      }
+
+      .flow-step {
+        min-height: 1.05in;
+        padding: 0.16in;
+        border-radius: 0.18in;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .flow-step strong {
+        display: block;
+        margin-bottom: 0.06in;
+        font-size: 12.5pt;
+      }
+
+      .flow-step p {
+        font-size: 10.8pt;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .artifact-card { min-height: 2.28in; }
+
+      .artifact-card h3 {
+        margin: 0 0 0.1in;
+        font-size: 16pt;
+      }
+
+      .artifact-card p {
+        margin-bottom: 0.12in;
+        font-size: 11.5pt;
+        line-height: 1.4;
+        color: var(--muted);
+      }
+
+      .chip-row {
+        display: flex;
+        gap: 0.08in;
+        flex-wrap: wrap;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.06in 0.1in;
+        border-radius: 999px;
+        background: var(--blue-soft);
+        color: var(--blue);
+        font-size: 10.8pt;
+        font-weight: 700;
+      }
+
+      .chip-green {
+        background: rgba(31, 157, 104, 0.14);
+        color: var(--green);
+      }
+
+      .chip-amber {
+        background: rgba(196, 137, 20, 0.14);
+        color: var(--amber);
+      }
+
+      .chip-cyan {
+        background: rgba(0, 184, 212, 0.14);
+        color: var(--cyan);
+      }
+
+      .chip-red {
+        background: rgba(214, 64, 64, 0.14);
+        color: var(--red);
+      }
+
+      .image-frame {
+        border: 1px solid var(--line);
+        border-radius: 0.18in;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      .image-frame-dark {
+        border-color: rgba(255,255,255,0.12);
+        background: #0a0e1a;
+      }
+
+      .image-frame img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      .caption {
+        padding: 0.12in 0.16in;
+        border-top: 1px solid var(--line);
+        font-size: 10.8pt;
+        line-height: 1.35;
+        color: var(--muted);
+        background: #fbfcff;
+      }
+
+      .caption-dark {
+        border-top-color: rgba(255,255,255,0.08);
+        color: #8b9cc0;
+        background: rgba(255,255,255,0.03);
+      }
+
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 0.24in;
+        font-size: 10.5pt;
+        color: var(--muted);
+      }
+
+      .footer strong,
+      .url-list strong {
+        color: var(--ink);
+      }
+
+      .url-list {
+        display: grid;
+        gap: 0.06in;
+        font-size: 11pt;
+        line-height: 1.4;
+      }
+
+      .url-list span { color: var(--muted); }
+
+      .cover-art {
+        max-width: 5.28in;
+        margin-left: auto;
+      }
+
+      .spotlight {
+        display: grid;
+        gap: 0.18in;
+      }
+
+      .metric-panel {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.16in;
+      }
+
+      .metric-panel-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .metric {
+        padding: 0.18in 0.2in;
+        border-radius: 0.18in;
+        background: var(--panel);
+        border: 1px solid var(--line);
+      }
+
+      .metric strong {
+        display: block;
+        margin-bottom: 0.04in;
+        font-size: 15pt;
+      }
+
+      .metric p {
+        font-size: 10.8pt;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .code-block {
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 10pt;
+        line-height: 1.55;
+        background: #0c1120;
+        color: #c8d6f0;
+        border-radius: 0.14in;
+        padding: 0.2in 0.24in;
+        overflow: hidden;
+        white-space: pre;
+      }
+
+      .code-block .key { color: #82aaff; }
+      .code-block .str { color: #89ddff; }
+      .code-block .bool { color: #ffcb6b; }
+      .code-block .comment { color: #546e7a; font-style: italic; }
+
+      .big-number {
+        font-size: 36pt;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .big-number-green { color: var(--green); }
+      .big-number-blue { color: var(--blue); }
+      .big-number-cyan { color: var(--cyan); }
+      .big-number-amber { color: var(--amber); }
+    </style>
+  </head>
+  <body>
+    <main class="deck">
+      <!-- SLIDE 1: HERO (from v1) -->
+      <section class="slide hero-slide">
+        <div class="grid-two">
+          <div>
+            <p class="eyebrow">Problem</p>
+            <h1>Autonomous trading agents need a control layer before capital moves.</h1>
+            <p class="lede">
+              Agents can act faster than humans, but speed without bounded
+              execution scope creates failure modes that are hard to audit after
+              the fact.
+            </p>
+            <div class="quote">
+              Sentinel-8004 focuses on the last safe checkpoint before execution.
+            </div>
+          </div>
+          <div class="cover-art image-frame">
+            <img src="../assets/cover/sentinel-8004-cover.png" alt="Sentinel-8004 cover art" />
+          </div>
+        </div>
+        <div class="metric-panel">
+          <div class="metric">
+            <strong>Before execution</strong>
+            <p>Evaluate the trade intent before the venue or chain call happens.</p>
+          </div>
+          <div class="metric">
+            <strong>Fail closed</strong>
+            <p>Block when required inputs or safe execution proof are missing.</p>
+          </div>
+          <div class="metric">
+            <strong>Machine readable</strong>
+            <p>Return structured outputs judges can inspect without private systems.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: THESIS (from v1) -->
+      <section class="slide">
+        <div class="grid-two">
+          <div class="stack">
+            <div>
+              <p class="eyebrow">Thesis</p>
+              <h2>Sentinel-8004 is not another trading bot.</h2>
+            </div>
+            <ul class="bullets">
+              <li><strong>Guardrail first:</strong> approve, deny, or downsize a proposed trade.</li>
+              <li><strong>Bounded execution:</strong> attach a signed permit envelope to the verdict.</li>
+              <li><strong>Auditable proof:</strong> surface a validation artifact that binds registration, decision hash, and permit hash.</li>
+            </ul>
+            <div class="panel panel-dark">
+              <p class="panel-label">Positioning</p>
+              <p>
+                We do not build bots for capital deployment. We build guardrails
+                for bots that move capital.
+              </p>
+            </div>
+          </div>
+          <div class="image-frame">
+            <img src="../assets/social/sentinel-8004-thread-card.png" alt="Sentinel-8004 share card" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: DUAL GUARDRAIL FLOW (NEW in v2) -->
+      <section class="slide">
+        <div>
+          <p class="eyebrow">Dual Guardrail Architecture</p>
+          <h2>Two independent layers. One before chain, one on chain.</h2>
+          <p class="lede">
+            Off-chain Sentinel evaluates the intent with rich policy. On-chain RiskRouter
+            enforces hard limits. Both must agree before execution proceeds.
+          </p>
+        </div>
+        <div class="flow" style="grid-template-columns: repeat(6, 1fr);">
+          <div class="flow-step">
+            <strong>1. Market Data</strong>
+            <p>Live Kraken REST feed: BTC/USD, ETH/USD, VWAP, 24h change.</p>
+          </div>
+          <div class="flow-step">
+            <strong>2. AI Strategy</strong>
+            <p>Gemini 2.5 Flash analyzes trend, proposes BUY / SELL / HOLD.</p>
+          </div>
+          <div class="flow-step" style="border-color: var(--amber); background: rgba(196,137,20,0.04);">
+            <strong>3. Sentinel (off-chain)</strong>
+            <p>Risk score 0–100. ALLOW ≤40, DOWNSIZE 40–70, DENY &gt;70.</p>
+          </div>
+          <div class="flow-step" style="border-color: var(--green); background: rgba(31,157,104,0.04);">
+            <strong>4. RiskRouter (on-chain)</strong>
+            <p>EIP-712 signed TradeIntent validated on Sepolia contract.</p>
+          </div>
+          <div class="flow-step">
+            <strong>5. Checkpoint</strong>
+            <p>Decision, tx hash, and audit data written to JSONL + chain.</p>
+          </div>
+          <div class="flow-step">
+            <strong>6. Dashboard</strong>
+            <p>Real-time PnL, guardrail status, and Etherscan links.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="panel-label">Key Differentiator</p>
+          <ul class="bullets bullets-tight">
+            <li><strong>Off-chain Sentinel catches risky trades before they waste gas on-chain.</strong></li>
+            <li>17 trades blocked, 31 downsized across 83 live cycles — this is the guardrail in action.</li>
+            <li>On-chain RiskRouter provides trustless verification that the agent is within bounds.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: EIP-712 PROOF (NEW in v2) -->
+      <section class="slide">
+        <div>
+          <p class="eyebrow">Cryptographic Proof Layer</p>
+          <h2>Real EIP-712 signed trade intents. Verifiable on Sepolia.</h2>
+        </div>
+        <div class="grid-two">
+          <div class="stack">
+            <div class="code-block"><span class="comment">// EIP-712 Typed Data — real signing, not mocked</span>
+{
+  <span class="key">"domain"</span>: {
+    <span class="key">"name"</span>: <span class="str">"Sentinel-8004"</span>,
+    <span class="key">"chainId"</span>: <span class="str">11155111</span>
+  },
+  <span class="key">"types"</span>: {
+    <span class="key">"TradeIntent"</span>: [
+      { <span class="key">"name"</span>: <span class="str">"market"</span>, <span class="key">"type"</span>: <span class="str">"string"</span> },
+      { <span class="key">"name"</span>: <span class="str">"side"</span>, <span class="key">"type"</span>: <span class="str">"string"</span> },
+      { <span class="key">"name"</span>: <span class="str">"notionalUsd"</span>, <span class="key">"type"</span>: <span class="str">"uint256"</span> },
+      { <span class="key">"name"</span>: <span class="str">"agentId"</span>, <span class="key">"type"</span>: <span class="str">"uint256"</span> }
+    ]
+  }
+}</div>
+            <div class="panel">
+              <p class="panel-label">Signer Recovery</p>
+              <ul class="bullets bullets-tight">
+                <li><strong>Sign</strong> the TradeIntent with agent wallet</li>
+                <li><strong>Recover</strong> signer from signature on-chain</li>
+                <li><strong>Verify</strong> recovered address matches AgentRegistry</li>
+              </ul>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="mini-grid">
+              <article class="panel artifact-card">
+                <p class="panel-label">Agent Registry</p>
+                <h3>ERC-721 #4</h3>
+                <p>On-chain identity token on AgentRegistry. Verifiable on <a href="https://sepolia.etherscan.io" style="color: var(--cyan);">Sepolia Etherscan</a>.</p>
+                <div class="chip-row">
+                  <span class="chip chip-green">registered</span>
+                  <span class="chip">tokenId: 4</span>
+                </div>
+              </article>
+              <article class="panel artifact-card">
+                <p class="panel-label">Shared Contracts</p>
+                <h3>Sepolia</h3>
+                <p>Organizer-provided contracts. Not self-deployed alternatives.</p>
+                <div class="chip-row">
+                  <span class="chip chip-cyan">RiskRouter</span>
+                  <span class="chip chip-cyan">ValidationRegistry</span>
+                </div>
+              </article>
+              <article class="panel artifact-card">
+                <p class="panel-label">Reputation</p>
+                <h3>On-chain score</h3>
+                <p>ReputationRegistry tracks validated decisions. Higher score = proven reliability.</p>
+                <div class="chip-row">
+                  <span class="chip chip-amber">leaderboard</span>
+                  <span class="chip chip-amber">83 entries</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: PRODUCT FLOW (from v1, kept) -->
+      <section class="slide">
+        <div>
+          <p class="eyebrow">Product Flow</p>
+          <h2>One narrow path from intent to execution gate.</h2>
+          <p class="lede">
+            The public repo stays intentionally narrow: evaluate the trade, emit
+            the proof objects, and verify that the requested execution remains
+            within the approved envelope.
+          </p>
+        </div>
+        <div class="flow">
+          <div class="flow-step">
+            <strong>1. Trade Intent</strong>
+            <p>Agent, venue, market, side, size, and required signals.</p>
+          </div>
+          <div class="flow-step">
+            <strong>2. Policy Evaluation</strong>
+            <p>Configured checks return ALLOW, DENY, or ALLOW_WITH_DOWNSIZE.</p>
+          </div>
+          <div class="flow-step">
+            <strong>3. Signed Verdict</strong>
+            <p>Decision hash, permit hash, signer, expiry, and scope payload.</p>
+          </div>
+          <div class="flow-step">
+            <strong>4. Validation Artifact</strong>
+            <p>Registration binding plus proof status: VALIDATED, CONSTRAINED, or BLOCKED.</p>
+          </div>
+          <div class="flow-step">
+            <strong>5. Permit Verification</strong>
+            <p>Execution is allowed only if the request still fits the signed envelope.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <p class="panel-label">Public-safe boundary</p>
+          <ul class="bullets bullets-tight">
+            <li>No exchange execution, private bridge logic, or hidden operator surface.</li>
+            <li>Judges can inspect the exact JSON objects that drive the guardrail story.</li>
+            <li>When the repo cannot prove a safe path, the demo stays fail closed.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: PROOF ARTIFACTS (from v1) -->
+      <section class="slide">
+        <div>
+          <p class="eyebrow">Proof Artifacts</p>
+          <h2>Three objects make the control story inspectable.</h2>
+        </div>
+        <div class="mini-grid">
+          <article class="panel artifact-card">
+            <p class="panel-label">Signed Verdict</p>
+            <h3>Execution decision</h3>
+            <p>Machine-readable output that records the verdict and the bounded permit envelope.</p>
+            <div class="chip-row">
+              <span class="chip">decision_hash</span>
+              <span class="chip">permit_hash</span>
+              <span class="chip">signature</span>
+              <span class="chip">expires_at</span>
+            </div>
+          </article>
+          <article class="panel artifact-card">
+            <p class="panel-label">Validation Artifact</p>
+            <h3>ERC-8004-facing proof layer</h3>
+            <p>Public-safe artifact that binds registration scope, verdict scope, and permit scope for the demo.</p>
+            <div class="chip-row">
+              <span class="chip chip-green">registration_id</span>
+              <span class="chip chip-green">proof_status</span>
+              <span class="chip chip-green">artifact_hash</span>
+              <span class="chip chip-green">demo_only</span>
+            </div>
+          </article>
+          <article class="panel artifact-card">
+            <p class="panel-label">Permit Verification</p>
+            <h3>Last execution gate</h3>
+            <p>Deterministic check that the requested execution still stays inside the approved notional and scope.</p>
+            <div class="chip-row">
+              <span class="chip chip-amber">permit_valid</span>
+              <span class="chip chip-amber">executable</span>
+              <span class="chip chip-amber">verification_code</span>
+              <span class="chip chip-amber">checks[]</span>
+            </div>
+          </article>
+        </div>
+        <div class="panel panel-dark">
+          <p class="panel-label">Proof trail</p>
+          <p>
+            All proof artifacts are backed by real EIP-712 typed signatures and
+            verifiable on Sepolia Etherscan. 83 validated checkpoints on-chain.
+          </p>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: OPERATOR + KRAKEN (NEW in v2) -->
+      <section class="slide">
+        <div class="grid-two">
+          <div class="stack">
+            <div>
+              <p class="eyebrow">Operator Flow + Kraken Compatibility</p>
+              <h2>Dry-run before execution. Paper-trading compatible.</h2>
+            </div>
+            <ul class="bullets">
+              <li><strong>Operator shell</strong> at <code>/operator</code>: load, edit, and submit trade intents through the full Sentinel pipeline.</li>
+              <li><strong>No live orders:</strong> the demo path stays bounded to paper compatibility. Real execution requires operator-approved capital allocation.</li>
+            </ul>
+            <div class="panel">
+              <p class="panel-label">Kraken Request Shape</p>
+              <p style="font-size: 12.5pt; line-height: 1.45; color: var(--muted);">
+                Each execution preview carries <code>ordertype</code>, <code>pair</code>,
+                <code>type</code>, <code>volume</code>, and <code>validate: true</code>
+                — matching the Kraken REST API <code>AddOrder</code> shape.
+              </p>
+            </div>
+            <div class="panel">
+              <p class="panel-label">Kraken CLI Paper Syntax</p>
+              <p style="font-size: 12.5pt; line-height: 1.45; color: var(--muted);">
+                Equivalent CLI: <code style="background: rgba(66,99,235,0.08); padding: 2px 6px; border-radius: 4px;">kraken paper buy BTCUSD &lt;params&gt; -o json</code><br/>
+                The artifact maps approved scope into both REST and CLI-compatible shapes.
+              </p>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="panel panel-dark">
+              <p class="panel-label">Pipeline Output</p>
+              <div class="code-block" style="font-size: 9.5pt;">
+<span class="comment">// POST /api/demo/run-pipeline response</span>
+{
+  <span class="key">"signed_intent_bundle"</span>: { ... },
+  <span class="key">"signed_intent_verification"</span>: {
+    <span class="key">"recovered_signer_wallet"</span>: <span class="str">"0x71C...4a2"</span>,
+    <span class="key">"match"</span>: <span class="bool">true</span>
+  },
+  <span class="key">"evaluation"</span>: {
+    <span class="key">"verdict"</span>: <span class="str">"ALLOW_WITH_DOWNSIZE"</span>,
+    <span class="key">"approved_notional_usd"</span>: <span class="str">2500.00</span>
+  },
+  <span class="key">"execution_preview"</span>: {
+    <span class="key">"pair"</span>: <span class="str">"ETHUSD"</span>,
+    <span class="key">"validate"</span>: <span class="bool">true</span>
+  },
+  <span class="key">"kraken_cli_paper_artifact"</span>: { ... }
+}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: REFERENCE AGENT DASHBOARD (NEW in v2) -->
+      <section class="slide dark-slide">
+        <div>
+          <p class="eyebrow">Reference Execution Companion</p>
+          <h2>A founder-run agent proves why the guardrail matters.</h2>
+          <p class="lede">
+            A private, founder-run companion agent submits real intents, receives guardrail
+            decisions, routes approved scope into on-chain execution, and tracks
+            simulated PnL — all governed by Sentinel. This is supporting proof, not a second primary product.
+          </p>
+        </div>
+        <div class="grid-halves">
+          <div class="image-frame image-frame-dark">
+            <img
+              src="../assets/screenshots/reference-agent-dashboard-header.png"
+              alt="Reference agent dashboard header"
+            />
+            <div class="caption caption-dark">
+              <strong>Live dashboard:</strong> real-time market price, AI decision
+              with confidence, dual guardrail status, Etherscan tx links.
+            </div>
+          </div>
+          <div class="image-frame image-frame-dark">
+            <img
+              src="../assets/screenshots/reference-agent-dashboard-pnl.png"
+              alt="Reference agent performance panel"
+            />
+            <div class="caption caption-dark">
+              <strong>Performance tracking:</strong> simulated PnL, win rate,
+              max drawdown, risk score avg, cumulative PnL chart, and 83 checkpoint feed.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: JUDGE DEMO SURFACE (from v1) -->
+      <section class="slide">
+        <div>
+          <p class="eyebrow">Live Demo Surfaces</p>
+          <h2>Hosted hub, judge walkthrough, and operator dry-run.</h2>
+          <p class="lede">
+            Judges land on the hub, inspect proof artifacts at <strong>/judge</strong>,
+            and test the operator pipeline at <strong>/operator</strong>.
+          </p>
+        </div>
+        <div class="grid-halves">
+          <div class="image-frame">
+            <img
+              src="../assets/screenshots/judge-demo-allow-btc-buy.png"
+              alt="Judge demo allow scenario screenshot"
+            />
+            <div class="caption">
+              <strong>Approved path:</strong> ALLOW verdict, VALIDATED proof
+              status, and executable permit.
+            </div>
+          </div>
+          <div class="image-frame">
+            <img
+              src="../assets/screenshots/judge-demo-downsize-eth-buy.png"
+              alt="Judge demo downsized scenario screenshot"
+            />
+            <div class="caption">
+              <strong>Constrained path:</strong> ALLOW_WITH_DOWNSIZE verdict,
+              CONSTRAINED proof status, and a blocked oversized execution
+              request.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: CLOSING (UPDATED in v2) -->
+      <section class="slide">
+        <div class="stack">
+          <div>
+            <p class="eyebrow">Why This Matters</p>
+            <h2>Sentinel-8004: trust and control infrastructure for autonomous capital.</h2>
+          </div>
+          <ul class="bullets">
+            <li><strong>Clear control point:</strong> a single guardrail layer before capital moves.</li>
+            <li><strong>Cryptographically verifiable:</strong> real EIP-712 signatures, recovered signers, on-chain validation.</li>
+            <li><strong>Battle-tested in practice:</strong> 83 live cycles, 17 blocked, 31 downsized, 0.3% max drawdown.</li>
+            <li><strong>Reference agent proves the thesis:</strong> a companion execution surface demonstrates why the control layer is not theoretical.</li>
+          </ul>
+        </div>
+        <div class="metric-panel metric-panel-4">
+          <div class="metric">
+            <strong class="big-number big-number-blue">83</strong>
+            <p>On-chain checkpoints verified on Sepolia</p>
+          </div>
+          <div class="metric">
+            <strong class="big-number big-number-amber">17</strong>
+            <p>High-risk trades blocked by Sentinel before chain</p>
+          </div>
+          <div class="metric">
+            <strong class="big-number big-number-cyan">31</strong>
+            <p>Excessive positions downsized to bounded scope</p>
+          </div>
+          <div class="metric">
+            <strong class="big-number big-number-green">0.3%</strong>
+            <p>Maximum drawdown across all trading cycles</p>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="url-list">
+            <div><strong>Primary repo:</strong> <span>github.com/Vetassikc/Vartovii-Sentinel-8004</span></div>
+            <div><strong>Hosted entrypoint:</strong> <span>sentinel-8004-judge-demo.onrender.com</span></div>
+            <div><strong>Judge demo:</strong> <span>/judge</span></div>
+            <div><strong>Operator dry-run:</strong> <span>/operator</span></div>
+          </div>
+          <div class="panel">
+            <p class="panel-label">Judge takeaway</p>
+            <p>
+              Sentinel-8004 is a signed trade-permit guardrail for autonomous
+              trading agents. The reference execution companion proves why
+              the control layer matters in practice.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
