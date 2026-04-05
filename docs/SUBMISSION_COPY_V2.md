@@ -6,13 +6,13 @@
 
 ## Short Description (≤ 200 chars)
 
-Signed trade-permit guardrail for autonomous trading agents. Dual off-chain + on-chain risk layer with EIP-712 cryptographic proof. ERC-8004 compatible.
+Signed trade-permit guardrail for autonomous trading agents. Real EIP-712 proof, bounded execution permits, and organizer-aligned shared Sepolia anchors.
 
 ---
 
 ## Long Description
 
-**Sentinel-8004** is a trust and control layer for autonomous trading agents, aligned with the ERC-8004 agent-identity standard and anchored to organizer-provided shared Sepolia contracts.
+**Sentinel-8004** is a trust and control layer for autonomous trading agents, built for the ERC-8004 challenge and aligned with the organizer-provided shared Sepolia contracts.
 
 ### The Problem
 
@@ -24,7 +24,7 @@ A dual-guardrail architecture that evaluates every trade intent **before executi
 
 1. **Off-chain Sentinel** — A policy-rich risk engine that scores each trade intent 0–100. Trades below 40 pass through. Trades between 40–70 are downsized to a bounded scope. Trades above 70 are blocked entirely. This layer catches risky trades before they waste gas on-chain.
 
-2. **On-chain RiskRouter** — Enforces hard limits via EIP-712 signed TradeIntents on the shared Sepolia contracts. The agent's identity is bound to an ERC-721 token in the AgentRegistry. Signed intents are verified off-chain via recovered-signer matching, with an on-chain anchor checkpoint recorded on Sepolia.
+2. **On-chain RiskRouter** — Enforces hard limits via EIP-712 signed TradeIntents on the shared Sepolia contracts. The agent's identity is bound to an ERC-721 token in the AgentRegistry. Signed intents are recovered and verified cryptographically via recovered-signer matching, with an organizer-aligned shared Sepolia anchor path for registration and checkpointing.
 
 Every decision is cryptographically signed, producing a machine-readable verdict with a bounded execution permit envelope. Judges can inspect the full proof chain: Trade Intent → Signed Verdict → Validation Artifact → Permit Verification → Execution Gate.
 
@@ -32,9 +32,9 @@ Every decision is cryptographically signed, producing a machine-readable verdict
 
 - **Real EIP-712 typed data signing** with recovered signer wallet verification (not mocked signatures)
 - **Shared Sepolia contracts** — AgentRegistry, RiskRouter, ValidationRegistry (organizer-provided, not self-deployed)
-- **Agent identity** on the AgentRegistry ERC-721 (current token: #4, verifiable on [Sepolia Etherscan](https://sepolia.etherscan.io))
+- **Agent identity path** on the shared AgentRegistry ERC-721, with the current founder-run registration inspectable on [Sepolia Etherscan](https://sepolia.etherscan.io)
 - **Kraken paper-compatible execution previews** with `validate: true` request shape
-- **83 on-chain checkpoints** verified on Sepolia Etherscan
+- **83 checkpoint events** captured across founder-run reference-agent cycles, with on-chain links available for inspection
 - **Full audit trail** — every decision, verdict, and permit logged as structured JSON
 
 ### What Is Still Demo-Only
@@ -148,7 +148,7 @@ The reference agent is not the primary product. It is a founder-run execution su
 
 ### 1:45–1:55 — On-Chain Proof
 
-> "Every decision is verifiable on-chain. The agent is registered on the AgentRegistry ERC-721 — currently Token #4, verifiable on Sepolia Etherscan. You can trace each transaction."
+> "Every decision is verifiable through a cryptographic proof chain with an organizer-aligned shared Sepolia anchor. The agent is registered on the AgentRegistry ERC-721, and you can trace the linked transactions on Sepolia Etherscan."
 
 *Visual: Etherscan showing transaction, or the validation artifact with tx hash.*
 
