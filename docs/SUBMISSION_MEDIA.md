@@ -15,7 +15,7 @@ This repo now includes:
 
 The canonical slide source is:
 
-- `slides/sentinel-8004-submission-deck-v1.html`
+- `slides/sentinel-8004-submission-deck-v2.html`
 
 The deck stays intentionally narrow and covers:
 
@@ -34,9 +34,9 @@ Export the upload-ready slide PDF with:
 npm run slides:pdf
 ```
 
-The generated PDF path is:
+The generated upload-ready PDF path is:
 
-- `output/pdf/sentinel-8004-submission-slides-v1.pdf`
+- `slides/sentinel-8004-submission-deck-v2.pdf`
 
 The export script uses a local Chrome-compatible browser in headless mode and
 does not require private infrastructure.
@@ -57,7 +57,7 @@ See `assets/README.md` for the broader asset pack.
 Recommended local verification flow:
 
 1. Regenerate the PDF with `npm run slides:pdf`.
-2. Confirm the PDF exists at `output/pdf/sentinel-8004-submission-slides-v1.pdf`.
+2. Confirm the PDF exists at `slides/sentinel-8004-submission-deck-v2.pdf`.
 3. Run `node --test api/tests/*.test.ts`.
 
 ## Video Boundary

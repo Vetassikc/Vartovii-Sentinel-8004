@@ -60,6 +60,7 @@ Current public assets include:
 - a local `GET /api/demo/execution-previews/:scenario-name` route for the Kraken-facing execution preview
 - a local `GET /api/demo/shared-sepolia` route for organizer shared contract config
 - a local `GET /api/demo/shared-sepolia/agent-registry-anchor/:agent-id` route for founder-run AgentRegistry calldata preparation
+- visible organizer leaderboard proof for shared-contract trades, validation, and reputation
 - a deployment-friendly `GET /healthz` endpoint
 - a CLI scenario runner for the canonical demo fixtures
 - a CLI signed-intent generator for the canonical typed bundle
@@ -284,6 +285,8 @@ The intended hosted entrypoint is now:
   - hosted submission hub
 - `/judge`
   - live judge demo shell
+- `/operator`
+  - live operator dry-run shell
 
 ## Submission Assets
 
@@ -309,8 +312,14 @@ The slide deck workflow lives in [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_ME
 
 Use these paths for upload-ready slides:
 
-- slide deck source: `slides/sentinel-8004-submission-deck-v1.html`
-- slide PDF: `output/pdf/sentinel-8004-submission-slides-v1.pdf`
+- slide deck source: `slides/sentinel-8004-submission-deck-v2.html`
+- slide PDF: `slides/sentinel-8004-submission-deck-v2.pdf`
+
+## Live Leaderboard Proof
+
+As of April 7, 2026, the organizer live leaderboard shows
+`Sentinel-8004-Agent` with visible shared-contract trades, validation score,
+and reputation on the official event surface.
 
 ## Demo Scenarios
 
