@@ -15,7 +15,7 @@ bot is supporting proof only and does not replace the Sentinel-first thesis.
 | Demo | [sentinel-8004-judge-demo.onrender.com](https://sentinel-8004-judge-demo.onrender.com) |
 | Judge | [sentinel-8004-judge-demo.onrender.com/judge](https://sentinel-8004-judge-demo.onrender.com/judge) |
 | Operator | [sentinel-8004-judge-demo.onrender.com/operator](https://sentinel-8004-judge-demo.onrender.com/operator) |
-| Slides | [output/pdf/sentinel-8004-submission-slides-v1.pdf](output/pdf/sentinel-8004-submission-slides-v1.pdf) |
+| Slides | [slides/sentinel-8004-submission-deck-v2.html](slides/sentinel-8004-submission-deck-v2.html) |
 | Video Script | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
 
 Note: the public video upload is still pending. The current `Video Script` link points
@@ -187,8 +187,8 @@ Use these as the primary submission references:
   [assets/screenshots/judge-demo-downsize-eth-buy.png](assets/screenshots/judge-demo-downsize-eth-buy.png)
 - Share card:
   [assets/social/sentinel-8004-thread-card.png](assets/social/sentinel-8004-thread-card.png)
-- Slide deck PDF:
-  [output/pdf/sentinel-8004-submission-slides-v1.pdf](output/pdf/sentinel-8004-submission-slides-v1.pdf)
+- Slide deck HTML:
+  [slides/sentinel-8004-submission-deck-v2.html](slides/sentinel-8004-submission-deck-v2.html)
 
 For judge narration, the most reusable proof object remains the validation
 artifact. For execution-rail narration, the strongest bridge is the Kraken
