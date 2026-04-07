@@ -15,10 +15,10 @@ bot is supporting proof only and does not replace the Sentinel-first thesis.
 | Demo | [sentinel-8004-judge-demo.onrender.com](https://sentinel-8004-judge-demo.onrender.com) |
 | Judge | [sentinel-8004-judge-demo.onrender.com/judge](https://sentinel-8004-judge-demo.onrender.com/judge) |
 | Operator | [sentinel-8004-judge-demo.onrender.com/operator](https://sentinel-8004-judge-demo.onrender.com/operator) |
-| Slides | [slides/sentinel-8004-submission-deck-v2.pdf](slides/sentinel-8004-submission-deck-v2.pdf) |
-| Video | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
+| Slides | [output/pdf/sentinel-8004-submission-slides-v1.pdf](output/pdf/sentinel-8004-submission-slides-v1.pdf) |
+| Video Script | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
 
-Note: the public video upload is still pending. The current `Video` link points
+Note: the public video upload is still pending. The current `Video Script` link points
 to the recording outline used for the submission walkthrough.
 
 ## One-Line Thesis
@@ -77,6 +77,9 @@ Sepolia. It does not introduce self-deployed judging alternates.
 
 Network: `Sepolia`  
 Chain ID: `11155111`
+
+The shared `ValidationRegistry` address above is verified against the public
+shared Sepolia config in `shared/config/shared-sepolia.ts`.
 
 The repo now exposes two organizer-aligned, read-only surfaces:
 
@@ -185,7 +188,7 @@ Use these as the primary submission references:
 - Share card:
   [assets/social/sentinel-8004-thread-card.png](assets/social/sentinel-8004-thread-card.png)
 - Slide deck PDF:
-  [slides/sentinel-8004-submission-deck-v2.pdf](slides/sentinel-8004-submission-deck-v2.pdf)
+  [output/pdf/sentinel-8004-submission-slides-v1.pdf](output/pdf/sentinel-8004-submission-slides-v1.pdf)
 
 For judge narration, the most reusable proof object remains the validation
 artifact. For execution-rail narration, the strongest bridge is the Kraken
