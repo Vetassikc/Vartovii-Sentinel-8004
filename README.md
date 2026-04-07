@@ -1,340 +1,236 @@
 # Vartovii Sentinel-8004
 
-Vartovii Sentinel-8004 is a signed trade-permit guardrail for autonomous
-trading agents.
+![Sentinel-8004 cover](assets/cover/sentinel-8004-cover.png)
 
-This repository is the public hackathon submission surface for the
-`AI Trading Agents with ERC-8004 Hackathon`. It is intentionally narrow,
-judge-friendly, and safe to share publicly.
+> Signed trade-permit guardrail for autonomous trading agents.
 
-## Product Thesis
+Sentinel-8004 is the main hackathon project. It is the control layer in front
+of an autonomous trading agent, not another trading bot. The companion trading
+bot is supporting proof only and does not replace the Sentinel-first thesis.
 
-Sentinel-8004 is not another trading bot.
+## Quick Links
 
-It evaluates proposed trades before execution and returns a machine-readable
-decision:
+| Surface | Link |
+| --- | --- |
+| Demo | [sentinel-8004-judge-demo.onrender.com](https://sentinel-8004-judge-demo.onrender.com) |
+| Judge | [sentinel-8004-judge-demo.onrender.com/judge](https://sentinel-8004-judge-demo.onrender.com/judge) |
+| Operator | [sentinel-8004-judge-demo.onrender.com/operator](https://sentinel-8004-judge-demo.onrender.com/operator) |
+| Slides | [slides/sentinel-8004-submission-deck-v2.pdf](slides/sentinel-8004-submission-deck-v2.pdf) |
+| Video | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
 
-- `ALLOW`
-- `DENY`
-- `ALLOW_WITH_DOWNSIZE`
+Note: the public video upload is still pending. The current `Video` link points
+to the recording outline used for the submission walkthrough.
 
-The core flow is:
+## One-Line Thesis
 
-`agent proposes trade -> Sentinel evaluates -> signed verdict + permit envelope + validation artifact -> auditable trace -> execution continues only if the permit remains valid`
+Sentinel-8004 evaluates each trade intent before execution and returns a
+machine-readable `ALLOW`, `DENY`, or `ALLOW_WITH_DOWNSIZE` decision, with signed
+proof and a bounded execution path that can be inspected by judges and
+operators.
 
-The public ERC-8004-facing slice adds an explicit tutorial-style proof path in
-front of that flow:
+## Architecture At A Glance
 
-`agent identity binding -> EIP-712 typed trade intent -> signed intent bundle -> Sentinel evaluation -> validation artifact + signed permit`
+Sentinel-8004 has one narrow job: decide whether an agent trade should proceed,
+be blocked, or be constrained before capital moves.
 
-The typed intent path now uses real EIP-712 digest signing and signature
-verification with demo-only fixture keys committed intentionally for public
-reproducibility.
+The public MVP combines:
 
-The current on-chain alignment target is the organizer-provided shared ERC-8004
-contracts on Sepolia, not self-deployed judging alternates.
+- agent identity binding and registration payloads
+- real EIP-712 typed trade intent signing and verification
+- deterministic trade evaluation with `ALLOW`, `DENY`, and `ALLOW_WITH_DOWNSIZE`
+- signed verdicts, validation artifacts, and permit verification
+- Kraken-facing execution previews and corrected paper-command compatibility
+- organizer-aligned shared Sepolia anchor preparation for `AgentRegistry`
 
-## Current Repository Status
+## Decision Flow
 
-This public repository now includes a runnable judge-mode foundation.
+1. `Trade Intent`
+   The agent or operator submits a canonical `TradeIntent`.
+2. `Evaluation`
+   Sentinel applies deterministic policy checks to the request.
+3. `Decision`
+   The result is one of `ALLOW`, `DENY`, or `ALLOW_WITH_DOWNSIZE`.
+4. `Signed Proof`
+   Sentinel produces a signed verdict plus a validation artifact.
+5. `Permit Verification`
+   The permit is checked again against the requested execution envelope.
+6. `Execution Preview`
+   A Kraken-facing preview shows what would be sent downstream after the permit
+   gate, including any downsized executable path.
 
-Current public assets include:
+Short form:
 
-- public architecture notes
-- judge-mode operating model
-- a hosted submission hub at the root URL
-- a narrow web demo shell for judges
-- a narrow operator dry-run shell for intent testing
-- demo script
-- a submission asset pack with a cover image, canonical screenshots, and a social card
-- a small submission slide deck source plus a reproducible PDF export path
-- public schema definitions
-- sample intent, verdict, registration, identity-binding, signed-intent, and validation-artifact payloads
-- organizer shared Sepolia contract config plus a bounded AgentRegistry anchor helper
-- a local `POST /api/demo/evaluate-intent` endpoint
-- a local `POST /api/demo/run-pipeline` endpoint for operator-side dry runs
-- a local `POST /api/demo/verify-signed-intent` endpoint
-- a local `POST /api/demo/verify-permit` endpoint
-- a local `GET /api/demo/scenarios/:scenario-name` bundle route for the demo shell
-- a local `GET /api/demo/signed-intents/:scenario-name` route for the canonical typed bundle
-- a local `GET /api/demo/execution-previews/:scenario-name` route for the Kraken-facing execution preview
-- a local `GET /api/demo/shared-sepolia` route for organizer shared contract config
-- a local `GET /api/demo/shared-sepolia/agent-registry-anchor/:agent-id` route for founder-run AgentRegistry calldata preparation
-- visible organizer leaderboard proof for shared-contract trades, validation, and reputation
-- a deployment-friendly `GET /healthz` endpoint
-- a CLI scenario runner for the canonical demo fixtures
-- a CLI signed-intent generator for the canonical typed bundle
-- a CLI signed-intent verifier for the canonical typed bundle
-- a CLI permit verifier for the signed execution envelope
-- a CLI Kraken paper compatibility smoke artifact generator
-- Node test coverage for fixture and endpoint parity
+`trade intent -> evaluation -> allow / deny / downsize -> signed proof -> permit verification -> execution preview`
 
-## Why This Repo Exists Separately
+## Shared Sepolia Alignment
 
-The private `Vartovii` repository remains the internal workspace for strategy,
-private core logic, and sensitive implementation details.
+Sentinel-8004 aligns to the organizer-provided shared ERC-8004 contracts on
+Sepolia. It does not introduce self-deployed judging alternates.
 
-This public repository exists to provide:
+| Shared Contract | Address |
+| --- | --- |
+| AgentRegistry | `0x97b07dDc405B0c28B17559aFFE63BdB3632d0ca3` |
+| HackathonVault | `0x0E7CD8ef9743FEcf94f9103033a044caBD45fC90` |
+| RiskRouter | `0xd6A6952545FF6E6E6681c2d15C59f9EB8F40FdBC` |
+| ReputationRegistry | `0x423a9904e39537a9997fbaF0f220d79D7d545763` |
+| ValidationRegistry | `0x92bF63E5C7Ac6980f237a164Ab413BE226187F1` |
 
-- a clean submission surface for judges
-- a reproducible judge-mode demo path
-- public-safe documentation and examples
-- screenshots, diagrams, and video assets
+Network: `Sepolia`  
+Chain ID: `11155111`
 
-## Public Scope
+The repo now exposes two organizer-aligned, read-only surfaces:
 
-The public submission focuses on:
+- `GET /api/demo/shared-sepolia`
+- `GET /api/demo/shared-sepolia/agent-registry-anchor/strategy-agent-demo`
 
-- guardrail evaluation
-- signed verdicts
-- auditable decision traces
-- judge-mode reproducibility
-- narrow trading-agent risk control
-
-Out of scope for this repository:
-
-- broad Vartovii platform internals
-- confidential infrastructure
-- private prompts
-- unrelated product surfaces
-
-## Repository Layout
-
-```text
-.
-├── README.md
-├── LICENSE
-├── package.json
-├── docs/
-├── web/
-├── api/
-├── shared/
-├── examples/
-├── assets/
-├── scripts/
-└── contracts/
-```
-
-## Start Here
-
-1. Read [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
-2. Read [docs/JUDGE_MODE.md](./docs/JUDGE_MODE.md)
-3. Read [docs/ERC8004_PROOF.md](./docs/ERC8004_PROOF.md)
-4. Read [docs/EXECUTION_PREVIEW.md](./docs/EXECUTION_PREVIEW.md)
-5. Read [docs/KRAKEN_CLI_COMPAT.md](./docs/KRAKEN_CLI_COMPAT.md)
-6. Read [docs/SHARED_SEPOLIA.md](./docs/SHARED_SEPOLIA.md)
-7. Read [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
-8. Read [docs/DEMO_SCRIPT.md](./docs/DEMO_SCRIPT.md)
-9. Read [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md)
-10. Inspect [assets/README.md](./assets/README.md)
-11. Inspect [shared/schemas/sentinel.ts](./shared/schemas/sentinel.ts)
-12. Inspect the example payloads under [examples/](./examples/)
-
-## Local Judge Mode
-
-The public judge-mode runtime uses Node 22+ and ships without private
-dependencies.
-
-Start the local API:
-
-```bash
-npm run start
-```
-
-Start the same server in production-style mode:
-
-```bash
-npm run start:prod
-```
-
-Open the hosted submission hub:
-
-```text
-http://127.0.0.1:8787/
-```
-
-Open the judge demo shell:
-
-```text
-http://127.0.0.1:8787/judge
-```
-
-Open the operator test shell:
-
-```text
-http://127.0.0.1:8787/operator
-```
-
-The operator shell now exposes the same proof set as the judge flow plus a
-corrected Kraken paper smoke artifact derived from the execution preview.
-
-Check the health endpoint:
-
-```bash
-curl http://127.0.0.1:8787/healthz
-```
-
-Run a fixture directly:
-
-```bash
-node scripts/run-scenario.ts allow-btc-buy
-```
-
-Verify the signed execution envelope:
-
-```bash
-node scripts/verify-permit.ts downsize-eth-buy 2500.00
-```
-
-Verify the signed ERC-8004-style intent bundle:
-
-```bash
-node scripts/verify-signed-intent.ts allow-btc-buy
-```
-
-Generate the real EIP-712 signed intent bundle:
-
-```bash
-node scripts/sign-intent.ts allow-btc-buy
-```
-
-Generate the Kraken paper compatibility artifact:
-
-```bash
-node scripts/kraken-paper-smoke.ts downsize-eth-buy
-```
-
-Prepare the shared-Sepolia AgentRegistry anchor calldata:
+It also exposes one founder-run helper:
 
 ```bash
 node scripts/prepare-agent-registry-anchor.ts strategy-agent-demo
 ```
 
-Rehearse the closest founder-side paper path:
+That helper prepares real calldata for:
 
-- follow [docs/PAPER_SMOKE_REHEARSAL.md](./docs/PAPER_SMOKE_REHEARSAL.md)
+`register(address agentWallet, string name, string description, string[] capabilities, string agentURI)`
 
-Fetch the same bundle used by the web shell:
+This is the smallest correct on-chain anchor in the repo today: real shared
+contract alignment, real calldata preparation, no hidden wallet flow.
 
-```bash
-curl http://127.0.0.1:8787/api/demo/scenarios/allow-btc-buy
-```
-
-Run the operator dry-run pipeline for a submitted intent:
-
-```bash
-curl -X POST http://127.0.0.1:8787/api/demo/run-pipeline \
-  -H "Content-Type: application/json" \
-  --data @examples/intents/downsize-eth-buy.json
-```
-
-The bundle now includes:
-
-- `signed_intent_bundle`
-- `signed_intent_verification`
-- `evaluation`
-- `permit_verification`
-- `execution_preview`
-- `kraken_cli_paper_artifact`
-
-Fetch the canonical signed intent bundle:
-
-```bash
-curl http://127.0.0.1:8787/api/demo/signed-intents/allow-btc-buy
-```
-
-Fetch the Kraken-facing execution preview:
-
-```bash
-curl http://127.0.0.1:8787/api/demo/execution-previews/downsize-eth-buy
-```
-
-Fetch the organizer shared Sepolia config:
-
-```bash
-curl http://127.0.0.1:8787/api/demo/shared-sepolia
-```
-
-Fetch the founder-run AgentRegistry anchor plan:
-
-```bash
-curl http://127.0.0.1:8787/api/demo/shared-sepolia/agent-registry-anchor/strategy-agent-demo
-```
-
-Run the local tests:
-
-```bash
-node --test api/tests/*.test.ts
-```
-
-Export the submission slides PDF:
-
-```bash
-npm run slides:pdf
-```
-
-## Deployment Target
-
-The smallest prepared hosting path is Render.
-
-Deployment-oriented notes are in [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
-
-The intended hosted entrypoint is now:
-
-- root URL
-  - hosted submission hub
-- `/judge`
-  - live judge demo shell
-- `/operator`
-  - live operator dry-run shell
-
-## Submission Assets
-
-The curated asset pack lives in [assets/README.md](./assets/README.md).
-
-Use these paths for submission materials:
-
-- cover image: `assets/cover/sentinel-8004-cover.png`
-- canonical judge screenshots:
-  - `assets/screenshots/judge-demo-allow-btc-buy.png`
-  - `assets/screenshots/judge-demo-downsize-eth-buy.png`
-- social/share card: `assets/social/sentinel-8004-thread-card.png`
-
-For demo videos and judge callouts, the most reusable single proof object is the
-`Validation Artifact` panel shown in the judge demo shell.
-
-For execution-rail narration, the most direct bridge between Sentinel and a
-Kraken-first rail is now the `Kraken Execution Preview` panel.
-
-## Submission Media
-
-The slide deck workflow lives in [docs/SUBMISSION_MEDIA.md](./docs/SUBMISSION_MEDIA.md).
-
-Use these paths for upload-ready slides:
-
-- slide deck source: `slides/sentinel-8004-submission-deck-v2.html`
-- slide PDF: `slides/sentinel-8004-submission-deck-v2.pdf`
+For the full notes, read [docs/SHARED_SEPOLIA.md](docs/SHARED_SEPOLIA.md).
 
 ## Live Leaderboard Proof
 
-As of April 7, 2026, the organizer live leaderboard shows
-`Sentinel-8004-Agent` with visible shared-contract trades, validation score,
-and reputation on the official event surface.
+As of April 7, 2026, the organizer event surface shows
+`Sentinel-8004-Agent` with visible shared-contract trade activity, validation,
+and reputation tracking.
 
-## Demo Scenarios
+This block matters because it shows that Sentinel is not only a local policy
+demo. It also has organizer-facing proof alignment on the shared event
+infrastructure.
 
-The runnable public demo path targets four core scenarios:
+This README treats the leaderboard as supporting external proof, not as the
+primary product claim.
 
-- safe BTC buy approved
-- unsafe oversized ETH trade denied
-- trade approved with downsizing
-- fail-closed behavior when a required signal is unavailable
+## Companion Reference Agent
+
+The reference agent is supporting proof only.
+
+Its purpose is to demonstrate why Sentinel matters in a more realistic trading
+context:
+
+- founder-run only
+- live-market-input supporting evidence
+- supporting proof for control-layer relevance
+- not the main submission surface
+- not a second primary product
+
+In other words: Sentinel-8004 is the product. The companion agent is evidence
+that a guardrail like Sentinel is useful in front of an execution surface.
+
+Reference visuals already in the repo:
+
+- [assets/screenshots/reference-agent-dashboard-header.png](assets/screenshots/reference-agent-dashboard-header.png)
+- [assets/screenshots/reference-agent-dashboard-pnl.png](assets/screenshots/reference-agent-dashboard-pnl.png)
+
+## What Is Real Today
+
+- Real EIP-712 typed data signing and signature verification are implemented in
+  the public repo.
+- The hosted app exposes live judge and operator shells at stable paths.
+- The proof chain is inspectable end to end:
+  `TradeIntent -> Signed Intent -> Verdict -> Validation Artifact -> Permit Verification -> Execution Preview`
+- Kraken-facing execution previews and corrected paper-command templates are
+  derived from current public logic.
+- The repo is aligned to the organizer shared Sepolia addresses and can prepare
+  founder-run `AgentRegistry.register(...)` calldata.
+- Canonical screenshots, slides, and artifact references are already present in
+  the repository.
+
+## Demo-Only Boundaries
+
+- Demo fixture signing keys are public by design and are not production custody
+  keys.
+- The hosted surface does not hold private exchange credentials or funded live
+  execution authority.
+- Kraken execution remains preview or paper-compatible only. No live orders are
+  placed by this public app.
+- Shared Sepolia writes are not performed from the hosted demo. Broadcasting an
+  `AgentRegistry` registration still requires explicit founder wallet action.
+- The companion reference agent is founder-run supporting proof, not a public
+  user product.
+
+## Judge Surfaces
+
+| Surface | Purpose |
+| --- | --- |
+| `/` | Hosted submission hub |
+| `/judge` | Canonical judge walkthrough with proof artifacts |
+| `/operator` | Narrow operator dry-run for composing and submitting intents |
+
+The judge shell is intentionally read-only and judge-first.
+
+The operator shell is intentionally narrow and test-oriented. It is not a
+trading dashboard.
+
+## Screenshots And Artifacts
+
+Use these as the primary submission references:
+
+- Cover image:
+  [assets/cover/sentinel-8004-cover.png](assets/cover/sentinel-8004-cover.png)
+- Canonical allow screenshot:
+  [assets/screenshots/judge-demo-allow-btc-buy.png](assets/screenshots/judge-demo-allow-btc-buy.png)
+- Canonical downsize screenshot:
+  [assets/screenshots/judge-demo-downsize-eth-buy.png](assets/screenshots/judge-demo-downsize-eth-buy.png)
+- Share card:
+  [assets/social/sentinel-8004-thread-card.png](assets/social/sentinel-8004-thread-card.png)
+- Slide deck PDF:
+  [slides/sentinel-8004-submission-deck-v2.pdf](slides/sentinel-8004-submission-deck-v2.pdf)
+
+For judge narration, the most reusable proof object remains the validation
+artifact. For execution-rail narration, the strongest bridge is the Kraken
+execution preview.
+
+## Run Locally
+
+```bash
+npm install
+npm run start
+```
+
+Open:
+
+- `http://127.0.0.1:8787/`
+- `http://127.0.0.1:8787/judge`
+- `http://127.0.0.1:8787/operator`
+
+Useful commands:
+
+```bash
+node scripts/sign-intent.ts allow-btc-buy
+node scripts/verify-signed-intent.ts allow-btc-buy
+node scripts/verify-permit.ts downsize-eth-buy 2500.00
+node scripts/prepare-agent-registry-anchor.ts strategy-agent-demo
+node --test api/tests/*.test.ts
+```
+
+## Read More
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [docs/JUDGE_MODE.md](docs/JUDGE_MODE.md)
+- [docs/ERC8004_PROOF.md](docs/ERC8004_PROOF.md)
+- [docs/EXECUTION_PREVIEW.md](docs/EXECUTION_PREVIEW.md)
+- [docs/KRAKEN_CLI_COMPAT.md](docs/KRAKEN_CLI_COMPAT.md)
+- [docs/SHARED_SEPOLIA.md](docs/SHARED_SEPOLIA.md)
+- [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)
+- [docs/SUBMISSION_MEDIA.md](docs/SUBMISSION_MEDIA.md)
+- [assets/README.md](assets/README.md)
 
 ## Safety Note
 
-This repository demonstrates a validation and control layer based on configured
-policies and available inputs. It does not provide legal, compliance, or
-investment advice.
+This repository demonstrates a policy-based validation and control layer based
+on configured inputs and public-safe proof objects. It does not provide legal,
+compliance, or investment advice.
 
 ## License
 
