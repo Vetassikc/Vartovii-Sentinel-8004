@@ -54,6 +54,7 @@ test("GET / returns the hosted submission hub HTML", async () => {
   assert.match(html, /og:title/);
   assert.match(html, /Open Shared Sepolia Config JSON/);
   assert.match(html, /View Minimal ABI Fragments/);
+  assert.match(html, /Open Public Proof Index/);
   assert.match(
     html,
     /<(?:div|dl) class="metric-strip"[\s\S]*?<div class="cta-row">/,

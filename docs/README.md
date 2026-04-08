@@ -27,6 +27,10 @@ This folder contains the public-safe documentation for the
   - slide deck and PDF export workflow for submission media
 - `SUBMISSION_FORM_FINAL.md`
   - final lablab.ai form copy and manual fill guidance
+- `PROOF_INDEX.md`
+  - smallest public-safe link set for judges and recap posts
+- `SOCIAL_POST_FINAL.md`
+  - ready-to-post recap copy for X and LinkedIn
 
 ## Related Asset Pack
 

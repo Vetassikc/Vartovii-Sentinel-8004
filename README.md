@@ -15,6 +15,7 @@ bot is supporting proof only and does not replace the Sentinel-first thesis.
 | Demo | [sentinel-8004-judge-demo.onrender.com](https://sentinel-8004-judge-demo.onrender.com) |
 | Judge | [sentinel-8004-judge-demo.onrender.com/judge](https://sentinel-8004-judge-demo.onrender.com/judge) |
 | Operator | [sentinel-8004-judge-demo.onrender.com/operator](https://sentinel-8004-judge-demo.onrender.com/operator) |
+| Public Proof Index | [docs/PROOF_INDEX.md](docs/PROOF_INDEX.md) |
 | Shared Contract ABI Fragments | [contracts/shared-sepolia-minimal-abis.ts](contracts/shared-sepolia-minimal-abis.ts) |
 | Slides | [slides/sentinel-8004-submission-deck-v2.html](slides/sentinel-8004-submission-deck-v2.html) |
 | Video Script | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
