@@ -8,3 +8,7 @@ build/
 coverage/
 *.log
 tmp/
+
+# Local experiments not part of the public Sentinel submission pack
+assets/social/surge-program-card.html
+assets/social/surge-program-card.png
