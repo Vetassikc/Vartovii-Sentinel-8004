@@ -44,15 +44,21 @@ test("GET /healthz returns a deployment-friendly health payload", async () => {
 
 test("GET / returns the hosted submission hub HTML", async () => {
   const response = await handleJudgeModeRequest("GET", "/", "");
+  const html = response.payload as string;
 
   assert.equal(response.statusCode, 200);
   assert.equal(response.contentType, "text/html; charset=utf-8");
-  assert.match(response.payload as string, /Sentinel-8004 public submission entrypoint/);
-  assert.match(response.payload as string, /Open Live Judge Demo/);
-  assert.match(response.payload as string, /Open Operator Test Flow/);
-  assert.match(response.payload as string, /og:title/);
-  assert.match(response.payload as string, /Open Shared Sepolia Config JSON/);
-  assert.match(response.payload as string, /View Minimal ABI Fragments/);
+  assert.match(html, /Sentinel-8004 public submission entrypoint/);
+  assert.match(html, /Open Live Judge Demo/);
+  assert.match(html, /Open Operator Test Flow/);
+  assert.match(html, /og:title/);
+  assert.match(html, /Open Shared Sepolia Config JSON/);
+  assert.match(html, /View Minimal ABI Fragments/);
+  assert.match(
+    html,
+    /<(?:div|dl) class="metric-strip"[\s\S]*?<div class="cta-row">/,
+    "Expected the judge-demo metric strip to appear before the CTA row.",
+  );
 });
 
 test("GET /operator returns the operator test shell HTML", async () => {
