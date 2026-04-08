@@ -73,13 +73,22 @@ const STATIC_ASSETS = {
   },
 } as const;
 
+const PUBLIC_PNG_ASSET_PREFIXES = [
+  "/assets/cover/",
+  "/assets/screenshots/",
+  "/assets/social/",
+] as const;
+
 function respond(
   response: ServerResponse,
   result: JudgeModeResponse,
 ): void {
   const isTextResponse = typeof result.payload === "string" && result.contentType !== undefined;
+  const isBinaryResponse = Buffer.isBuffer(result.payload);
   const body = isTextResponse
     ? result.payload
+    : isBinaryResponse
+      ? result.payload
     : JSON.stringify(result.payload, null, 2);
 
   response.writeHead(result.statusCode, {
@@ -91,6 +100,16 @@ function respond(
 
 async function readStaticAsset(pathname: keyof typeof STATIC_ASSETS): Promise<string> {
   return readFile(STATIC_ASSETS[pathname].fileUrl, "utf8");
+}
+
+function resolvePublicPngAsset(pathname: string): URL | null {
+  const isAllowedPrefix = PUBLIC_PNG_ASSET_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+
+  if (!isAllowedPrefix || !pathname.endsWith(".png") || pathname.includes("..")) {
+    return null;
+  }
+
+  return new URL(pathname.slice(1), ROOT_DIR);
 }
 
 function buildPipelineBundle(
@@ -275,6 +294,27 @@ export async function handleJudgeModeRequest(
       payload: await readStaticAsset(pathname as keyof typeof STATIC_ASSETS),
       contentType: STATIC_ASSETS[pathname as keyof typeof STATIC_ASSETS].contentType,
     };
+  }
+
+  if (method === "GET") {
+    const publicPngAsset = resolvePublicPngAsset(pathname);
+    if (publicPngAsset) {
+      try {
+        return {
+          statusCode: 200,
+          payload: await readFile(publicPngAsset),
+          contentType: "image/png",
+        };
+      } catch {
+        return {
+          statusCode: 404,
+          payload: {
+            error: "not_found",
+            details: [`No public asset for ${pathname}`],
+          },
+        };
+      }
+    }
   }
 
   if (method === "GET") {

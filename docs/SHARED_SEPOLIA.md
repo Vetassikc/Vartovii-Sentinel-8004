@@ -10,6 +10,7 @@ The repo does not deploy alternate judging contracts.
 Instead, it exposes:
 
 - the shared contract addresses as a public-safe config surface
+- minimal ABI fragments for the shared contract touchpoints in `contracts/shared-sepolia-minimal-abis.ts`
 - a bounded `AgentRegistry` anchor helper
 - a founder-run calldata plan for `register(...)`
 

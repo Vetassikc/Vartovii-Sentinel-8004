@@ -50,6 +50,9 @@ test("GET / returns the hosted submission hub HTML", async () => {
   assert.match(response.payload as string, /Sentinel-8004 public submission entrypoint/);
   assert.match(response.payload as string, /Open Live Judge Demo/);
   assert.match(response.payload as string, /Open Operator Test Flow/);
+  assert.match(response.payload as string, /og:title/);
+  assert.match(response.payload as string, /Open Shared Sepolia Config JSON/);
+  assert.match(response.payload as string, /View Minimal ABI Fragments/);
 });
 
 test("GET /operator returns the operator test shell HTML", async () => {
@@ -69,6 +72,7 @@ test("GET /judge returns the judge demo shell HTML", async () => {
   assert.match(response.payload as string, /Sentinel-8004 public proof walkthrough/);
   assert.match(response.payload as string, /Kraken Execution Preview/);
   assert.match(response.payload as string, /Back to Hosted Submission Hub/);
+  assert.match(response.payload as string, /twitter:card/);
 });
 
 test("GET /judge/ also returns the judge demo shell HTML", async () => {
@@ -77,6 +81,18 @@ test("GET /judge/ also returns the judge demo shell HTML", async () => {
   assert.equal(response.statusCode, 200);
   assert.equal(response.contentType, "text/html; charset=utf-8");
   assert.match(response.payload as string, /Sentinel-8004 public proof walkthrough/);
+});
+
+test("GET /assets/cover/sentinel-8004-cover.png returns a public asset from the hosted demo domain", async () => {
+  const response = await handleJudgeModeRequest(
+    "GET",
+    "/assets/cover/sentinel-8004-cover.png",
+    "",
+  );
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.contentType, "image/png");
+  assert.equal(Buffer.isBuffer(response.payload), true);
 });
 
 test("GET /api/demo/scenarios returns the canonical scenario names", async () => {
