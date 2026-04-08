@@ -28,7 +28,7 @@ Chain ID: `11155111`
 - `ReputationRegistry`
   - `0x423a9904e39537a9997fbaF0f220d79D7d545763`
 - `ValidationRegistry`
-  - `0x92bF63E5C7Ac6980f237a164Ab413BE226187F1`
+  - `0x92bF63E5C7Ac6980f237a7164Ab413BE226187F1`
 
 ## What This Repo Implements
 

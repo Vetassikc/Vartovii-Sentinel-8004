@@ -25,6 +25,8 @@ This folder contains the public-safe documentation for the
   - recommended live demo sequence for judges and streams
 - `SUBMISSION_MEDIA.md`
   - slide deck and PDF export workflow for submission media
+- `SUBMISSION_FORM_FINAL.md`
+  - final lablab.ai form copy and manual fill guidance
 
 ## Related Asset Pack
 

@@ -18,8 +18,24 @@ bot is supporting proof only and does not replace the Sentinel-first thesis.
 | Slides | [slides/sentinel-8004-submission-deck-v2.html](slides/sentinel-8004-submission-deck-v2.html) |
 | Video Script | [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) |
 
-Note: the public video upload is still pending. The current `Video Script` link points
-to the recording outline used for the submission walkthrough.
+Note: this repo keeps the recording outline in `docs/DEMO_SCRIPT.md`. The
+submitted video is distributed through the hackathon submission surface rather
+than versioned inside this repository.
+
+## Project Topology
+
+There are two code surfaces in the broader submission story:
+
+- `Vartovii-Sentinel-8004` (this repo)
+  - the primary judged product surface
+  - public MIT-safe demo, docs, schemas, and submission assets
+- `sentinel-8004-agent-demo` (separate founder-run companion repo)
+  - supporting proof only
+  - live-market reference loop that demonstrates why Sentinel matters in front
+    of execution
+
+Judges do not need the companion repo to evaluate or run this public
+submission.
 
 ## One-Line Thesis
 
@@ -27,6 +43,12 @@ Sentinel-8004 evaluates each trade intent before execution and returns a
 machine-readable `ALLOW`, `DENY`, or `ALLOW_WITH_DOWNSIZE` decision, with signed
 proof and a bounded execution path that can be inspected by judges and
 operators.
+
+## Why This Is Distinct
+
+- control layer first, execution surface second
+- public-safe proof objects instead of hidden operator logic
+- realistic future path as a reusable guardrail module for agent builders
 
 ## Architecture At A Glance
 
@@ -73,7 +95,7 @@ Sepolia. It does not introduce self-deployed judging alternates.
 | HackathonVault | `0x0E7CD8ef9743FEcf94f9103033a044caBD45fC90` |
 | RiskRouter | `0xd6A6952545FF6E6E6681c2d15C59f9EB8F40FdBC` |
 | ReputationRegistry | `0x423a9904e39537a9997fbaF0f220d79D7d545763` |
-| ValidationRegistry | `0x92bF63E5C7Ac6980f237a164Ab413BE226187F1` |
+| ValidationRegistry | `0x92bF63E5C7Ac6980f237a7164Ab413BE226187F1` |
 
 Network: `Sepolia`  
 Chain ID: `11155111`
@@ -121,6 +143,7 @@ The reference agent is supporting proof only.
 Its purpose is to demonstrate why Sentinel matters in a more realistic trading
 context:
 
+- separate companion repository: `sentinel-8004-agent-demo`
 - founder-run only
 - live-market-input supporting evidence
 - supporting proof for control-layer relevance
@@ -227,6 +250,7 @@ node --test api/tests/*.test.ts
 - [docs/SHARED_SEPOLIA.md](docs/SHARED_SEPOLIA.md)
 - [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)
 - [docs/SUBMISSION_MEDIA.md](docs/SUBMISSION_MEDIA.md)
+- [docs/SUBMISSION_FORM_FINAL.md](docs/SUBMISSION_FORM_FINAL.md)
 - [assets/README.md](assets/README.md)
 
 ## Safety Note

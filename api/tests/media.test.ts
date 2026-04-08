@@ -8,11 +8,11 @@ const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = resolve(TEST_DIR, "../..");
 const SLIDE_SOURCE_PATH = resolve(
   ROOT_DIR,
-  "slides/sentinel-8004-submission-deck-v1.html",
+  "slides/sentinel-8004-submission-deck-v2.html",
 );
 const SLIDE_PDF_PATH = resolve(
   ROOT_DIR,
-  "output/pdf/sentinel-8004-submission-slides-v1.pdf",
+  "slides/sentinel-8004-submission-deck-v2.pdf",
 );
 
 test("submission slide deck source covers the required judge topics", () => {

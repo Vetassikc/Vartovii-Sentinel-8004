@@ -1,4 +1,4 @@
-# Sentinel-8004 Submission Asset Pack v1
+# Sentinel-8004 Submission Asset Pack
 
 This folder contains the smallest public-safe asset pack for hackathon
 submission materials.
@@ -26,7 +26,7 @@ Use these two screenshots as the canonical demo shell states:
 These screenshots are captured from the public judge demo shell and are the
 recommended stills for lablab, slides, and demo videos.
 
-The slide deck source in `../slides/sentinel-8004-submission-deck-v1.html`
+The canonical slide deck source in `../slides/sentinel-8004-submission-deck-v2.html`
 reuses both screenshots.
 
 ## Social And Share Card

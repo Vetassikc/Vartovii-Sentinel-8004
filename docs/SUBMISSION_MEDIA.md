@@ -8,7 +8,8 @@ submission.
 This repo now includes:
 
 - a judge-friendly slide deck source
-- a reproducible PDF export path for upload
+- a tracked upload-ready PDF artifact
+- a reproducible PDF export path for refreshes
 - clear reuse of existing public screenshots and cover art
 
 ## Slide Deck Source

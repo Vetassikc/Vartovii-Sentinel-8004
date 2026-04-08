@@ -32,9 +32,9 @@ Every decision is cryptographically signed, producing a machine-readable verdict
 
 - **Real EIP-712 typed data signing** with recovered signer wallet verification (not mocked signatures)
 - **Shared Sepolia contracts** — AgentRegistry, RiskRouter, ValidationRegistry (organizer-provided, not self-deployed)
-- **Agent identity path** on the shared AgentRegistry ERC-721, with the current founder-run registration inspectable on [Sepolia Etherscan](https://sepolia.etherscan.io)
+- **Agent identity path** on the shared AgentRegistry ERC-721, with founder-run registration and approved transactions inspectable on [Sepolia Etherscan](https://sepolia.etherscan.io)
 - **Kraken paper-compatible execution previews** with `validate: true` request shape
-- **83 checkpoint events** captured across founder-run reference-agent cycles, with on-chain links available for inspection
+- **As of April 8, 2026:** the founder-run companion log contains **130** recorded cycles, including **83** on-chain-approved shared-Sepolia RiskRouter actions, with transaction links available for inspection
 - **Full audit trail** — every decision, verdict, and permit logged as structured JSON
 
 ### What Is Still Demo-Only
@@ -46,11 +46,11 @@ Every decision is cryptographically signed, producing a machine-readable verdict
 
 ### Reference Execution Companion (Founder-Run Supporting Proof)
 
-A private, founder-run companion agent demonstrates *why* the guardrail matters. This is supporting proof, not a second primary submission.
+A private, founder-run companion agent in the separate `sentinel-8004-agent-demo` repository demonstrates *why* the guardrail matters. This is supporting proof, not a second primary submission.
 
 - **Live Kraken market data** — real BTC/USD and ETH/USD prices via Kraken REST API
 - **Gemini 2.5 Flash AI strategy** — analyzes market momentum and proposes trades with confidence scores
-- **Dual guardrail in action** — across 83 live cycles, Sentinel blocked **17** high-risk trades and downsized **31** excessive positions
+- **Dual guardrail in action** — as of April 8, 2026, the founder-run companion log shows **130** cycles: **50** allow decisions, **49** downsized decisions, and **26** denied decisions; **83** approved actions also reached the shared Sepolia RiskRouter
 - **Real-time monitoring dashboard** — PnL tracking, win rate, max drawdown (0.3%), risk score distribution, and Etherscan transaction links
 
 The reference agent is not the primary product. It is a founder-run execution surface that validates the control layer thesis.
@@ -142,7 +142,7 @@ The reference agent is not the primary product. It is a founder-run execution su
 
 ### 1:25–1:45 — Reference Agent (Founder-Run Supporting Proof)
 
-> "To prove the guardrail works in practice, we run a private, founder-operated reference agent. It pulls live Kraken prices, generates AI trade decisions via Gemini 2.5, and submits every intent through Sentinel first. Over 83 cycles, Sentinel blocked 17 high-risk trades and downsized 31 excessive positions. Max drawdown: 0.3%."
+> "To prove the guardrail works in practice, we run a private, founder-operated reference agent. It pulls live Kraken prices, generates AI trade decisions via Gemini 2.5, and submits every intent through Sentinel first. As of April 8, 2026, the companion log contains 130 cycles: 50 allowed, 49 downsized, and 26 denied, with 83 approved actions also anchored through the shared Sepolia flow. Max drawdown: 0.3%."
 
 *Visual: Dashboard with market price, dual guardrail status, PnL panel, checkpoint feed.*
 

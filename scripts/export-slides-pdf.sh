@@ -2,9 +2,9 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SOURCE_HTML="$ROOT_DIR/slides/sentinel-8004-submission-deck-v1.html"
-OUTPUT_DIR="$ROOT_DIR/output/pdf"
-OUTPUT_PDF="$OUTPUT_DIR/sentinel-8004-submission-slides-v1.pdf"
+SOURCE_HTML="$ROOT_DIR/slides/sentinel-8004-submission-deck-v2.html"
+OUTPUT_DIR="$ROOT_DIR/slides"
+OUTPUT_PDF="$OUTPUT_DIR/sentinel-8004-submission-deck-v2.pdf"
 
 if [[ ! -f "$SOURCE_HTML" ]]; then
   echo "Missing slide deck source: $SOURCE_HTML" >&2
