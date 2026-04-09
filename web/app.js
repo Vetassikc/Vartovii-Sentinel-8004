@@ -1,8 +1,13 @@
+import { buildStatusNotes, buildStatusSummary } from "./status-notes.js";
+
 const selectElement = document.querySelector("#scenario-select");
 const reloadButton = document.querySelector("#reload-button");
 const summaryElement = document.querySelector("#scenario-summary");
 const scenarioBadge = document.querySelector("#scenario-badge");
 const highlightsElement = document.querySelector("#scenario-highlights");
+const statusNotesCard = document.querySelector("#status-notes-card");
+const statusNotesSummary = document.querySelector("#status-notes-summary");
+const statusNotesList = document.querySelector("#status-notes-list");
 const intentPanel = document.querySelector("#intent-panel");
 const verdictPanel = document.querySelector("#verdict-panel");
 const artifactPanel = document.querySelector("#artifact-panel");
@@ -109,6 +114,34 @@ function renderHighlights(bundle) {
     .join("");
 }
 
+function resetStatusNotes() {
+  statusNotesCard.hidden = true;
+  statusNotesSummary.textContent = "";
+  statusNotesList.innerHTML = "";
+}
+
+function renderStatusNotes(bundle) {
+  const notes = buildStatusNotes(bundle);
+
+  if (notes.length === 0) {
+    resetStatusNotes();
+    return;
+  }
+
+  statusNotesCard.hidden = false;
+  statusNotesSummary.textContent = buildStatusSummary(bundle, notes);
+  statusNotesList.innerHTML = notes
+    .map(
+      (note) => `
+        <li class="status-note-item">
+          <strong class="status-note-label">${note.label}</strong>
+          <span>${note.detail}</span>
+        </li>
+      `,
+    )
+    .join("");
+}
+
 async function loadScenarioBundle(scenarioName) {
   const response = await fetch(`/api/demo/scenarios/${scenarioName}`);
   if (!response.ok) {
@@ -138,6 +171,7 @@ async function renderScenario(scenarioName) {
   scenarioBadge.textContent = "Loading scenario";
   scenarioBadge.className = "status-pill status-pill-neutral";
   highlightsElement.innerHTML = "";
+  resetStatusNotes();
 
   try {
     const bundle = await loadScenarioBundle(scenarioName);
@@ -146,6 +180,7 @@ async function renderScenario(scenarioName) {
     scenarioBadge.textContent = formatVerdictLabel(bundle.evaluation.verdict);
     scenarioBadge.className = `status-pill status-pill-${getBadgeVariant(bundle)}`;
     renderHighlights(bundle);
+    renderStatusNotes(bundle);
     renderJson(intentPanel, bundle.intent);
     renderJson(verdictPanel, bundle.evaluation);
     renderJson(artifactPanel, bundle.evaluation.validation_artifact);
@@ -157,6 +192,7 @@ async function renderScenario(scenarioName) {
     scenarioBadge.textContent = "Load failed";
     scenarioBadge.className = "status-pill status-pill-deny";
     highlightsElement.innerHTML = "";
+    resetStatusNotes();
     intentPanel.textContent = message;
     verdictPanel.textContent = message;
     artifactPanel.textContent = message;

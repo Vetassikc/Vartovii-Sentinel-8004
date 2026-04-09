@@ -78,6 +78,7 @@ test("GET /judge returns the judge demo shell HTML", async () => {
   assert.equal(response.contentType, "text/html; charset=utf-8");
   assert.match(response.payload as string, /Sentinel-8004 public proof walkthrough/);
   assert.match(response.payload as string, /Kraken Execution Preview/);
+  assert.match(response.payload as string, /Status Notes/);
   assert.match(response.payload as string, /Back to Hosted Submission Hub/);
   assert.match(response.payload as string, /twitter:card/);
 });
@@ -100,6 +101,14 @@ test("GET /assets/cover/sentinel-8004-cover.png returns a public asset from the 
   assert.equal(response.statusCode, 200);
   assert.equal(response.contentType, "image/png");
   assert.equal(Buffer.isBuffer(response.payload), true);
+});
+
+test("GET /web/status-notes.js returns the shared status-notes helper module", async () => {
+  const response = await handleJudgeModeRequest("GET", "/web/status-notes.js", "");
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.contentType, "text/javascript; charset=utf-8");
+  assert.match(response.payload as string, /buildStatusNotes/);
 });
 
 test("GET /api/demo/scenarios returns the canonical scenario names", async () => {

@@ -67,6 +67,10 @@ const STATIC_ASSETS = {
     fileUrl: new URL("web/operator.js", ROOT_DIR),
     contentType: "text/javascript; charset=utf-8",
   },
+  "/web/status-notes.js": {
+    fileUrl: new URL("web/status-notes.js", ROOT_DIR),
+    contentType: "text/javascript; charset=utf-8",
+  },
   "/web/styles.css": {
     fileUrl: new URL("web/styles.css", ROOT_DIR),
     contentType: "text/css; charset=utf-8",

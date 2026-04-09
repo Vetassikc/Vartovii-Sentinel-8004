@@ -1,9 +1,14 @@
+import { buildStatusNotes, buildStatusSummary } from "./status-notes.js";
+
 const selectElement = document.querySelector("#operator-scenario-select");
 const loadButton = document.querySelector("#operator-load-button");
 const runButton = document.querySelector("#operator-run-button");
 const statusBadge = document.querySelector("#operator-status-badge");
 const summaryElement = document.querySelector("#operator-summary");
 const highlightsElement = document.querySelector("#operator-highlights");
+const statusNotesCard = document.querySelector("#status-notes-card");
+const statusNotesSummary = document.querySelector("#status-notes-summary");
+const statusNotesList = document.querySelector("#status-notes-list");
 const intentInput = document.querySelector("#operator-intent-input");
 const intentPanel = document.querySelector("#operator-intent-panel");
 const signedIntentPanel = document.querySelector("#operator-signed-intent-panel");
@@ -114,6 +119,34 @@ function renderHighlights(bundle) {
     .join("");
 }
 
+function resetStatusNotes() {
+  statusNotesCard.hidden = true;
+  statusNotesSummary.textContent = "";
+  statusNotesList.innerHTML = "";
+}
+
+function renderStatusNotes(bundle) {
+  const notes = buildStatusNotes(bundle);
+
+  if (notes.length === 0) {
+    resetStatusNotes();
+    return;
+  }
+
+  statusNotesCard.hidden = false;
+  statusNotesSummary.textContent = buildStatusSummary(bundle, notes);
+  statusNotesList.innerHTML = notes
+    .map(
+      (note) => `
+        <li class="status-note-item">
+          <strong class="status-note-label">${note.label}</strong>
+          <span>${note.detail}</span>
+        </li>
+      `,
+    )
+    .join("");
+}
+
 async function fetchScenarioNames() {
   const response = await fetch("/api/demo/scenarios");
   if (!response.ok) {
@@ -156,6 +189,7 @@ async function loadSelectedScenario() {
   statusBadge.className = "status-pill status-pill-neutral";
   summaryElement.textContent = "Loading canonical scenario...";
   highlightsElement.innerHTML = "";
+  resetStatusNotes();
 
   try {
     const intent = await fetchScenarioIntent(selectElement.value);
@@ -176,6 +210,7 @@ async function handlePipelineRun() {
   statusBadge.className = "status-pill status-pill-neutral";
   summaryElement.textContent = "Submitting intent through the operator dry-run flow...";
   highlightsElement.innerHTML = "";
+  resetStatusNotes();
 
   try {
     const parsedIntent = JSON.parse(intentInput.value);
@@ -187,6 +222,7 @@ async function handlePipelineRun() {
     statusBadge.textContent = formatVerdictLabel(bundle.evaluation.verdict);
     statusBadge.className = `status-pill status-pill-${getBadgeVariant(bundle)}`;
     renderHighlights(bundle);
+    renderStatusNotes(bundle);
     renderJson(intentPanel, bundle.intent);
     renderJson(signedIntentPanel, {
       signed_intent_bundle: bundle.signed_intent_bundle,
@@ -203,6 +239,7 @@ async function handlePipelineRun() {
     statusBadge.textContent = "Run failed";
     statusBadge.className = "status-pill status-pill-deny";
     highlightsElement.innerHTML = "";
+    resetStatusNotes();
     renderMessage(message);
   }
 }

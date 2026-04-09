@@ -509,6 +509,29 @@ textarea {
   margin-top: 16px;
 }
 
+.status-notes {
+  margin-bottom: 16px;
+}
+
+.status-note-list {
+  display: grid;
+  gap: 10px;
+}
+
+.status-note-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: rgba(246, 248, 252, 0.92);
+  list-style: none;
+}
+
+.status-note-label {
+  color: var(--text-strong);
+}
+
 pre {
   margin: 0;
   padding: 14px;
